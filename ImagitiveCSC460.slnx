@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ImagitiveCSC460/ImagitiveCSC460UI.csproj" />
+  <Project Path="ImagitiveLibrary/ImagitiveLibrary.csproj" />
+</Solution>
