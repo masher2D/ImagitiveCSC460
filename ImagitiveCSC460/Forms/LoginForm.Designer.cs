@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             headerLabel = new Label();
             usernameLabelE = new Label();
             usernameValue = new TextBox();
@@ -39,23 +40,25 @@
             adminRadioBtn = new RadioButton();
             loginAsLabel = new Label();
             splitContainer1 = new SplitContainer();
+            emailLabel = new Label();
+            emailValue = new TextBox();
+            viewerCheckBox = new CheckBox();
+            artistCheckBox = new CheckBox();
+            signupBtn = new Button();
+            signupAsLabel = new Label();
+            passwordLabelN = new Label();
+            textBox2 = new TextBox();
+            usernameLabelN = new Label();
+            textBox1 = new TextBox();
             subtitleLabel = new Label();
             existingUsersLabel = new Label();
             newUsersLabel = new Label();
-            signupBtn = new Button();
-            signupAsLabel = new Label();
-            usernameLabelN = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            passwordLabelN = new Label();
-            artistCheckBox = new CheckBox();
-            viewerCheckBox = new CheckBox();
-            emailLabel = new Label();
-            emailValue = new TextBox();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // headerLabel
@@ -164,6 +167,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.BackColor = Color.Gainsboro;
             splitContainer1.Panel1.Controls.Add(loginBtn);
             splitContainer1.Panel1.Controls.Add(adminRadioBtn);
             splitContainer1.Panel1.Controls.Add(loginAsLabel);
@@ -177,6 +181,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.BackColor = Color.Gainsboro;
             splitContainer1.Panel2.Controls.Add(emailLabel);
             splitContainer1.Panel2.Controls.Add(emailValue);
             splitContainer1.Panel2.Controls.Add(viewerCheckBox);
@@ -191,6 +196,96 @@
             splitContainer1.Size = new Size(778, 500);
             splitContainer1.SplitterDistance = 389;
             splitContainer1.TabIndex = 10;
+            // 
+            // emailLabel
+            // 
+            emailLabel.AutoSize = true;
+            emailLabel.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            emailLabel.Location = new Point(143, 195);
+            emailLabel.Name = "emailLabel";
+            emailLabel.Size = new Size(96, 45);
+            emailLabel.TabIndex = 19;
+            emailLabel.Text = "Email";
+            // 
+            // emailValue
+            // 
+            emailValue.Location = new Point(91, 243);
+            emailValue.Name = "emailValue";
+            emailValue.Size = new Size(200, 39);
+            emailValue.TabIndex = 20;
+            // 
+            // viewerCheckBox
+            // 
+            viewerCheckBox.AutoSize = true;
+            viewerCheckBox.Location = new Point(132, 379);
+            viewerCheckBox.Name = "viewerCheckBox";
+            viewerCheckBox.Size = new Size(118, 36);
+            viewerCheckBox.TabIndex = 18;
+            viewerCheckBox.Text = "Viewer";
+            viewerCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // artistCheckBox
+            // 
+            artistCheckBox.AutoSize = true;
+            artistCheckBox.Location = new Point(141, 337);
+            artistCheckBox.Name = "artistCheckBox";
+            artistCheckBox.Size = new Size(101, 36);
+            artistCheckBox.TabIndex = 14;
+            artistCheckBox.Text = "Artist";
+            artistCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // signupBtn
+            // 
+            signupBtn.Location = new Point(116, 424);
+            signupBtn.Name = "signupBtn";
+            signupBtn.Size = new Size(150, 46);
+            signupBtn.TabIndex = 14;
+            signupBtn.Text = "Sign Up";
+            signupBtn.UseVisualStyleBackColor = true;
+            // 
+            // signupAsLabel
+            // 
+            signupAsLabel.AutoSize = true;
+            signupAsLabel.Font = new Font("Leelawadee UI", 10.125F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            signupAsLabel.Location = new Point(115, 293);
+            signupAsLabel.Name = "signupAsLabel";
+            signupAsLabel.Size = new Size(152, 37);
+            signupAsLabel.TabIndex = 17;
+            signupAsLabel.Text = "Sign Up As:";
+            // 
+            // passwordLabelN
+            // 
+            passwordLabelN.AutoSize = true;
+            passwordLabelN.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            passwordLabelN.Location = new Point(114, 105);
+            passwordLabelN.Name = "passwordLabelN";
+            passwordLabelN.Size = new Size(154, 45);
+            passwordLabelN.TabIndex = 12;
+            passwordLabelN.Text = "Password";
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(91, 153);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(200, 39);
+            textBox2.TabIndex = 13;
+            // 
+            // usernameLabelN
+            // 
+            usernameLabelN.AutoSize = true;
+            usernameLabelN.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            usernameLabelN.Location = new Point(110, 14);
+            usernameLabelN.Name = "usernameLabelN";
+            usernameLabelN.Size = new Size(163, 45);
+            usernameLabelN.TabIndex = 10;
+            usernameLabelN.Text = "Username";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(91, 62);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(200, 39);
+            textBox1.TabIndex = 11;
             // 
             // subtitleLabel
             // 
@@ -223,101 +318,24 @@
             newUsersLabel.Text = "New Users";
             newUsersLabel.Click += newUsersLabel_Click;
             // 
-            // signupBtn
+            // pictureBox1
             // 
-            signupBtn.Location = new Point(116, 424);
-            signupBtn.Name = "signupBtn";
-            signupBtn.Size = new Size(150, 46);
-            signupBtn.TabIndex = 14;
-            signupBtn.Text = "Sign Up";
-            signupBtn.UseVisualStyleBackColor = true;
-            // 
-            // signupAsLabel
-            // 
-            signupAsLabel.AutoSize = true;
-            signupAsLabel.Font = new Font("Leelawadee UI", 10.125F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            signupAsLabel.Location = new Point(115, 293);
-            signupAsLabel.Name = "signupAsLabel";
-            signupAsLabel.Size = new Size(152, 37);
-            signupAsLabel.TabIndex = 17;
-            signupAsLabel.Text = "Sign Up As:";
-            // 
-            // usernameLabelN
-            // 
-            usernameLabelN.AutoSize = true;
-            usernameLabelN.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            usernameLabelN.Location = new Point(110, 14);
-            usernameLabelN.Name = "usernameLabelN";
-            usernameLabelN.Size = new Size(163, 45);
-            usernameLabelN.TabIndex = 10;
-            usernameLabelN.Text = "Username";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(91, 62);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(200, 39);
-            textBox1.TabIndex = 11;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(91, 153);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(200, 39);
-            textBox2.TabIndex = 13;
-            // 
-            // passwordLabelN
-            // 
-            passwordLabelN.AutoSize = true;
-            passwordLabelN.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            passwordLabelN.Location = new Point(114, 105);
-            passwordLabelN.Name = "passwordLabelN";
-            passwordLabelN.Size = new Size(154, 45);
-            passwordLabelN.TabIndex = 12;
-            passwordLabelN.Text = "Password";
-            // 
-            // artistCheckBox
-            // 
-            artistCheckBox.AutoSize = true;
-            artistCheckBox.Location = new Point(141, 337);
-            artistCheckBox.Name = "artistCheckBox";
-            artistCheckBox.Size = new Size(101, 36);
-            artistCheckBox.TabIndex = 14;
-            artistCheckBox.Text = "Artist";
-            artistCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // viewerCheckBox
-            // 
-            viewerCheckBox.AutoSize = true;
-            viewerCheckBox.Location = new Point(132, 379);
-            viewerCheckBox.Name = "viewerCheckBox";
-            viewerCheckBox.Size = new Size(118, 36);
-            viewerCheckBox.TabIndex = 18;
-            viewerCheckBox.Text = "Viewer";
-            viewerCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // emailLabel
-            // 
-            emailLabel.AutoSize = true;
-            emailLabel.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            emailLabel.Location = new Point(143, 195);
-            emailLabel.Name = "emailLabel";
-            emailLabel.Size = new Size(96, 45);
-            emailLabel.TabIndex = 19;
-            emailLabel.Text = "Email";
-            // 
-            // emailValue
-            // 
-            emailValue.Location = new Point(91, 243);
-            emailValue.Name = "emailValue";
-            emailValue.Size = new Size(200, 39);
-            emailValue.TabIndex = 20;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(358, 732);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(112, 62);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 14;
+            pictureBox1.TabStop = false;
+            pictureBox1.Visible = false;
             // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(834, 756);
+            BackColor = Color.White;
+            ClientSize = new Size(834, 819);
+            Controls.Add(pictureBox1);
             Controls.Add(newUsersLabel);
             Controls.Add(existingUsersLabel);
             Controls.Add(subtitleLabel);
@@ -331,6 +349,7 @@
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -361,5 +380,6 @@
         private CheckBox viewerCheckBox;
         private Label emailLabel;
         private TextBox emailValue;
+        private PictureBox pictureBox1;
     }
 }
