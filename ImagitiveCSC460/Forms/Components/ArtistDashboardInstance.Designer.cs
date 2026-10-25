@@ -296,6 +296,7 @@
             BackColor = Color.LightGray;
             Controls.Add(headerLabel);
             Controls.Add(tabControl1);
+            MaximumSize = new Size(780, 899);
             Name = "ArtistDashboardInstance";
             Size = new Size(780, 899);
             tabControl1.ResumeLayout(false);

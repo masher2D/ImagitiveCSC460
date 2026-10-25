@@ -43,6 +43,8 @@
             panel2 = new Panel();
             navLabel = new Label();
             headerLabel = new Label();
+            label1 = new Label();
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)starRatingBar).BeginInit();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -197,10 +199,29 @@
             headerLabel.Font = new Font("Leelawadee UI", 16.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
             headerLabel.Location = new Point(530, 15);
             headerLabel.Name = "headerLabel";
-            headerLabel.Size = new Size(247, 279);
+            headerLabel.Size = new Size(247, 130);
             headerLabel.TabIndex = 9;
             headerLabel.Text = "Viewer Dashboard";
             headerLabel.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Leelawadee UI", 11F);
+            label1.Location = new Point(557, 187);
+            label1.Name = "label1";
+            label1.Size = new Size(187, 41);
+            label1.TabIndex = 18;
+            label1.Text = "Filter By Tag:";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Resolved", "Unresolved" });
+            comboBox1.Location = new Point(544, 231);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(212, 40);
+            comboBox1.TabIndex = 17;
             // 
             // ViewerDashboardInstance
             // 
@@ -208,12 +229,15 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.Silver;
+            Controls.Add(label1);
+            Controls.Add(comboBox1);
             Controls.Add(headerLabel);
             Controls.Add(navLabel);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(ratingLabel);
             Controls.Add(imageInstanceViewer1);
+            MaximumSize = new Size(780, 899);
             Name = "ViewerDashboardInstance";
             Size = new Size(780, 899);
             ((System.ComponentModel.ISupportInitialize)starRatingBar).EndInit();
@@ -241,5 +265,7 @@
         private Panel panel2;
         private Label navLabel;
         private Label headerLabel;
+        private Label label1;
+        private ComboBox comboBox1;
     }
 }

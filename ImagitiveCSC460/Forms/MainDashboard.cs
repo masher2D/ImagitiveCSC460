@@ -14,5 +14,20 @@ namespace ImagitiveCSC460UI.Forms
         {
             InitializeComponent();
         }
+
+        private void adminDashboardInstance1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void adminDashboardInstance1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

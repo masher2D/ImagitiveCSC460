@@ -33,10 +33,10 @@
             sortByLabel = new Label();
             listView1 = new ListView();
             reportID = new ColumnHeader();
-            reportedUsername = new ColumnHeader();
-            reporterUsername = new ColumnHeader();
             reason = new ColumnHeader();
             reportDate = new ColumnHeader();
+            reportedUsername = new ColumnHeader();
+            reporterUsername = new ColumnHeader();
             label1 = new Label();
             comboBox1 = new ComboBox();
             SuspendLayout();
@@ -85,16 +85,6 @@
             reportID.Text = "ReportID";
             reportID.Width = 120;
             // 
-            // reportedUsername
-            // 
-            reportedUsername.Text = "Reported User";
-            reportedUsername.Width = 150;
-            // 
-            // reporterUsername
-            // 
-            reporterUsername.Text = "Reporter";
-            reporterUsername.Width = 130;
-            // 
             // reason
             // 
             reason.Text = "Reason";
@@ -104,6 +94,16 @@
             // 
             reportDate.Text = "Report Date";
             reportDate.Width = 150;
+            // 
+            // reportedUsername
+            // 
+            reportedUsername.Text = "Reported User";
+            reportedUsername.Width = 150;
+            // 
+            // reporterUsername
+            // 
+            reporterUsername.Text = "Reporter";
+            reporterUsername.Width = 130;
             // 
             // label1
             // 
@@ -135,6 +135,7 @@
             Controls.Add(sortByLabel);
             Controls.Add(sortByComboBox);
             Controls.Add(headerLabel);
+            MaximumSize = new Size(780, 899);
             Name = "AdminDashboardInstance";
             Size = new Size(780, 899);
             ResumeLayout(false);
