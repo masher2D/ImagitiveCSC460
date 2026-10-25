@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewItem listViewItem1 = new ListViewItem("laRP");
-            ListViewItem listViewItem2 = new ListViewItem("Yap");
-            ListViewItem listViewItem3 = new ListViewItem("laRP");
-            ListViewItem listViewItem4 = new ListViewItem("Yap");
             tabControl1 = new TabControl();
             artworkManagementPage = new TabPage();
             artworkManagerReloadBtn = new Button();
@@ -122,7 +118,6 @@
             listView1.Activation = ItemActivation.OneClick;
             listView1.Columns.AddRange(new ColumnHeader[] { lvArtworkTitle, lvTags, lvartworkCreationDate });
             listView1.Font = new Font("Leelawadee UI", 9F);
-            listView1.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
             listView1.Location = new Point(6, 103);
             listView1.Name = "listView1";
             listView1.Size = new Size(746, 642);
@@ -260,7 +255,6 @@
             listView2.Activation = ItemActivation.OneClick;
             listView2.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listView2.Font = new Font("Leelawadee UI", 9F);
-            listView2.Items.AddRange(new ListViewItem[] { listViewItem3, listViewItem4 });
             listView2.Location = new Point(6, 209);
             listView2.Name = "listView2";
             listView2.Size = new Size(746, 536);

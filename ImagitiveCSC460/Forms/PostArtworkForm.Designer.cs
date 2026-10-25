@@ -1,6 +1,6 @@
 ﻿namespace ImagitiveCSC460UI.Forms
 {
-    partial class PostArtwork
+    partial class PostArtworkForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostArtwork));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostArtworkForm));
             headerLabel = new Label();
             subtitleLabel = new Label();
             descriptionLabel = new Label();
@@ -40,6 +40,11 @@
             addImageBtn = new Button();
             previewBox = new PictureBox();
             previewLabel = new Label();
+            addTagValueComboBox = new ComboBox();
+            addTagLabel = new Label();
+            label1 = new Label();
+            clearTagsBtn = new Button();
+            addTagBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)previewBox).BeginInit();
             SuspendLayout();
             // 
@@ -80,7 +85,7 @@
             // 
             addImageLabel.AutoSize = true;
             addImageLabel.Font = new Font("Leelawadee UI", 11F);
-            addImageLabel.Location = new Point(12, 534);
+            addImageLabel.Location = new Point(12, 538);
             addImageLabel.Name = "addImageLabel";
             addImageLabel.Size = new Size(164, 41);
             addImageLabel.TabIndex = 14;
@@ -96,7 +101,7 @@
             descriptionValue.Location = new Point(12, 266);
             descriptionValue.Multiline = true;
             descriptionValue.Name = "descriptionValue";
-            descriptionValue.Size = new Size(432, 251);
+            descriptionValue.Size = new Size(616, 251);
             descriptionValue.TabIndex = 15;
             descriptionValue.TextChanged += descriptionValue_TextChanged;
             // 
@@ -110,9 +115,9 @@
             // postBtn
             // 
             postBtn.Font = new Font("Leelawadee UI", 12F);
-            postBtn.Location = new Point(12, 645);
+            postBtn.Location = new Point(909, 776);
             postBtn.Name = "postBtn";
-            postBtn.Size = new Size(167, 79);
+            postBtn.Size = new Size(231, 103);
             postBtn.TabIndex = 17;
             postBtn.Text = "Post";
             postBtn.UseVisualStyleBackColor = true;
@@ -121,7 +126,7 @@
             // addImageBtn
             // 
             addImageBtn.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            addImageBtn.Location = new Point(12, 578);
+            addImageBtn.Location = new Point(12, 582);
             addImageBtn.Name = "addImageBtn";
             addImageBtn.Size = new Size(150, 46);
             addImageBtn.TabIndex = 18;
@@ -148,12 +153,65 @@
             previewLabel.TabIndex = 20;
             previewLabel.Text = "Image Preview";
             // 
+            // addTagValueComboBox
+            // 
+            addTagValueComboBox.FormattingEnabled = true;
+            addTagValueComboBox.Location = new Point(12, 691);
+            addTagValueComboBox.Name = "addTagValueComboBox";
+            addTagValueComboBox.Size = new Size(242, 40);
+            addTagValueComboBox.TabIndex = 21;
+            addTagValueComboBox.SelectedIndexChanged += addTagValueComboBox_SelectedIndexChanged;
+            // 
+            // addTagLabel
+            // 
+            addTagLabel.AutoSize = true;
+            addTagLabel.Font = new Font("Leelawadee UI", 11F);
+            addTagLabel.Location = new Point(12, 647);
+            addTagLabel.Name = "addTagLabel";
+            addTagLabel.Size = new Size(248, 41);
+            addTagLabel.TabIndex = 22;
+            addTagLabel.Text = "Add Tags (max 3)";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(12, 856);
+            label1.Name = "label1";
+            label1.Size = new Size(452, 45);
+            label1.TabIndex = 23;
+            label1.Text = "Taglist: {Insert submitted tags}";
+            // 
+            // clearTagsBtn
+            // 
+            clearTagsBtn.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            clearTagsBtn.Location = new Point(12, 791);
+            clearTagsBtn.Name = "clearTagsBtn";
+            clearTagsBtn.Size = new Size(150, 46);
+            clearTagsBtn.TabIndex = 24;
+            clearTagsBtn.Text = "Clear Tags";
+            clearTagsBtn.UseVisualStyleBackColor = true;
+            // 
+            // addTagBtn
+            // 
+            addTagBtn.Location = new Point(12, 737);
+            addTagBtn.Name = "addTagBtn";
+            addTagBtn.Size = new Size(150, 46);
+            addTagBtn.TabIndex = 25;
+            addTagBtn.Text = "Add Tag";
+            addTagBtn.UseVisualStyleBackColor = true;
+            // 
             // PostArtwork
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1387, 728);
+            ClientSize = new Size(1387, 930);
+            Controls.Add(addTagBtn);
+            Controls.Add(clearTagsBtn);
+            Controls.Add(label1);
+            Controls.Add(addTagLabel);
+            Controls.Add(addTagValueComboBox);
             Controls.Add(previewLabel);
             Controls.Add(previewBox);
             Controls.Add(addImageBtn);
@@ -184,5 +242,10 @@
         private Button addImageBtn;
         private PictureBox previewBox;
         private Label previewLabel;
+        private ComboBox addTagValueComboBox;
+        private Label addTagLabel;
+        private Label label1;
+        private Button clearTagsBtn;
+        private Button addTagBtn;
     }
 }

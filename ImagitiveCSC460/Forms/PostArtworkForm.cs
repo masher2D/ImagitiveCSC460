@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace ImagitiveCSC460UI.Forms
 {
-    public partial class PostArtwork : Form
+    public partial class PostArtworkForm : Form
     {
-        public PostArtwork()
+        public PostArtworkForm()
         {
             InitializeComponent();
         }
@@ -31,6 +31,11 @@ namespace ImagitiveCSC460UI.Forms
         }
 
         private void descriptionValue_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void addTagValueComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
