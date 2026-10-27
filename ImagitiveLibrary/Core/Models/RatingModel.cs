@@ -17,7 +17,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the rating given by the user.
         /// </summary>
-        public int Rating { get; set; }
+        public byte RateValue { get; set; }
 
 
 

@@ -21,10 +21,10 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>
-        public string Reason { get; set; }
+        public int ReasonID { get; set; }
         /// <summary>
         /// Gets or sets the description of the report.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

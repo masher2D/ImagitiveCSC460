@@ -9,24 +9,24 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the ID of the user.
         /// </summary>
-        public int Id { get; set; }
+        public int UserId { get; set; } 
         /// <summary>
         /// Gets or sets the username of the user.
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets the email of the user.
         /// </summary>
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets the password of the user.
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the region of the user.
         /// </summary>
-        public string Region { get; set; }
+        public int? RegionID { get; set; }
         /// <summary>
         /// Gets or sets the role of the user.
         /// </summary>
