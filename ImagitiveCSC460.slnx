@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="ImagitiveAPI/ImagitiveAPI.csproj" Id="c6277858-921d-4d6b-9ed1-18570b3f8d7e" />
   <Project Path="ImagitiveCSC460/ImagitiveCSC460UI.csproj" />
   <Project Path="ImagitiveLibrary/ImagitiveLibrary.csproj" />
 </Solution>

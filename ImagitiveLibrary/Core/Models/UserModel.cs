@@ -18,18 +18,14 @@ namespace ImagitiveLibrary.Core.Models
         /// Gets or sets the email of the user.
         /// </summary>
         public string Email { get; set; } = string.Empty;
-        /// <summary>
-        /// Gets or sets the password of the user.
-        /// </summary>
-        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the region of the user.
         /// </summary>
         public int? RegionID { get; set; }
         /// <summary>
-        /// Gets or sets the role of the user.
+        /// Gets or sets the roles of the user.
         /// </summary>
-        public string Role { get; set; } = string.Empty;
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }
