@@ -20,6 +20,5 @@ namespace ImagitiveLibrary.Core.Models
         public byte RateValue { get; set; }
 
 
-
     }
 }

@@ -9,7 +9,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the ID of the report.
         /// </summary>
-        public int Id { get; set; }
+        public int ReportID { get; set; }
         /// <summary>
         /// Gets or sets the ID of the reporter.
         /// </summary>
@@ -17,7 +17,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the ID of the artwork being reported.
         /// </summary>
-        public int ArtworkId { get; set; }
+        public int? ArtworkId { get; set; }
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>
@@ -26,5 +26,17 @@ namespace ImagitiveLibrary.Core.Models
         /// Gets or sets the description of the report.
         /// </summary>
         public string Description { get; set; } = string.Empty;
+        /// <summary>
+        /// Gets or sets the ID of the user who was reported.
+        /// </summary>
+        public int? ReportedUserId { get; set; }
+        /// <summary>
+        /// Gets or sets the status of the report.
+        /// </summary>
+        public string Status { get; set; }
+        /// <summary>
+        /// Gets or sets the date and time when the report was created.
+        /// </summary>
+        public DateTime ReportedAt { get; set; }
     }
 }

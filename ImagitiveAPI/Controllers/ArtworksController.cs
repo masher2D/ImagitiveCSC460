@@ -1,6 +1,7 @@
-﻿using ImagitiveAPI.Data;
+﻿using ImagitiveAPI.Services.Interfaces;
+using ImagitiveLibrary.Core.Requests;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace ImagitiveAPI.Controllers;
 
@@ -8,18 +9,57 @@ namespace ImagitiveAPI.Controllers;
 [Route("api/artworks")]
 public class ArtworksController : ControllerBase
 {
-    private readonly AppDBContext _context;
+    private readonly IArtworkService _artworkService;
 
-    public ArtworksController(AppDBContext context)
+    public ArtworksController(IArtworkService artworkService)
     {
-        _context = context;
+        _artworkService = artworkService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var artworks = await _context.Artworks.ToListAsync();
+        var artworks = await _artworkService.GetAllArtworksAsync();
 
         return Ok(artworks);
+    }
+
+    [HttpGet("{artworkId}")]
+    public async Task<IActionResult> GetById(int artworkId)
+    {
+        var artwork = await _artworkService.GetArtworkByIdAsync(artworkId);
+        if (artwork == null)
+        {
+            return NotFound();
+        }
+        return Ok(artwork);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create( [FromForm] PostArtworkRequest request, IFormFile imageFile)
+    {
+        var artwork = await _artworkService.CreateArtworkAsync(request,imageFile);
+
+        return Ok(artwork);
+    }
+
+    [HttpPost("{id}/view")]
+    public async Task<IActionResult> RecordView(
+    int id,
+    int viewerId)
+    {
+        bool success = await _artworkService.RecordViewAsync(id, viewerId);
+
+        if (!success) return NotFound();
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Remove(int id, int reasonId)
+    {
+        bool success = await _artworkService.RemoveArtworkAsync(id, reasonId);
+        if (!success) return NotFound();
+        return Ok();
     }
 }

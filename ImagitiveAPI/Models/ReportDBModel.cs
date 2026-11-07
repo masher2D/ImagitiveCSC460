@@ -18,7 +18,7 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the ID of the artwork being reported.
         /// </summary>
-        public int ArtworkId { get; set; }
+        public int? ArtworkId { get; set; }
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>
@@ -47,5 +47,9 @@ namespace ImagitiveAPI.Models
         /// Gets or sets the action taken regarding the report.
         /// </summary>
         public string? ActionTaken { get; set; }
+        /// <summary>
+        /// Gets or sets the ID of the user who was reported.
+        /// </summary>
+        public int? ReportedUserId { get; set; }
     }
 }

@@ -4,12 +4,8 @@ using System.Text;
 
 namespace ImagitiveLibrary.Core.Requests
 {
-    public class CreateReportRequest
+    public class PostReportRequest
     {
-        /// <summary>
-        /// Gets or sets the ID of the report.
-        /// </summary>
-        public int Id { get; set; }
         /// <summary>
         /// Gets or sets the ID of the reporter.
         /// </summary>
@@ -17,7 +13,11 @@ namespace ImagitiveLibrary.Core.Requests
         /// <summary>
         /// Gets or sets the ID of the artwork being reported.
         /// </summary>
-        public int ArtworkId { get; set; }
+        public int? ArtworkId { get; set; }
+        /// <summary>
+        /// Gets or sets the ID of the user being reported.
+        /// </summary>
+        public int? ReportedUserId { get; set; }
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>

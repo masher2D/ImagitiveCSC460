@@ -5,7 +5,7 @@ using System.Text;
 namespace ImagitiveLibrary.Core.Requests
 {
 
-    public class CreateArtworkRequest
+    public class PostArtworkRequest
     {
         /// <summary>
         /// The ID of the user creating the artwork.
@@ -19,6 +19,10 @@ namespace ImagitiveLibrary.Core.Requests
         /// The description of the artwork.
         /// </summary>
         public string? Description { get; set; }
-        
+        /// <summary>
+        /// The tags associated with the artwork.
+        /// </summary>
+        public List<string> Tags { get; set; } = [];
+
     }
 }

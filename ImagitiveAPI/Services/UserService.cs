@@ -1,6 +1,8 @@
 ﻿using ImagitiveAPI.Data;
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Services.Interfaces;
+using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
 using Microsoft.EntityFrameworkCore;
 
 namespace ImagitiveAPI.Services
@@ -9,43 +11,93 @@ namespace ImagitiveAPI.Services
     {
         private readonly AppDBContext _context;
 
+    
+
+        private async Task<List<string>> GetUserRolesAsync(int userId)
+        {
+            var roles = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Join(
+                    _context.Roles,
+                    ur => ur.RoleId,
+                    r => r.RoleId,
+                    (ur, r) => r.RoleName)
+                .ToListAsync();
+            return roles;
+        }
+
+        private async Task<UserModel> MapToUserModel(UserDBModel user)
+        {
+            List<string> roles = await GetUserRolesAsync(user.UserId);
+            return new UserModel
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                Email = user.Email,
+                RegionID = user.RegionID,
+                AccountStatus = user.AccountStatus,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+                Roles = roles
+            };
+        }
+
         public UserService(AppDBContext context)
         {
             _context = context;
         }
-        public async Task<UserDBModel> CreateUserAsync(UserDBModel user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
 
-            
+        public async Task<UserModel?> GetUserByIdAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+                return null;
+
+            return await MapToUserModel(user);
         }
 
-        public async Task<bool> DeactivateUserAsync(int id)
+        public async Task<List<UserModel>> GetAllUsersAsync()
         {
-            var user = await GetUserByIdAsync(id);
-            if (user == null) 
+            var users = await _context.Users.ToListAsync();
+            var mappedUsers = new List<UserModel>();
+
+            foreach (var user in users)
+            {
+                mappedUsers.Add(
+                    await MapToUserModel(user));
+            }
+
+            return mappedUsers;
+        }
+
+        public async Task<UserModel?> UpdateUserAsync(int id, UpdateUserRequest request)
+        {
+            var existingUser = await _context.Users.FindAsync(id);
+
+            if (existingUser == null)
+                return null;
+
+            existingUser.Username = request.Username;
+            existingUser.Email = request.Email;
+            existingUser.RegionID = request.RegionId;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return await MapToUserModel(existingUser);
+        }
+        
+        public async Task<bool> SetUserStatusAsync(int id, string status)
+        {
+            var existingUser = await _context.Users.FindAsync(id);
+            if (existingUser == null)
                 return false;
-            int rowsAffected = await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC SetUserStatus {id}, 'Deactivated'");
-            return rowsAffected > 0;
-        }
 
-        public async Task<List<UserDBModel>> GetAllUsersAsync()
-        {
-            return await _context.Users.ToListAsync();
-        }
-
-        public async Task<UserDBModel?> GetUserByIdAsync(int id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
-
-        public async Task<UserDBModel?> UpdateUserAsync(UserDBModel user)
-        {
-            _context.Users.Update(user);
+            existingUser.AccountStatus = status;
+            existingUser.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
-            return user;
+            return true;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 namespace ImagitiveLibrary.Core.Requests
 {
 
-    public class SubmitRatingRequest
+    public class PostRatingRequest
     {
         /// <summary>
         /// The ID of the user submitting the rating.
@@ -18,6 +18,6 @@ namespace ImagitiveLibrary.Core.Requests
         /// <summary>
         /// The rating value being submitted (e.g., 1-5).
         /// </summary>
-        public int Rating { get; set; }
+        public byte RateValue { get; set; }
     }
 }

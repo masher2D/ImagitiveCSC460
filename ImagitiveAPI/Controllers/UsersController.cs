@@ -1,7 +1,10 @@
 ﻿using ImagitiveAPI.Data;
 using ImagitiveAPI.Models;
+using ImagitiveAPI.Services.Interfaces;
+using ImagitiveLibrary.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ImagitiveLibrary.Core.Requests;
 
 namespace ImagitiveAPI.Controllers
 {
@@ -9,40 +12,42 @@ namespace ImagitiveAPI.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private readonly AppDBContext _context;
+        private readonly IUserService _userService;
 
-        public UsersController(AppDBContext context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _context.Users.ToListAsync();
 
-            return Ok(users);
+            return Ok(await _userService.GetAllUsersAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var artwork = await _context.Artworks
-                .FirstOrDefaultAsync(a => a.ArtworkId == id);
+            var user = await _userService.GetUserByIdAsync(id);
 
-            if (artwork == null)
+            if (user == null)
                 return NotFound();
 
-            return Ok(artwork);
+            return Ok(user);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(UserDBModel user)
+        /*
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateUserRequest request)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var user = await _userService.UpdateUserAsync(id, request);
+            if (user == null)
+                return NotFound();
 
-            return CreatedAtAction(nameof(GetById), new { id = user.UserId }, user);
+            return Ok(user);
         }
+        */
+
+
     }
 }

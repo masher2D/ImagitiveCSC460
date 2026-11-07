@@ -50,7 +50,7 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets a value indicating whether the artwork is removed.
         /// </summary>
-        public bool isRemoved { get; set; }
+        public bool IsRemoved { get; set; }
         /// <summary>
         /// Gets or sets the reason why the artwork was removed.
         /// </summary>

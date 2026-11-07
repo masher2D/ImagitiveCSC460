@@ -1,13 +1,18 @@
-﻿using ImagitiveAPI.Models;
+﻿using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
 
-namespace ImagitiveAPI.Services.Interfaces
+namespace ImagitiveAPI.Services.Interfaces;
+
+public interface IArtworkService
 {
-    public interface IArtworkService
-    {
-        public Task<ArtworkDBModel> CreateArtworkAsync(ArtworkDBModel artwork);
-        public Task<ArtworkDBModel> GetArtworkByIdAsync(int id);
-        public Task<List<ArtworkDBModel>> GetAllArtworksAsync();
-        public Task<ArtworkDBModel> UpdateArtworkAsync(ArtworkDBModel artwork);
-        public Task<bool> DeleteArtworkAsync(int id);
-    }
+    Task<List<ArtworkModel>> GetAllArtworksAsync();
+
+    Task<ArtworkModel?> GetArtworkByIdAsync(int artworkId);
+
+    Task<ArtworkModel> CreateArtworkAsync(PostArtworkRequest request, IFormFile file);
+
+    Task<bool> RemoveArtworkAsync(int artworkId, int reasonId);
+
+    Task<bool> RecordViewAsync(int artworkId, int userId);
+
 }

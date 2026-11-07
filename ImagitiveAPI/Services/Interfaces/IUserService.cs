@@ -1,13 +1,14 @@
 ﻿using ImagitiveAPI.Models;
+using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
 
 namespace ImagitiveAPI.Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<UserDBModel> CreateUserAsync(UserDBModel user);
-        public Task<UserDBModel?> GetUserByIdAsync(int id);
-        public Task<List<UserDBModel>> GetAllUsersAsync();
-        public Task<UserDBModel?> UpdateUserAsync(UserDBModel user);
-        public Task<bool> DeactivateUserAsync(int id);
+        public Task<UserModel?> GetUserByIdAsync(int id);
+        public Task<List<UserModel>> GetAllUsersAsync();
+        public Task<UserModel?> UpdateUserAsync(int id, UpdateUserRequest request);
+        public Task<bool> SetUserStatusAsync(int id, string status);
     }
 }

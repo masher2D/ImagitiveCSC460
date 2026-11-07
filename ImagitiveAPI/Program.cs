@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ImagitiveAPI.Data;
+using ImagitiveAPI.Services;
+using ImagitiveAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IArtworkService, ArtworkService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddDbContext<AppDBContext>(options =>
     options

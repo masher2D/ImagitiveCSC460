@@ -9,7 +9,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the ID of the artwork.
         /// </summary>
-        public int Id { get; set; }
+        public int ArtworkId { get; set; }
         /// <summary>
         /// Gets or sets the title of the artwork.
         /// </summary>
@@ -27,9 +27,21 @@ namespace ImagitiveLibrary.Core.Models
         /// </summary>
         public int UserId { get; set; }
         /// <summary>
+        /// Gets or sets the date and time when the artwork was uploaded.
+        /// </summary>
+        public DateTime UploadDate { get; set; }
+        /// <summary>
         /// Gets or sets the number of times the item has been viewed.
         /// </summary>
         public int ViewCount { get; set; }
+        /// <summary>
+        /// Gets or sets the average rating of the artwork.
+        /// </summary>
+        public double AverageRateValue { get; set; }
+        /// <summary>
+        /// Gets or sets the list of tags associated with the artwork.
+        /// </summary>
+        public List<string> Tags { get; set; } = [];
 
     }
 }

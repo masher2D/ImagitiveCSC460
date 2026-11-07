@@ -30,15 +30,15 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the account status of the user.
         /// </summary>
-        public string AccountStatus { get; set; }
+        public string AccountStatus { get; set; } = "Active";
         /// <summary>
         /// Gets or sets the date and time when the user was created.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         /// <summary>
         /// Gets or sets the date and time when the user was last updated.
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         /// <summary>
         /// Gets or sets the date and time when the user's account is restricted until.
         /// </summary>

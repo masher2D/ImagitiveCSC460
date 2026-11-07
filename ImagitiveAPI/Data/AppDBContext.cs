@@ -28,11 +28,21 @@ namespace ImagitiveAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<ArtworkTagDBModel>()
                 .HasKey(at => new { at.ArtworkId, at.TagId });
 
             modelBuilder.Entity<UserRoleDBModelcs>()
                 .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            modelBuilder.Entity<RatingDBModel>()
+                .HasKey(ar => new
+                {
+                    ar.ArtworkId,
+                    ar.UserId
+                });
+
+
         }
 
     }
