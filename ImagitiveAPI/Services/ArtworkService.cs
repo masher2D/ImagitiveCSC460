@@ -3,8 +3,9 @@ using ImagitiveAPI.Models;
 using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
-using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Security.Claims;
 
 namespace ImagitiveAPI.Services
 {
@@ -80,8 +81,9 @@ namespace ImagitiveAPI.Services
             };
         }
 
-        public async Task<ArtworkModel> CreateArtworkAsync(PostArtworkRequest request, IFormFile file)
+        public async Task<ArtworkModel> CreateArtworkAsync(int userId, PostArtworkRequest request, IFormFile file)
         {
+
             var uniqueTags = request.Tags.Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             if (uniqueTags.Count > 3) 
             { 
@@ -102,7 +104,7 @@ namespace ImagitiveAPI.Services
 
             var artwork = new ArtworkDBModel
             {
-                UserId = request.UserId,
+                UserId = userId,
                 Title = request.Title,
                 Description = request.Description,
 
@@ -155,16 +157,18 @@ namespace ImagitiveAPI.Services
             return true;
         }
 
-        public async Task<bool> RemoveArtworkAsync(int artworkId, int reasonId)
+        public async Task<int> RemoveArtworkAsync(int requesterId, bool isAdmin, int artworkId, RemoveArtworkRequest request)
         {
+
             var artwork = await _context.Artworks.FirstOrDefaultAsync(a => a.ArtworkId == artworkId);
-            if (artwork == null) return false;
+            if (artwork == null) return 0;
+            if(!isAdmin || artwork.UserId != requesterId) return 2;
 
             artwork.IsRemoved = true;
-            artwork.RemovedReason = reasonId;
+            artwork.RemovedReason = request.ReasonId;
 
             await _context.SaveChangesAsync();
-            return true;
+            return 1;
         }
     }
 }

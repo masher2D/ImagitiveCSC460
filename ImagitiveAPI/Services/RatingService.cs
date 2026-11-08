@@ -13,15 +13,10 @@ namespace ImagitiveAPI.Services
         {
             _context = context;
         }
-        public async Task<bool> PostRatingAsync(PostRatingRequest request)
+        public async Task<bool> PostRatingAsync(int userId, PostRatingRequest request)
         {
 
-            bool userExists = await _context.Users.AnyAsync(u => u.UserId == request.UserId);
-
-            if (!userExists)
-            {
-                throw new Exception("User not found.");
-            }
+            
 
             if (request.RateValue < 1 || request.RateValue > 5)
             {
@@ -35,12 +30,17 @@ namespace ImagitiveAPI.Services
                 throw new Exception("Artwork not found.");
             }
 
+            if (artwork.UserId == userId)
+            {
+                throw new Exception("You cannot rate your own artwork.");
+            }
+
             if (artwork.IsRemoved)
             {
                 throw new Exception("Cannot rate removed artwork.");
             }
 
-            var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.ArtworkId == request.ArtworkId && r.UserId == request.UserId);
+            var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.ArtworkId == request.ArtworkId && r.UserId == userId);
             if (existingRating != null)
             {
                 existingRating.RateValue = request.RateValue;
@@ -50,7 +50,7 @@ namespace ImagitiveAPI.Services
                 var newRating = new RatingDBModel
                 {
                     ArtworkId = request.ArtworkId,
-                    UserId = request.UserId,
+                    UserId = userId,
                     RateValue = request.RateValue
                 };
                 _context.Ratings.Add(newRating);

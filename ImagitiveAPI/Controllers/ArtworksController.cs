@@ -1,6 +1,8 @@
 ﻿using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 namespace ImagitiveAPI.Controllers;
@@ -10,6 +12,8 @@ namespace ImagitiveAPI.Controllers;
 public class ArtworksController : ControllerBase
 {
     private readonly IArtworkService _artworkService;
+
+    private int CurrentUserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
     public ArtworksController(IArtworkService artworkService)
     {
@@ -35,31 +39,38 @@ public class ArtworksController : ControllerBase
         return Ok(artwork);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create( [FromForm] PostArtworkRequest request, IFormFile imageFile)
     {
-        var artwork = await _artworkService.CreateArtworkAsync(request,imageFile);
+
+        var artwork = await _artworkService.CreateArtworkAsync(CurrentUserId, request, imageFile);
 
         return Ok(artwork);
     }
 
-    [HttpPost("{id}/view")]
-    public async Task<IActionResult> RecordView(
-    int id,
-    int viewerId)
+    [Authorize]
+    [HttpPost("{artworkId}/view")]
+    public async Task<IActionResult> RecordView(int artworkId)
     {
-        bool success = await _artworkService.RecordViewAsync(id, viewerId);
+
+
+        bool success = await _artworkService.RecordViewAsync(artworkId, CurrentUserId);
 
         if (!success) return NotFound();
 
         return Ok();
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Remove(int id, int reasonId)
+    [Authorize]
+    [HttpDelete("{artworkId}")]
+    public async Task<IActionResult> Remove(int artworkId, int reasonId)
     {
-        bool success = await _artworkService.RemoveArtworkAsync(id, reasonId);
-        if (!success) return NotFound();
+
+        bool isAdmin = User.IsInRole("Admin");
+        int success = await _artworkService.RemoveArtworkAsync(CurrentUserId, isAdmin, artworkId, new RemoveArtworkRequest { ReasonId = reasonId });
+        if (success == 0) return NotFound();
+        if (success == 2) return Forbid();
         return Ok();
     }
 }

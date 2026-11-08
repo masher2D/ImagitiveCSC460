@@ -47,9 +47,9 @@
             signupBtn = new Button();
             signupAsLabel = new Label();
             passwordLabelN = new Label();
-            textBox2 = new TextBox();
+            passwordValueN = new TextBox();
             usernameLabelN = new Label();
-            textBox1 = new TextBox();
+            usernameValueN = new TextBox();
             subtitleLabel = new Label();
             existingUsersLabel = new Label();
             newUsersLabel = new Label();
@@ -71,7 +71,7 @@
             headerLabel.TabIndex = 0;
             headerLabel.Text = "Imagitive";
             headerLabel.TextAlign = ContentAlignment.TopCenter;
-            headerLabel.Click += label1_Click;
+            headerLabel.Click += headerLabel_Click;
             // 
             // usernameLabelE
             // 
@@ -86,9 +86,11 @@
             // usernameValue
             // 
             usernameValue.Location = new Point(89, 62);
+            usernameValue.MaxLength = 50;
             usernameValue.Name = "usernameValue";
             usernameValue.Size = new Size(200, 39);
             usernameValue.TabIndex = 2;
+            usernameValue.TextChanged += usernameValue_TextChanged;
             // 
             // passwordValue
             // 
@@ -115,6 +117,7 @@
             loginBtn.TabIndex = 5;
             loginBtn.Text = "Login";
             loginBtn.UseVisualStyleBackColor = true;
+            loginBtn.Click += loginBtn_Click;
             // 
             // artistRadioBtn
             // 
@@ -126,7 +129,7 @@
             artistRadioBtn.TabStop = true;
             artistRadioBtn.Text = "Artist";
             artistRadioBtn.UseVisualStyleBackColor = true;
-            artistRadioBtn.CheckedChanged += radioButton1_CheckedChanged;
+            artistRadioBtn.CheckedChanged += artistRadioBtn_CheckedChanged;
             // 
             // viewerRadioBtn
             // 
@@ -149,6 +152,7 @@
             adminRadioBtn.TabIndex = 8;
             adminRadioBtn.Text = "Admin";
             adminRadioBtn.UseVisualStyleBackColor = true;
+            adminRadioBtn.CheckedChanged += adminRadioBtn_CheckedChanged;
             // 
             // loginAsLabel
             // 
@@ -189,9 +193,9 @@
             splitContainer1.Panel2.Controls.Add(signupBtn);
             splitContainer1.Panel2.Controls.Add(signupAsLabel);
             splitContainer1.Panel2.Controls.Add(passwordLabelN);
-            splitContainer1.Panel2.Controls.Add(textBox2);
+            splitContainer1.Panel2.Controls.Add(passwordValueN);
             splitContainer1.Panel2.Controls.Add(usernameLabelN);
-            splitContainer1.Panel2.Controls.Add(textBox1);
+            splitContainer1.Panel2.Controls.Add(usernameValueN);
             splitContainer1.Panel2.Paint += splitContainer1_Panel2_Paint;
             splitContainer1.Size = new Size(778, 500);
             splitContainer1.SplitterDistance = 389;
@@ -213,6 +217,7 @@
             emailValue.Name = "emailValue";
             emailValue.Size = new Size(200, 39);
             emailValue.TabIndex = 20;
+            emailValue.TextChanged += emailValue_TextChanged;
             // 
             // viewerCheckBox
             // 
@@ -223,6 +228,7 @@
             viewerCheckBox.TabIndex = 18;
             viewerCheckBox.Text = "Viewer";
             viewerCheckBox.UseVisualStyleBackColor = true;
+            viewerCheckBox.CheckedChanged += viewerCheckBox_CheckedChanged;
             // 
             // artistCheckBox
             // 
@@ -233,6 +239,7 @@
             artistCheckBox.TabIndex = 14;
             artistCheckBox.Text = "Artist";
             artistCheckBox.UseVisualStyleBackColor = true;
+            artistCheckBox.CheckedChanged += artistCheckBox_CheckedChanged;
             // 
             // signupBtn
             // 
@@ -242,6 +249,7 @@
             signupBtn.TabIndex = 14;
             signupBtn.Text = "Sign Up";
             signupBtn.UseVisualStyleBackColor = true;
+            signupBtn.Click += signupBtn_Click;
             // 
             // signupAsLabel
             // 
@@ -263,12 +271,13 @@
             passwordLabelN.TabIndex = 12;
             passwordLabelN.Text = "Password";
             // 
-            // textBox2
+            // passwordValueN
             // 
-            textBox2.Location = new Point(91, 153);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(200, 39);
-            textBox2.TabIndex = 13;
+            passwordValueN.Location = new Point(91, 153);
+            passwordValueN.Name = "passwordValueN";
+            passwordValueN.Size = new Size(200, 39);
+            passwordValueN.TabIndex = 13;
+            passwordValueN.TextChanged += passwordValueN_TextChanged;
             // 
             // usernameLabelN
             // 
@@ -280,12 +289,13 @@
             usernameLabelN.TabIndex = 10;
             usernameLabelN.Text = "Username";
             // 
-            // textBox1
+            // usernameValueN
             // 
-            textBox1.Location = new Point(91, 62);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(200, 39);
-            textBox1.TabIndex = 11;
+            usernameValueN.Location = new Point(91, 62);
+            usernameValueN.Name = "usernameValueN";
+            usernameValueN.Size = new Size(200, 39);
+            usernameValueN.TabIndex = 11;
+            usernameValueN.TextChanged += usernameValueN_TextChanged;
             // 
             // subtitleLabel
             // 
@@ -374,9 +384,9 @@
         private Button signupBtn;
         private Label signupAsLabel;
         private Label passwordLabelN;
-        private TextBox textBox2;
+        private TextBox passwordValueN;
         private Label usernameLabelN;
-        private TextBox textBox1;
+        private TextBox usernameValueN;
         private CheckBox viewerCheckBox;
         private Label emailLabel;
         private TextBox emailValue;

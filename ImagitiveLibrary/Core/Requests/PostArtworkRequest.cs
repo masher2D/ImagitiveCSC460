@@ -7,10 +7,7 @@ namespace ImagitiveLibrary.Core.Requests
 
     public class PostArtworkRequest
     {
-        /// <summary>
-        /// The ID of the user creating the artwork.
-        /// </summary>
-        public int UserId { get; set; }
+        
         /// <summary>
         /// The title of the artwork.
         /// </summary>

@@ -88,9 +88,10 @@ namespace ImagitiveAPI.Services
             return await MapToUserModel(existingUser);
         }
         
-        public async Task<bool> SetUserStatusAsync(int id, string status)
+        public async Task<bool> SetUserStatusAsync(int updateeId, string status)
         {
-            var existingUser = await _context.Users.FindAsync(id);
+
+            var existingUser = await _context.Users.FindAsync(updateeId);
             if (existingUser == null)
                 return false;
 

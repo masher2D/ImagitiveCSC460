@@ -11,7 +11,6 @@ namespace ImagitiveAPI.Services
     public class ReportService : IReportService
     {
         private readonly AppDBContext _context;
-        private readonly ArtworkService _artworkService;
 
         private static readonly HashSet<string> ValidStatuses = [
             "Unresolved",
@@ -23,7 +22,6 @@ namespace ImagitiveAPI.Services
         public ReportService(AppDBContext context)
         {
             _context = context;
-            _artworkService = _artworkService;
         }
 
         private ReportModel MapToReportModel(ReportDBModel report)
@@ -41,7 +39,7 @@ namespace ImagitiveAPI.Services
             };
         }
 
-        public async Task<ReportModel> CreateReportAsync(PostReportRequest request)
+        public async Task<ReportModel> CreateReportAsync(int reporterId, PostReportRequest request)
         {
             bool reportingArtwork = request.ArtworkId.HasValue;
 
@@ -54,7 +52,7 @@ namespace ImagitiveAPI.Services
 
             if (reportingUser)
             {
-                if (request.ReportedUserId == request.ReporterId)
+                if (request.ReportedUserId == reporterId)
                 {
                     throw new Exception(
                         "You cannot report yourself.");
@@ -69,41 +67,60 @@ namespace ImagitiveAPI.Services
                     throw new Exception(
                         "Reported user not found.");
                 }
+
+                bool alreadyReported = await _context.Reports
+                    .AnyAsync(r =>
+                    r.ReporterId == reporterId &&
+                    r.ReportedUserId ==
+                    request.ReportedUserId &&
+                    r.Status == "Unresolved");
+
+                if (alreadyReported)
+                {
+                    throw new Exception(
+                        "You already have an unresolved report for this user.");
+
+                }
             }
 
             if (reportingArtwork)
             {
-                bool artworkExists = await _context.Artworks
-                    .AnyAsync(a => a.ArtworkId == request.ArtworkId);
+                var artwork = await _context.Artworks
+                    .FirstOrDefaultAsync(a => a.ArtworkId == request.ArtworkId);
 
-                if (!artworkExists)
+                if (artwork == null)
                 {
                     throw new Exception(
                         "Artwork not found.");
                 }
 
-                var artwork = await _context.Artworks
-                    .FirstOrDefaultAsync(a => a.ArtworkId == request.ArtworkId);
+                
 
-                if(artwork.UserId == request.ReporterId)
+                if(artwork.UserId == reporterId)
                 {
                     throw new Exception(
                         "Users cannot report their own posts.");
                 }
 
-            }
+                bool alreadyReported = await _context.Reports
+                    .AnyAsync(r =>
+                    r.ReporterId == reporterId &&
+                    r.ArtworkId == request.ArtworkId &&
+                    r.Status == "Unresolved");
 
-            if (request.ReportedUserId == request.ReporterId)
-            {
-                throw new Exception(
-                    "Users cannot report themselves.");
+                if (alreadyReported)
+                {
+                    throw new Exception(
+                       "You have already reported this artwork and it is still unresolved.");
+                }
+
             }
 
             bool reasonExists = await _context.Reasons
                 .AnyAsync(r => r.ReasonId == request.ReasonID);
 
             bool reporterExists = await _context.Users
-                .AnyAsync(u => u.UserId == request.ReporterId);
+                .AnyAsync(u => u.UserId == reporterId);
 
             if (!reasonExists)
             {
@@ -118,17 +135,13 @@ namespace ImagitiveAPI.Services
             }
 
 
-            bool alreadyReported = await _context.Reports
-                .AnyAsync(r => 
-                    r.ReporterId == request.ReporterId &&
-                    r.ArtworkId == request.ArtworkId &&
-                    r.Status == "Unresolved");
+            
 
             var report = new ReportDBModel
             {
                 ArtworkId = request.ArtworkId,
                 ReportedUserId = request.ReportedUserId,
-                ReporterId = request.ReporterId,
+                ReporterId = reporterId,
                 ReasonID = request.ReasonID,
                 Description = request.Description,
                 Status = "Unresolved",

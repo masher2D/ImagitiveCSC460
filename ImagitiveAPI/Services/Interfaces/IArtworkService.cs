@@ -9,9 +9,9 @@ public interface IArtworkService
 
     Task<ArtworkModel?> GetArtworkByIdAsync(int artworkId);
 
-    Task<ArtworkModel> CreateArtworkAsync(PostArtworkRequest request, IFormFile file);
+    Task<ArtworkModel> CreateArtworkAsync(int userId, PostArtworkRequest request, IFormFile file);
 
-    Task<bool> RemoveArtworkAsync(int artworkId, int reasonId);
+    Task<int> RemoveArtworkAsync(int requesterId, bool isAdmin, int artworkId, RemoveArtworkRequest request);
 
     Task<bool> RecordViewAsync(int artworkId, int userId);
 

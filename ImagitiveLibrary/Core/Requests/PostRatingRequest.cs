@@ -7,10 +7,7 @@ namespace ImagitiveLibrary.Core.Requests
 
     public class PostRatingRequest
     {
-        /// <summary>
-        /// The ID of the user submitting the rating.
-        /// </summary>
-        public int UserId { get; set; }
+        
         /// <summary>
         /// The ID of the artwork being rated.
         /// </summary>

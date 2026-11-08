@@ -6,10 +6,7 @@ namespace ImagitiveLibrary.Core.Requests
 {
     public class UpdatePasswordRequest
     {
-        /// <summary>
-        /// The ID of the user whose password is being updated.
-        /// </summary>
-        public int UserId { get; set; }
+        
         /// <summary>
         /// The current password of the user, used for verification before updating to a new password.
         /// </summary>

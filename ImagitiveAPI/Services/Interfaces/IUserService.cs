@@ -9,6 +9,6 @@ namespace ImagitiveAPI.Services.Interfaces
         public Task<UserModel?> GetUserByIdAsync(int id);
         public Task<List<UserModel>> GetAllUsersAsync();
         public Task<UserModel?> UpdateUserAsync(int id, UpdateUserRequest request);
-        public Task<bool> SetUserStatusAsync(int id, string status);
+        public Task<bool> SetUserStatusAsync(int updateeId, string status);
     }
 }

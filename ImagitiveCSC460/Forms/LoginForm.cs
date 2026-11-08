@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ImagitiveAPI.Session;
+using ImagitiveLibrary.Core.Requests;
+using ImagitiveUI.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,32 +13,250 @@ namespace ImagitiveCSC460UI.Forms
 {
     public partial class LoginForm : Form
     {
+        private readonly AuthApiService _authService = new();
         public LoginForm()
         {
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void LoginForm_Load(object sender, EventArgs e)
         {
-
+            pictureBox1.Visible = false;
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        private void headerLabel_Click(object sender, EventArgs e)
         {
+            // This method is intentionally left empty.
+        }
 
+        private void usernameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // This method is intentionally left empty.
+        }
+
+        private void usernameValue_TextChanged(object sender, EventArgs e)
+        {
+            // This method is intentionally left empty.
+        }
+
+        private async void loginBtn_Click(object sender, EventArgs e)
+        {
+            loginBtn.Enabled = false;
+            signupBtn.Enabled = false;
+            
+
+            try
+            {
+                string username = validateString(usernameValue.Text);
+                string password = validateString(passwordValue.Text);
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    MessageBox.Show("Please enter both username and password.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Proceed with login logic here
+                var request = new LogInRequest
+                {
+                    Username = username,
+                    Password = password
+                };
+
+                Cursor = Cursors.WaitCursor;
+                pictureBox1.Visible = true;
+                var response = await _authService.LoginAsync(request);
+
+                if (response == null || !response.Success)
+                {
+                    MessageBox.Show(
+                        "Invalid username or password.");
+                    return;
+                }
+
+                string selectedRole = artistRadioBtn.Checked ? "Artist" : viewerRadioBtn.Checked ? "Viewer" : adminRadioBtn.Checked ? "Admin" : string.Empty;
+
+                if (!response.Roles.Contains(selectedRole))
+                {
+                    MessageBox.Show(
+                        $"Your account does not have the {selectedRole} role.");
+
+                    return;
+                }
+
+                UserSession.UserId = response.UserId;
+
+                UserSession.Username = response.Username;
+
+                UserSession.JwtToken = response.Token;
+
+                UserSession.Roles = response.Roles;
+
+                ApiClient.SetToken(response.Token);
+
+
+
+                MessageBox.Show($"Welcome {response.Username}!");
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+                pictureBox1.Visible = false;
+                loginBtn.Enabled = true;
+                signupBtn.Enabled = true;
+            }
+        }
+
+
+
+        private void artistRadioBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            // This method is intentionally left empty.
         }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
         {
+            // This method is intentionally left empty.
+        }
+
+        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+            // This method is intentionally left empty.
+        }
+
+        private void newUsersLabel_Click(object sender, EventArgs e)
+        {
+            // This method is intentionally left empty.
+        }
+
+        private string validateString(string dirtyText)
+        {
+            return dirtyText?.Trim();
 
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void emailValue_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void newUsersLabel_Click(object sender, EventArgs e)
+        private void passwordValueN_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void usernameValueN_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void artistCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void viewerCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void signupBtn_Click(object sender, EventArgs e)
+        {
+            loginBtn.Enabled = false;
+            signupBtn.Enabled = false;
+
+            try
+            {
+                var roleIds = new List<int>();
+
+
+                if (artistCheckBox.Checked)
+                {
+                    roleIds.Add(1);
+                }
+
+                if (viewerCheckBox.Checked)
+                {
+                    roleIds.Add(2);
+                }
+
+                string username = validateString(usernameValueN.Text);
+                string password = validateString(passwordValueN.Text);
+                string email = validateString(emailValue.Text);
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email))
+                {
+                    MessageBox.Show("Please enter a value for all fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (!artistCheckBox.Checked && !viewerCheckBox.Checked)
+                {
+                    MessageBox.Show("Please select a role.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var request = new SignupRequest
+                {
+                    Username = username,
+
+                    Email = email,
+
+                    Password = password,
+
+                    RoleIds = roleIds
+                };
+
+                pictureBox1.Visible = true;
+                var result = await _authService.SignupAsync(request);
+
+                if (result == null)
+                {
+                    MessageBox.Show(
+                        "Failed to create account.");
+
+                    return;
+                }
+
+                MessageBox.Show(
+                    "Account created successfully.");
+
+                usernameValue.Text = usernameValueN.Text;
+
+                passwordValueN.Clear();
+
+                usernameValueN.Text = "";
+                emailValue.Clear();
+                passwordValueN.Clear();
+                passwordValue.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                pictureBox1.Visible = false;
+
+                loginBtn.Enabled = true;
+                signupBtn.Enabled = true;
+            }
+        }
+
+            
+
+
+
+
+
+        private void adminRadioBtn_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }

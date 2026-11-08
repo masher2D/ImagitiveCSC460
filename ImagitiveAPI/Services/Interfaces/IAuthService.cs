@@ -9,6 +9,6 @@ namespace ImagitiveAPI.Services.Interfaces
     {
         public Task<UserModel> SignupUserAsync(SignupRequest request);
         public Task<LogInResponse> LoginAsync(LogInRequest request);
-        public Task UpdatePasswordAsync(UpdatePasswordRequest request);
+        public Task UpdatePasswordAsync(int userId, UpdatePasswordRequest request);
     }
 }

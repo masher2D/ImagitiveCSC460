@@ -2,9 +2,11 @@
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ImagitiveLibrary.Core.Requests;
+using System.Security.Claims;
 
 namespace ImagitiveAPI.Controllers
 {
@@ -36,17 +38,31 @@ namespace ImagitiveAPI.Controllers
 
             return Ok(user);
         }
-        /*
+
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateUserRequest request)
+        public async Task<IActionResult> Update(int updateeId, UpdateUserRequest request)
         {
-            var user = await _userService.UpdateUserAsync(id, request);
+
+
+            var roles =
+                User.FindAll(ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToList();
+
+            if (!roles.Contains("Admin"))
+            {
+                return Forbid();
+            }
+
+            var user = await _userService.UpdateUserAsync(updateeId, request);
             if (user == null)
                 return NotFound();
 
             return Ok(user);
         }
-        */
+
+        
 
 
     }

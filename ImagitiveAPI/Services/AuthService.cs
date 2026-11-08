@@ -11,14 +11,30 @@ namespace ImagitiveAPI.Services
     public class AuthService : IAuthService
     {
         private AppDBContext _context;
+        private IJwtService _jwtService;
 
-        public AuthService(AppDBContext context)
+        public AuthService(AppDBContext context, IJwtService jwtService)
         {
             _context = context;
+            _jwtService = jwtService;
         }
-        public async Task UpdatePasswordAsync(UpdatePasswordRequest request)
+
+        private async Task<List<string>> GetUserRolesAsync(int userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == request.UserId);
+            var roles = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Join(
+                    _context.Roles,
+                    ur => ur.RoleId,
+                    r => r.RoleId,
+                    (ur, r) => r.RoleName)
+                .ToListAsync();
+            return roles;
+        }
+
+        public async Task UpdatePasswordAsync(int userId, UpdatePasswordRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null)
             {
                 throw new Exception("User not found.");
@@ -30,7 +46,7 @@ namespace ImagitiveAPI.Services
             }
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-            int rowsAffected = await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC UpdateUserPassword {request.UserId}, {hashedPassword}");
+            int rowsAffected = await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC UpdateUserPassword {userId}, {hashedPassword}");
             if(rowsAffected == 0)
             {
                 throw new Exception("Password update failed.");
@@ -50,12 +66,18 @@ namespace ImagitiveAPI.Services
                 };
             }
 
+            var roles = await GetUserRolesAsync(user.UserId);
+
+            string token = _jwtService.GenerateToken(user, roles);
+
             return new LogInResponse
             {
                 Success = true,
                 Message = "Login successful.",
                 UserId = user.UserId,
-                Username = user.Username
+                Username = user.Username,
+                Roles = roles,
+                Token = token
             };
         }
 

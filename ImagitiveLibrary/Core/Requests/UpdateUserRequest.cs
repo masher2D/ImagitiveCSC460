@@ -6,10 +6,7 @@ namespace ImagitiveLibrary.Core.Requests
 {
     public class UpdateUserRequest
     {
-        /// <summary>
-        /// The Id of the user to be updated.
-        /// </summary>
-        public int UserId { get; set; }
+        
 
         /// <summary>
         /// The updated username for the user.

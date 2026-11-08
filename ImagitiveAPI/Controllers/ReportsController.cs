@@ -1,6 +1,8 @@
 ﻿using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ImagitiveAPI.Controllers;
 
@@ -10,16 +12,24 @@ public class ReportsController : ControllerBase
 {
     private readonly IReportService _reportService;
 
+    private int CurrentUserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
     public ReportsController(IReportService reportService)
     {
         _reportService = reportService;
     }
 
+    [Authorize]
     [HttpPatch("{id}/status")]
     public async Task<IActionResult> UpdateStatus(
     int id,
     UpdateReportStatusRequest request)
     {
+        bool isAdmin = User.IsInRole("Admin");
+        if (!isAdmin)
+        {
+            return Forbid();
+        }
         bool updated =
             await _reportService
                 .UpdateReportStatusAsync(
@@ -49,10 +59,11 @@ public class ReportsController : ControllerBase
         return Ok(report);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(PostReportRequest request)
     {
-        var report = await _reportService.CreateReportAsync(request);
+        var report = await _reportService.CreateReportAsync(CurrentUserId, request);
         return Ok(report);
     }
 

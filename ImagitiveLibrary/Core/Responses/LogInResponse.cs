@@ -17,10 +17,13 @@ namespace ImagitiveLibrary.Core.Responses
         /// <summary>
         /// Gets or sets the ID of the logged-in user.
         /// </summary>
+        public string Token { get; set; } = string.Empty;
+
         public int UserId { get; set; }
-        /// <summary>
-        /// Gets or sets the username of the logged-in user.
-        /// </summary>
+
         public string Username { get; set; } = string.Empty;
+
+        public List<string> Roles { get; set; } = [];
     }
+    
 }

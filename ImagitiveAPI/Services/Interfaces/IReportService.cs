@@ -5,7 +5,7 @@ namespace ImagitiveAPI.Services.Interfaces
 {
     public interface IReportService
     {
-        Task<ReportModel> CreateReportAsync(PostReportRequest request);
+        Task<ReportModel> CreateReportAsync(int reporterId, PostReportRequest request);
 
         Task<List<ReportModel>> GetAllReportsAsync();
 

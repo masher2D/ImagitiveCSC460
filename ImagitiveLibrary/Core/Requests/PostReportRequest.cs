@@ -6,10 +6,7 @@ namespace ImagitiveLibrary.Core.Requests
 {
     public class PostReportRequest
     {
-        /// <summary>
-        /// Gets or sets the ID of the reporter.
-        /// </summary>
-        public int ReporterId { get; set; }
+        
         /// <summary>
         /// Gets or sets the ID of the artwork being reported.
         /// </summary>

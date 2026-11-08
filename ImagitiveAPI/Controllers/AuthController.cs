@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Requests;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ImagitiveAPI.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
 
@@ -15,6 +16,7 @@ namespace ImagitiveAPI.Controllers
             _authService = authService;
         }
 
+        [AllowAnonymous]
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignupRequest request)
         {
@@ -29,6 +31,7 @@ namespace ImagitiveAPI.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LogInRequest request)
         {
@@ -40,12 +43,14 @@ namespace ImagitiveAPI.Controllers
             return Ok(response);
         }
 
-        [HttpPost("update-password")]
+        [Authorize]
+        [HttpPatch("update-password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
         {
             try
             {
-                await _authService.UpdatePasswordAsync(request);
+                int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+                await _authService.UpdatePasswordAsync(userId, request);
                 return Ok(new { Message = "Password updated successfully." });
             }
             catch (Exception ex)
