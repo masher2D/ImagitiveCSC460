@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 
 namespace ImagitiveUI.Services;
 
-public class AuthApiService
+public class AuthAPIService
 {
     public async Task<LogInResponse?> LoginAsync(
         LogInRequest request)

@@ -1,6 +1,8 @@
 ﻿using ImagitiveAPI.Session;
+using ImagitiveCSC460UI.Services;
 using ImagitiveLibrary.Core.Requests;
 using ImagitiveUI.Services;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +15,9 @@ namespace ImagitiveCSC460UI.Forms
 {
     public partial class LoginForm : Form
     {
-        private readonly AuthApiService _authService = new();
+        private readonly AuthAPIService _authService = new();
+        private readonly UserAPIService _userApiService = new();
+        private readonly RegionAPIService _regionApiService = new();
         public LoginForm()
         {
             InitializeComponent();
@@ -57,7 +61,7 @@ namespace ImagitiveCSC460UI.Forms
 
                 string selectedRole = selectedRoleComboBox.SelectedItem?.ToString() ?? string.Empty;
 
-                if(selectedRole == "")
+                if (selectedRole == "")
                 {
                     MessageBox.Show("Please enter a role.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -89,6 +93,7 @@ namespace ImagitiveCSC460UI.Forms
 
                     return;
                 }
+                
 
                 UserSession.UserId = response.UserId;
 
@@ -99,6 +104,23 @@ namespace ImagitiveCSC460UI.Forms
                 UserSession.Roles = response.Roles;
 
                 UserSession.ActiveRole = selectedRole;
+
+                var user = await _userApiService.GetUserByIdAsync(UserSession.UserId);
+
+                if (user != null)
+                {
+                    UserSession.Email = user.Email;
+                    UserSession.RegionId = user.RegionID;
+                }
+
+                var region = await _regionApiService.GetRegionByIdAsync(UserSession.RegionId ?? 0);
+
+                if(!(region == null))
+                {
+                    UserSession.RegionName = region.Name;
+                }
+
+                
 
                 ApiClient.SetToken(response.Token);
 
@@ -299,5 +321,9 @@ namespace ImagitiveCSC460UI.Forms
 
         }
 
+        private void LoginForm_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

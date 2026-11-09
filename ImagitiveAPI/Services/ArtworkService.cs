@@ -1,5 +1,6 @@
 ﻿using ImagitiveAPI.Data;
 using ImagitiveAPI.Models;
+using ImagitiveAPI.Requests;
 using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
@@ -81,8 +82,9 @@ namespace ImagitiveAPI.Services
             };
         }
 
-        public async Task<ArtworkModel> CreateArtworkAsync(int userId, PostArtworkRequest request, IFormFile file)
+        public async Task<ArtworkModel> CreateArtworkAsync(int userId, PostArtworkFormRequest request)
         {
+
 
             var uniqueTags = request.Tags.Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             if (uniqueTags.Count > 3) 
@@ -95,12 +97,12 @@ namespace ImagitiveAPI.Services
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
-            string fileName = $"{Guid.NewGuid():N}" + Path.GetExtension(file.FileName);
+            string fileName = $"{Guid.NewGuid():N}" + Path.GetExtension(request.ImageFile.FileName);
             string filePath = Path.Combine(uploadsFolder, fileName);
 
             using var stream = new FileStream(filePath, FileMode.Create);
 
-            await file.CopyToAsync(stream);
+            await request.ImageFile.CopyToAsync(stream);
 
             var artwork = new ArtworkDBModel
             {

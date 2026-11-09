@@ -324,6 +324,7 @@
             Controls.Add(splitContainer1);
             Name = "LoginForm";
             Text = "LoginForm";
+            Load += LoginForm_Load_1;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);

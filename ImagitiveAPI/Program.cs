@@ -19,6 +19,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IArtworkService, ArtworkService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IRegionService, RegionService>();
 
 builder.Services.AddDbContext<AppDBContext>(options =>
     options

@@ -78,9 +78,25 @@ namespace ImagitiveAPI.Services
             if (existingUser == null)
                 return null;
 
-            existingUser.Username = request.Username;
-            existingUser.Email = request.Email;
-            existingUser.RegionID = request.RegionId;
+            var isPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, existingUser.PasswordHash);
+            if (!isPasswordValid)
+                throw new UnauthorizedAccessException("Current password is incorrect.");
+
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                existingUser.Username = request.Username;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                existingUser.Email = request.Email;
+            }
+
+            if (request.RegionId.HasValue)
+            {
+                existingUser.RegionID = request.RegionId;
+            }
+
             existingUser.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();

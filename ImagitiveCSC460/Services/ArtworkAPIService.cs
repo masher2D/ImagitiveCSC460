@@ -14,45 +14,22 @@ namespace ImagitiveCSC460UI.Services
 {
     public class ArtworkAPIService
     {
-        public async Task<ArtworkModel> CreateArtworkAsync(PostArtworkRequest request, string filePath)
+        public async Task<ArtworkModel?> CreateArtworkAsync(string filePath, PostArtworkRequest request)
         {
             using var content = new MultipartFormDataContent();
-            
-            foreach (var property in typeof(PostArtworkRequest).GetProperties())
+
+            content.Add(new StringContent(request.Title), "Title");
+
+            content.Add(new StringContent(request.Description ?? string.Empty), "Description");
+
+            foreach (var tag in request.Tags)
             {
-                var value = property.GetValue(request);
-
-                if (value == null)
-                    continue;
-
-                var type = Nullable.GetUnderlyingType(property.PropertyType)
-                           ?? property.PropertyType;
-
-                if (type.IsPrimitive ||
-                    type == typeof(string) ||
-                    type == typeof(decimal) ||
-                    type.IsEnum)
-                {
-                    content.Add(
-                        new StringContent(
-                            Convert.ToString(value, CultureInfo.InvariantCulture)!),
-                        property.Name);
-                }
+                content.Add(new StringContent(tag), "Tags");
             }
 
-            // Add image file
-            await using var fileStream = File.OpenRead(filePath);
+            content.Add(new StreamContent(File.OpenRead(filePath)), "ImageFile", Path.GetFileName(filePath));
 
-            using var fileContent = new StreamContent(fileStream);
-
-            fileContent.Headers.ContentType =
-                new MediaTypeHeaderValue("application/octet-stream");
-
-            content.Add(fileContent, "imageFile",
-                Path.GetFileName(filePath));
-
-            var response = await ApiClient.Client.PostAsync(
-                "api/artworks", content);
+            var response = await ApiClient.Client.PostAsync("api/artworks", content);
 
             if (!response.IsSuccessStatusCode)
                 return null;

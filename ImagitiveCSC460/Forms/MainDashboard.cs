@@ -1,4 +1,7 @@
 ﻿using ImagitiveAPI.Session;
+using ImagitiveCSC460UI.Services;
+using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +15,10 @@ namespace ImagitiveCSC460UI.Forms
     public partial class MainDashboard : Form
     {
         private LoginForm loginForm;
+        private readonly UserAPIService _userService = new UserAPIService();
+        private readonly RegionAPIService _regionService = new RegionAPIService();
+
+
         public MainDashboard(LoginForm loginForm)
         {
             InitializeComponent();
@@ -33,11 +40,16 @@ namespace ImagitiveCSC460UI.Forms
 
         }
 
-        private void MainDashboard_Load(object sender, EventArgs e)
+        private async void MainDashboard_Load(object sender, EventArgs e)
         {
 
             ConfigureRoleAccess();
             availableRolesComboBox.Items.AddRange(UserSession.Roles.ToArray());
+            await LoadRegionsAsync();
+            currUsernameValue.Text = UserSession.Username;
+            currRegionValue.Text = UserSession.RegionName;
+            currEmailValue.Text = UserSession.Email;
+
 
         }
 
@@ -87,6 +99,33 @@ namespace ImagitiveCSC460UI.Forms
 
         }
 
+        private async Task LoadRegionsAsync()
+        {
+            var regions = await _regionService.GetRegionsAsync();
+            
+
+            if (regions == null)
+            {
+                MessageBox.Show("Unable to load regions.");
+                return;
+            }
+
+            regionComboBox.DataSource = regions;
+
+            regionComboBox.DisplayMember = nameof(RegionModel.Name);
+
+            regionComboBox.ValueMember = nameof(RegionModel.RegionId);
+
+            if (UserSession.RegionId == null)
+            {
+                regionComboBox.SelectedIndex = -1;
+            }
+            else
+            {
+                regionComboBox.SelectedValue = (int)UserSession.RegionId;
+            }
+        }
+
         private void currRoleValue_Click(object sender, EventArgs e)
         {
 
@@ -117,10 +156,10 @@ namespace ImagitiveCSC460UI.Forms
             if (result == DialogResult.Yes)
             {
                 loginForm.Show();
-                clearSession();
+                ClearSession();
                 Close();
             }
-           
+
 
         }
 
@@ -135,18 +174,54 @@ namespace ImagitiveCSC460UI.Forms
         }
 
 
-        private void saveAndLogoutBtn_Click(object sender, EventArgs e)
+        private async void saveAndLogoutBtn_Click(object sender, EventArgs e)
         {
+            using var verifyForm = new ConfirmPasswordForm();
 
+            if (verifyForm.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+
+
+            var request = new UpdateUserRequest
+            {
+                Username = usernameValue.Text,
+                Email = emailValue.Text,
+                RegionId = regionComboBox.SelectedValue as int?,
+                CurrentPassword = verifyForm.ResultValue
+            };
+
+            var response = await _userService.UpdateUserAsync(request);
+            if (!response)
+            {
+                MessageBox.Show("Failed to update user information. Please check your current password and try again.", "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            MessageBox.Show("Profile updated. You will now be logged out.");
+            ClearSession();
+            loginForm.Show();
+            Close();
         }
 
-        private void clearSession()
+        private void ClearSession()
         {
             UserSession.UserId = 0;
             UserSession.JwtToken = string.Empty;
             UserSession.Username = string.Empty;
             UserSession.Roles.Clear();
             UserSession.ActiveRole = string.Empty;
+        }
+
+        private void regionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void changeUsernameLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

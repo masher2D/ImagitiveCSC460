@@ -35,10 +35,7 @@ namespace ImagitiveCSC460UI.Services
         }
         public async Task<bool> UpdateUserAsync(UpdateUserRequest request)
         {
-            var response =
-            await ApiClient.Client.PutAsJsonAsync(
-                $"api/user/{UserSession.UserId}",
-                request);
+            var response = await ApiClient.Client.PutAsJsonAsync($"api/users/{UserSession.UserId}", request);
 
             return response.IsSuccessStatusCode;
 

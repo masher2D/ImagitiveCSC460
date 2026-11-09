@@ -1,4 +1,5 @@
-﻿using ImagitiveAPI.Services.Interfaces;
+﻿using ImagitiveAPI.Requests;
+using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,10 +42,10 @@ public class ArtworksController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Create( [FromForm] PostArtworkRequest request, [FromForm] IFormFile imageFile)
+    public async Task<IActionResult> Create( [FromForm] PostArtworkFormRequest request)
     {
 
-        var artwork = await _artworkService.CreateArtworkAsync(CurrentUserId, request, imageFile);
+        var artwork = await _artworkService.CreateArtworkAsync(CurrentUserId, request);
 
         return Ok(artwork);
     }

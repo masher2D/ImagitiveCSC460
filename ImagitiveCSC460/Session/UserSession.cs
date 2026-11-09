@@ -22,5 +22,17 @@
         /// The currently active role of the user in the session. This can be used to determine the user's permissions and access level within the application.
         /// </summary>
         public static string ActiveRole { get; set; } = string.Empty;
+        /// <summary>
+        /// Gets or sets the email address.
+        /// </summary>
+        public static string Email { get; set; } = string.Empty;
+        /// <summary>
+        /// Gets or sets the region name.
+        /// </summary>
+        public static string? RegionName { get; set; }
+        /// <summary>
+        /// Gets or sets the region identifier.
+        /// </summary>
+        public static int? RegionId { get; set; }
     }
 }

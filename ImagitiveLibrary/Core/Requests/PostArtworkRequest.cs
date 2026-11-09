@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,6 +21,7 @@ namespace ImagitiveLibrary.Core.Requests
         /// The tags associated with the artwork.
         /// </summary>
         public List<string> Tags { get; set; } = [];
+        
 
     }
 }
