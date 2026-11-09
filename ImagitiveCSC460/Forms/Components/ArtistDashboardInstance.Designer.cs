@@ -52,6 +52,7 @@
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             headerLabel = new Label();
+            artworkManagerGetNextPageBtn = new Button();
             tabControl1.SuspendLayout();
             artworkManagementPage.SuspendLayout();
             statisticsPage.SuspendLayout();
@@ -70,6 +71,7 @@
             // 
             // artworkManagementPage
             // 
+            artworkManagementPage.Controls.Add(artworkManagerGetNextPageBtn);
             artworkManagementPage.Controls.Add(artworkManagerReloadBtn);
             artworkManagementPage.Controls.Add(deleteSelectedArtworkBtn);
             artworkManagementPage.Controls.Add(postNewArtworkBtn);
@@ -125,6 +127,7 @@
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
+            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
             // 
             // lvArtworkTitle
             // 
@@ -288,6 +291,16 @@
             headerLabel.Text = "Artist Dashboard";
             headerLabel.TextAlign = ContentAlignment.TopRight;
             // 
+            // artworkManagerGetNextPageBtn
+            // 
+            artworkManagerGetNextPageBtn.Font = new Font("Leelawadee UI", 9F);
+            artworkManagerGetNextPageBtn.Location = new Point(15, 688);
+            artworkManagerGetNextPageBtn.Name = "artworkManagerGetNextPageBtn";
+            artworkManagerGetNextPageBtn.Size = new Size(181, 46);
+            artworkManagerGetNextPageBtn.TabIndex = 13;
+            artworkManagerGetNextPageBtn.Text = "Get Next Page";
+            artworkManagerGetNextPageBtn.UseVisualStyleBackColor = true;
+            // 
             // ArtistDashboardInstance
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -333,5 +346,6 @@
         private Label accountAvgRatingValueLabel;
         private Button artworkManagerReloadBtn;
         private Button statsReloadBtn;
+        private Button artworkManagerGetNextPageBtn;
     }
 }

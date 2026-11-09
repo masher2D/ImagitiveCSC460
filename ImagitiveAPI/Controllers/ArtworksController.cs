@@ -41,7 +41,7 @@ public class ArtworksController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Create( [FromForm] PostArtworkRequest request, IFormFile imageFile)
+    public async Task<IActionResult> Create( [FromForm] PostArtworkRequest request, [FromForm] IFormFile imageFile)
     {
 
         var artwork = await _artworkService.CreateArtworkAsync(CurrentUserId, request, imageFile);

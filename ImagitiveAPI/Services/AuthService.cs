@@ -121,6 +121,7 @@ namespace ImagitiveAPI.Services
                 Email = user.Email,
                 Roles = roles
             };
+            
         }
     }
 }

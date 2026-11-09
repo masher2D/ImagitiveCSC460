@@ -43,7 +43,7 @@ namespace ImagitiveCSC460UI.Forms
         {
             loginBtn.Enabled = false;
             signupBtn.Enabled = false;
-            
+
 
             try
             {
@@ -54,6 +54,15 @@ namespace ImagitiveCSC460UI.Forms
                     MessageBox.Show("Please enter both username and password.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
+                string selectedRole = selectedRoleComboBox.SelectedItem?.ToString() ?? string.Empty;
+
+                if(selectedRole == "")
+                {
+                    MessageBox.Show("Please enter a role.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
 
                 // Proceed with login logic here
                 var request = new LogInRequest
@@ -73,8 +82,6 @@ namespace ImagitiveCSC460UI.Forms
                     return;
                 }
 
-                string selectedRole = artistRadioBtn.Checked ? "Artist" : viewerRadioBtn.Checked ? "Viewer" : adminRadioBtn.Checked ? "Admin" : string.Empty;
-
                 if (!response.Roles.Contains(selectedRole))
                 {
                     MessageBox.Show(
@@ -91,14 +98,23 @@ namespace ImagitiveCSC460UI.Forms
 
                 UserSession.Roles = response.Roles;
 
+                UserSession.ActiveRole = selectedRole;
+
                 ApiClient.SetToken(response.Token);
 
 
 
                 MessageBox.Show($"Welcome {response.Username}!");
 
+                MainDashboard dashboard = new MainDashboard(this);
+
+                dashboard.Show();
+
+                Hide();
+
+                ResetAllFields();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -166,9 +182,11 @@ namespace ImagitiveCSC460UI.Forms
 
         private async void signupBtn_Click(object sender, EventArgs e)
         {
+            //Prevents extra attempts at login
             loginBtn.Enabled = false;
             signupBtn.Enabled = false;
 
+            //
             try
             {
                 var roleIds = new List<int>();
@@ -212,9 +230,10 @@ namespace ImagitiveCSC460UI.Forms
                 pictureBox1.Visible = true;
                 var result = await _authService.SignupAsync(request);
 
-                if (result == null)
+                if (result.User == null)
                 {
                     MessageBox.Show(
+                        result.Error ??
                         "Failed to create account.");
 
                     return;
@@ -245,7 +264,7 @@ namespace ImagitiveCSC460UI.Forms
             }
         }
 
-            
+
 
 
 
@@ -260,5 +279,25 @@ namespace ImagitiveCSC460UI.Forms
         {
 
         }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ResetAllFields()
+        {
+            //Clears all fields for form reuse
+            usernameValueN.Clear();
+            emailValue.Clear();
+            passwordValueN.Clear();
+            artistCheckBox.Checked = false;
+            viewerCheckBox.Checked = false;
+            usernameValue.Clear();
+            passwordValue.Clear();
+            selectedRoleComboBox.SelectedIndex = -1;
+
+        }
+
     }
 }

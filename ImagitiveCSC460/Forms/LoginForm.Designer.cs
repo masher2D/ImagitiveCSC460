@@ -35,11 +35,9 @@
             passwordValue = new TextBox();
             passwordLabelE = new Label();
             loginBtn = new Button();
-            artistRadioBtn = new RadioButton();
-            viewerRadioBtn = new RadioButton();
-            adminRadioBtn = new RadioButton();
             loginAsLabel = new Label();
             splitContainer1 = new SplitContainer();
+            selectedRoleComboBox = new ComboBox();
             emailLabel = new Label();
             emailValue = new TextBox();
             viewerCheckBox = new CheckBox();
@@ -77,7 +75,7 @@
             // 
             usernameLabelE.AutoSize = true;
             usernameLabelE.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            usernameLabelE.Location = new Point(108, 14);
+            usernameLabelE.Location = new Point(103, 14);
             usernameLabelE.Name = "usernameLabelE";
             usernameLabelE.Size = new Size(163, 45);
             usernameLabelE.TabIndex = 1;
@@ -85,7 +83,7 @@
             // 
             // usernameValue
             // 
-            usernameValue.Location = new Point(89, 62);
+            usernameValue.Location = new Point(84, 62);
             usernameValue.MaxLength = 50;
             usernameValue.Name = "usernameValue";
             usernameValue.Size = new Size(200, 39);
@@ -94,7 +92,7 @@
             // 
             // passwordValue
             // 
-            passwordValue.Location = new Point(89, 153);
+            passwordValue.Location = new Point(84, 153);
             passwordValue.Name = "passwordValue";
             passwordValue.Size = new Size(200, 39);
             passwordValue.TabIndex = 4;
@@ -103,7 +101,7 @@
             // 
             passwordLabelE.AutoSize = true;
             passwordLabelE.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            passwordLabelE.Location = new Point(112, 105);
+            passwordLabelE.Location = new Point(107, 105);
             passwordLabelE.Name = "passwordLabelE";
             passwordLabelE.Size = new Size(154, 45);
             passwordLabelE.TabIndex = 3;
@@ -111,48 +109,13 @@
             // 
             // loginBtn
             // 
-            loginBtn.Location = new Point(113, 424);
+            loginBtn.Location = new Point(109, 424);
             loginBtn.Name = "loginBtn";
             loginBtn.Size = new Size(150, 46);
             loginBtn.TabIndex = 5;
             loginBtn.Text = "Login";
             loginBtn.UseVisualStyleBackColor = true;
             loginBtn.Click += loginBtn_Click;
-            // 
-            // artistRadioBtn
-            // 
-            artistRadioBtn.AutoSize = true;
-            artistRadioBtn.Location = new Point(138, 285);
-            artistRadioBtn.Name = "artistRadioBtn";
-            artistRadioBtn.Size = new Size(100, 36);
-            artistRadioBtn.TabIndex = 6;
-            artistRadioBtn.TabStop = true;
-            artistRadioBtn.Text = "Artist";
-            artistRadioBtn.UseVisualStyleBackColor = true;
-            artistRadioBtn.CheckedChanged += artistRadioBtn_CheckedChanged;
-            // 
-            // viewerRadioBtn
-            // 
-            viewerRadioBtn.AutoSize = true;
-            viewerRadioBtn.Checked = true;
-            viewerRadioBtn.Location = new Point(130, 327);
-            viewerRadioBtn.Name = "viewerRadioBtn";
-            viewerRadioBtn.Size = new Size(117, 36);
-            viewerRadioBtn.TabIndex = 7;
-            viewerRadioBtn.TabStop = true;
-            viewerRadioBtn.Text = "Viewer";
-            viewerRadioBtn.UseVisualStyleBackColor = true;
-            // 
-            // adminRadioBtn
-            // 
-            adminRadioBtn.AutoSize = true;
-            adminRadioBtn.Location = new Point(131, 369);
-            adminRadioBtn.Name = "adminRadioBtn";
-            adminRadioBtn.Size = new Size(115, 36);
-            adminRadioBtn.TabIndex = 8;
-            adminRadioBtn.Text = "Admin";
-            adminRadioBtn.UseVisualStyleBackColor = true;
-            adminRadioBtn.CheckedChanged += adminRadioBtn_CheckedChanged;
             // 
             // loginAsLabel
             // 
@@ -172,12 +135,10 @@
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.BackColor = Color.Gainsboro;
+            splitContainer1.Panel1.Controls.Add(selectedRoleComboBox);
             splitContainer1.Panel1.Controls.Add(loginBtn);
-            splitContainer1.Panel1.Controls.Add(adminRadioBtn);
             splitContainer1.Panel1.Controls.Add(loginAsLabel);
-            splitContainer1.Panel1.Controls.Add(viewerRadioBtn);
             splitContainer1.Panel1.Controls.Add(usernameLabelE);
-            splitContainer1.Panel1.Controls.Add(artistRadioBtn);
             splitContainer1.Panel1.Controls.Add(usernameValue);
             splitContainer1.Panel1.Controls.Add(passwordValue);
             splitContainer1.Panel1.Controls.Add(passwordLabelE);
@@ -200,6 +161,16 @@
             splitContainer1.Size = new Size(778, 500);
             splitContainer1.SplitterDistance = 389;
             splitContainer1.TabIndex = 10;
+            // 
+            // selectedRoleComboBox
+            // 
+            selectedRoleComboBox.FormattingEnabled = true;
+            selectedRoleComboBox.Items.AddRange(new object[] { "Artist", "Viewer", "Admin" });
+            selectedRoleComboBox.Location = new Point(63, 290);
+            selectedRoleComboBox.Name = "selectedRoleComboBox";
+            selectedRoleComboBox.Size = new Size(242, 40);
+            selectedRoleComboBox.TabIndex = 10;
+            selectedRoleComboBox.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // emailLabel
             // 
@@ -372,9 +343,6 @@
         private TextBox passwordValue;
         private Label passwordLabelE;
         private Button loginBtn;
-        private RadioButton artistRadioBtn;
-        private RadioButton viewerRadioBtn;
-        private RadioButton adminRadioBtn;
         private Label loginAsLabel;
         private SplitContainer splitContainer1;
         private Label subtitleLabel;
@@ -391,5 +359,6 @@
         private Label emailLabel;
         private TextBox emailValue;
         private PictureBox pictureBox1;
+        private ComboBox selectedRoleComboBox;
     }
 }

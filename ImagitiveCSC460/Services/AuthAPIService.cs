@@ -25,7 +25,7 @@ public class AuthApiService
             .ReadFromJsonAsync<LogInResponse>();
     }
 
-    public async Task<UserModel?> SignupAsync(
+    public async Task<(UserModel? User, string? Error)> SignupAsync(
         SignupRequest request)
     {
         var response =
@@ -35,18 +35,22 @@ public class AuthApiService
 
         if (!response.IsSuccessStatusCode)
         {
-            return null;
+            var error =
+                await response.Content
+                    .ReadFromJsonAsync<ErrorResponse>();
+
+            return (null, error?.Message);
         }
 
-        return await response.Content
-            .ReadFromJsonAsync<UserModel>();
+            return (await response.Content
+            .ReadFromJsonAsync<UserModel>(), null);
     }
 
     public async Task<bool> UpdatePasswordAsync(
         UpdatePasswordRequest request)
     {
         var response =
-            await ApiClient.Client.PostAsJsonAsync(
+            await ApiClient.Client.PatchAsJsonAsync(
                 "api/auth/update-password",
                 request);
 

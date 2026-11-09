@@ -50,6 +50,8 @@
             swapRoleBtn = new Button();
             quitBtn = new Button();
             logoutBtn = new Button();
+            artistDashboardInstance1 = new ImagitiveCSC460UI.Forms.Components.ArtistDashboardInstance();
+            viewerDashboardInstance1 = new ImagitiveCSC460UI.Forms.Components.ViewerDashboardInstance();
             panel1.SuspendLayout();
             settingsTab.SuspendLayout();
             generalSettingsPage.SuspendLayout();
@@ -65,6 +67,7 @@
             adminDashboardInstance1.Name = "adminDashboardInstance1";
             adminDashboardInstance1.Size = new Size(780, 899);
             adminDashboardInstance1.TabIndex = 0;
+            adminDashboardInstance1.Visible = false;
             adminDashboardInstance1.Load += adminDashboardInstance1_Load_1;
             // 
             // panel1
@@ -194,6 +197,7 @@
             saveAndLogoutBtn.TabIndex = 1;
             saveAndLogoutBtn.Text = "Save and Logout";
             saveAndLogoutBtn.UseVisualStyleBackColor = true;
+            saveAndLogoutBtn.Click += saveAndLogoutBtn_Click;
             // 
             // loginSettingsPage
             // 
@@ -219,6 +223,7 @@
             availableRolesComboBox.Name = "availableRolesComboBox";
             availableRolesComboBox.Size = new Size(242, 40);
             availableRolesComboBox.TabIndex = 6;
+            availableRolesComboBox.SelectedIndexChanged += availableRolesComboBox_SelectedIndexChanged;
             // 
             // availableRolesLabel
             // 
@@ -239,6 +244,7 @@
             currRoleValue.TabIndex = 4;
             currRoleValue.Text = "{Insert Curr Role}";
             currRoleValue.TextAlign = ContentAlignment.TopRight;
+            currRoleValue.Click += currRoleValue_Click_1;
             // 
             // currRoleLabel
             // 
@@ -258,6 +264,7 @@
             swapRoleBtn.TabIndex = 2;
             swapRoleBtn.Text = "Swap Role";
             swapRoleBtn.UseVisualStyleBackColor = true;
+            swapRoleBtn.Click += swapRoleBtn_Click;
             // 
             // quitBtn
             // 
@@ -267,6 +274,7 @@
             quitBtn.TabIndex = 1;
             quitBtn.Text = "Quit Application";
             quitBtn.UseVisualStyleBackColor = true;
+            quitBtn.Click += quitBtn_Click;
             // 
             // logoutBtn
             // 
@@ -276,6 +284,29 @@
             logoutBtn.TabIndex = 0;
             logoutBtn.Text = "Logout";
             logoutBtn.UseVisualStyleBackColor = true;
+            logoutBtn.Click += logoutBtn_Click;
+            // 
+            // artistDashboardInstance1
+            // 
+            artistDashboardInstance1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            artistDashboardInstance1.BackColor = Color.LightGray;
+            artistDashboardInstance1.Location = new Point(12, 12);
+            artistDashboardInstance1.MaximumSize = new Size(780, 899);
+            artistDashboardInstance1.Name = "artistDashboardInstance1";
+            artistDashboardInstance1.Size = new Size(780, 899);
+            artistDashboardInstance1.TabIndex = 2;
+            artistDashboardInstance1.Visible = false;
+            // 
+            // viewerDashboardInstance1
+            // 
+            viewerDashboardInstance1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            viewerDashboardInstance1.BackColor = Color.Silver;
+            viewerDashboardInstance1.Location = new Point(12, 12);
+            viewerDashboardInstance1.MaximumSize = new Size(780, 899);
+            viewerDashboardInstance1.Name = "viewerDashboardInstance1";
+            viewerDashboardInstance1.Size = new Size(780, 899);
+            viewerDashboardInstance1.TabIndex = 3;
+            viewerDashboardInstance1.Visible = false;
             // 
             // MainDashboard
             // 
@@ -283,10 +314,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1474, 929);
-            Controls.Add(panel1);
+            Controls.Add(viewerDashboardInstance1);
             Controls.Add(adminDashboardInstance1);
+            Controls.Add(artistDashboardInstance1);
+            Controls.Add(panel1);
             Name = "MainDashboard";
             Text = "MainDashboard";
+            Load += MainDashboard_Load;
             panel1.ResumeLayout(false);
             settingsTab.ResumeLayout(false);
             generalSettingsPage.ResumeLayout(false);
@@ -320,5 +354,7 @@
         private TextBox textBox3;
         private TextBox textBox2;
         private TextBox textBox1;
+        private Components.ArtistDashboardInstance artistDashboardInstance1;
+        private Components.ViewerDashboardInstance viewerDashboardInstance1;
     }
 }

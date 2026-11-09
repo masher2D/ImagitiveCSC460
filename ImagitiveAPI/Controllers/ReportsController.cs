@@ -21,9 +21,7 @@ public class ReportsController : ControllerBase
 
     [Authorize]
     [HttpPatch("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(
-    int id,
-    UpdateReportStatusRequest request)
+    public async Task<IActionResult> UpdateStatus(int id, UpdateReportStatusRequest request)
     {
         bool isAdmin = User.IsInRole("Admin");
         if (!isAdmin)

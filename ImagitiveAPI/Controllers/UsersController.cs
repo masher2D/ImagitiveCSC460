@@ -41,21 +41,22 @@ namespace ImagitiveAPI.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int updateeId, UpdateUserRequest request)
+        public async Task<IActionResult> Update(int id, UpdateUserRequest request)
         {
+   
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if (currentUserId == null)
+                return Unauthorized();
 
-            var roles =
-                User.FindAll(ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .ToList();
+            int authenticatedUserId = int.Parse(currentUserId);
 
-            if (!roles.Contains("Admin"))
-            {
+            bool isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && authenticatedUserId != id)
                 return Forbid();
-            }
 
-            var user = await _userService.UpdateUserAsync(updateeId, request);
+            var user = await _userService.UpdateUserAsync(id, request);
             if (user == null)
                 return NotFound();
 
