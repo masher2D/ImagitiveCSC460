@@ -3,6 +3,7 @@ using ImagitiveAPI.Services.Interfaces;
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using ImagitiveLibrary.Core.Models;
 
 namespace ImagitiveAPI.Services
 {
@@ -63,6 +64,33 @@ namespace ImagitiveAPI.Services
             return await _context.Ratings
                 .Where(r => r.ArtworkId == artworkId)
                 .AverageAsync(r => (double?)r.RateValue) ?? 0.0;
+        }
+
+        public async Task<RatingModel?> GetUserRatingAsync(int userId, int artworkId)
+        {
+            var rating = await _context.Ratings.FirstOrDefaultAsync(r => r.UserId == userId && r.ArtworkId == artworkId);
+            if (rating == null)
+            {
+                return null;
+            }
+            return new RatingModel
+            {
+                ArtworkId = rating.ArtworkId,
+                UserId = rating.UserId,
+                RateValue = rating.RateValue
+            };
+        }
+
+        public async Task<bool> UpdateRatingAsync(int userId, PostRatingRequest request)
+        {
+            var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.ArtworkId == request.ArtworkId && r.UserId == userId);
+            if (existingRating == null)
+            {
+                return false; // Rating does not exist
+            }
+            existingRating.RateValue = request.RateValue;
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

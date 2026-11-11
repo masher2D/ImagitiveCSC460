@@ -30,6 +30,8 @@
         {
             tabControl1 = new TabControl();
             artworkManagementPage = new TabPage();
+            artworkManagerGetPrevPageBtn = new Button();
+            artworkManagerGetNextPageBtn = new Button();
             artworkManagerReloadBtn = new Button();
             deleteSelectedArtworkBtn = new Button();
             postNewArtworkBtn = new Button();
@@ -38,6 +40,8 @@
             lvTags = new ColumnHeader();
             lvartworkCreationDate = new ColumnHeader();
             statisticsPage = new TabPage();
+            statsPrevButton = new Button();
+            statNextButton = new Button();
             statsReloadBtn = new Button();
             accountAvgRatingValueLabel = new Label();
             totalViewsValueLabel = new Label();
@@ -47,12 +51,11 @@
             avgRatingLabel = new Label();
             totalViewsLabel = new Label();
             dailyViewsLabel = new Label();
-            listView2 = new ListView();
+            statsView = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             headerLabel = new Label();
-            artworkManagerGetNextPageBtn = new Button();
             tabControl1.SuspendLayout();
             artworkManagementPage.SuspendLayout();
             statisticsPage.SuspendLayout();
@@ -71,6 +74,7 @@
             // 
             // artworkManagementPage
             // 
+            artworkManagementPage.Controls.Add(artworkManagerGetPrevPageBtn);
             artworkManagementPage.Controls.Add(artworkManagerGetNextPageBtn);
             artworkManagementPage.Controls.Add(artworkManagerReloadBtn);
             artworkManagementPage.Controls.Add(deleteSelectedArtworkBtn);
@@ -84,6 +88,28 @@
             artworkManagementPage.TabIndex = 1;
             artworkManagementPage.Text = "Artwork Manager";
             artworkManagementPage.UseVisualStyleBackColor = true;
+            // 
+            // artworkManagerGetPrevPageBtn
+            // 
+            artworkManagerGetPrevPageBtn.Font = new Font("Leelawadee UI", 9F);
+            artworkManagerGetPrevPageBtn.Location = new Point(15, 636);
+            artworkManagerGetPrevPageBtn.Name = "artworkManagerGetPrevPageBtn";
+            artworkManagerGetPrevPageBtn.Size = new Size(181, 46);
+            artworkManagerGetPrevPageBtn.TabIndex = 14;
+            artworkManagerGetPrevPageBtn.Text = "Get Prev Page";
+            artworkManagerGetPrevPageBtn.UseVisualStyleBackColor = true;
+            artworkManagerGetPrevPageBtn.Click += artworkManagerGetPrevPageBtn_Click;
+            // 
+            // artworkManagerGetNextPageBtn
+            // 
+            artworkManagerGetNextPageBtn.Font = new Font("Leelawadee UI", 9F);
+            artworkManagerGetNextPageBtn.Location = new Point(15, 688);
+            artworkManagerGetNextPageBtn.Name = "artworkManagerGetNextPageBtn";
+            artworkManagerGetNextPageBtn.Size = new Size(181, 46);
+            artworkManagerGetNextPageBtn.TabIndex = 13;
+            artworkManagerGetNextPageBtn.Text = "Get Next Page";
+            artworkManagerGetNextPageBtn.UseVisualStyleBackColor = true;
+            artworkManagerGetNextPageBtn.Click += artworkManagerGetNextPageBtn_Click;
             // 
             // artworkManagerReloadBtn
             // 
@@ -104,6 +130,7 @@
             deleteSelectedArtworkBtn.TabIndex = 2;
             deleteSelectedArtworkBtn.Text = "Delete Selected Artwork";
             deleteSelectedArtworkBtn.UseVisualStyleBackColor = true;
+            deleteSelectedArtworkBtn.Click += deleteSelectedArtworkBtn_Click;
             // 
             // postNewArtworkBtn
             // 
@@ -114,6 +141,7 @@
             postNewArtworkBtn.TabIndex = 1;
             postNewArtworkBtn.Text = "Post New Artwork";
             postNewArtworkBtn.UseVisualStyleBackColor = true;
+            postNewArtworkBtn.Click += postNewArtworkBtn_Click;
             // 
             // listView1
             // 
@@ -121,9 +149,9 @@
             listView1.Columns.AddRange(new ColumnHeader[] { lvArtworkTitle, lvTags, lvartworkCreationDate });
             listView1.Font = new Font("Leelawadee UI", 9F);
             listView1.Location = new Point(6, 103);
+            listView1.MultiSelect = false;
             listView1.Name = "listView1";
             listView1.Size = new Size(746, 642);
-            listView1.Sorting = SortOrder.Ascending;
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -146,6 +174,8 @@
             // 
             // statisticsPage
             // 
+            statisticsPage.Controls.Add(statsPrevButton);
+            statisticsPage.Controls.Add(statNextButton);
             statisticsPage.Controls.Add(statsReloadBtn);
             statisticsPage.Controls.Add(accountAvgRatingValueLabel);
             statisticsPage.Controls.Add(totalViewsValueLabel);
@@ -155,7 +185,7 @@
             statisticsPage.Controls.Add(avgRatingLabel);
             statisticsPage.Controls.Add(totalViewsLabel);
             statisticsPage.Controls.Add(dailyViewsLabel);
-            statisticsPage.Controls.Add(listView2);
+            statisticsPage.Controls.Add(statsView);
             statisticsPage.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             statisticsPage.Location = new Point(8, 46);
             statisticsPage.Name = "statisticsPage";
@@ -164,6 +194,28 @@
             statisticsPage.TabIndex = 0;
             statisticsPage.Text = "Statistics";
             statisticsPage.UseVisualStyleBackColor = true;
+            statisticsPage.Click += statisticsPage_Click;
+            // 
+            // statsPrevButton
+            // 
+            statsPrevButton.Font = new Font("Leelawadee UI", 9F);
+            statsPrevButton.Location = new Point(15, 636);
+            statsPrevButton.Name = "statsPrevButton";
+            statsPrevButton.Size = new Size(181, 46);
+            statsPrevButton.TabIndex = 16;
+            statsPrevButton.Text = "Get Prev Page";
+            statsPrevButton.UseVisualStyleBackColor = true;
+            statsPrevButton.Click += statsPrevButton_Click;
+            // 
+            // statNextButton
+            // 
+            statNextButton.Font = new Font("Leelawadee UI", 9F);
+            statNextButton.Location = new Point(15, 688);
+            statNextButton.Name = "statNextButton";
+            statNextButton.Size = new Size(181, 46);
+            statNextButton.TabIndex = 15;
+            statNextButton.Text = "Get Next Page";
+            statNextButton.UseVisualStyleBackColor = true;
             // 
             // statsReloadBtn
             // 
@@ -215,6 +267,7 @@
             dailyViewsValueLabel.TabIndex = 6;
             dailyViewsValueLabel.Text = "{Insert Views for Day}";
             dailyViewsValueLabel.TextAlign = ContentAlignment.TopRight;
+            dailyViewsValueLabel.Click += dailyViewsValueLabel_Click;
             // 
             // accountAvgRatingLabel
             // 
@@ -253,18 +306,20 @@
             dailyViewsLabel.TabIndex = 2;
             dailyViewsLabel.Text = "Views Today:";
             // 
-            // listView2
+            // statsView
             // 
-            listView2.Activation = ItemActivation.OneClick;
-            listView2.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            listView2.Font = new Font("Leelawadee UI", 9F);
-            listView2.Location = new Point(6, 209);
-            listView2.Name = "listView2";
-            listView2.Size = new Size(746, 536);
-            listView2.Sorting = SortOrder.Ascending;
-            listView2.TabIndex = 1;
-            listView2.UseCompatibleStateImageBehavior = false;
-            listView2.View = View.Details;
+            statsView.Activation = ItemActivation.OneClick;
+            statsView.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+            statsView.Font = new Font("Leelawadee UI", 9F);
+            statsView.Location = new Point(6, 209);
+            statsView.MultiSelect = false;
+            statsView.Name = "statsView";
+            statsView.Size = new Size(746, 536);
+            statsView.Sorting = SortOrder.Ascending;
+            statsView.TabIndex = 1;
+            statsView.UseCompatibleStateImageBehavior = false;
+            statsView.View = View.Details;
+            statsView.SelectedIndexChanged += statsView_SelectedIndexChanged;
             // 
             // columnHeader1
             // 
@@ -290,16 +345,7 @@
             headerLabel.TabIndex = 10;
             headerLabel.Text = "Artist Dashboard";
             headerLabel.TextAlign = ContentAlignment.TopRight;
-            // 
-            // artworkManagerGetNextPageBtn
-            // 
-            artworkManagerGetNextPageBtn.Font = new Font("Leelawadee UI", 9F);
-            artworkManagerGetNextPageBtn.Location = new Point(15, 688);
-            artworkManagerGetNextPageBtn.Name = "artworkManagerGetNextPageBtn";
-            artworkManagerGetNextPageBtn.Size = new Size(181, 46);
-            artworkManagerGetNextPageBtn.TabIndex = 13;
-            artworkManagerGetNextPageBtn.Text = "Get Next Page";
-            artworkManagerGetNextPageBtn.UseVisualStyleBackColor = true;
+            headerLabel.Click += headerLabel_Click;
             // 
             // ArtistDashboardInstance
             // 
@@ -312,6 +358,7 @@
             MaximumSize = new Size(780, 899);
             Name = "ArtistDashboardInstance";
             Size = new Size(780, 899);
+            Load += ArtistDashboardInstance_Load;
             tabControl1.ResumeLayout(false);
             artworkManagementPage.ResumeLayout(false);
             statisticsPage.ResumeLayout(false);
@@ -335,7 +382,7 @@
         private Label avgRatingLabel;
         private Label totalViewsLabel;
         private Label dailyViewsLabel;
-        private ListView listView2;
+        private ListView statsView;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
@@ -347,5 +394,8 @@
         private Button artworkManagerReloadBtn;
         private Button statsReloadBtn;
         private Button artworkManagerGetNextPageBtn;
+        private Button artworkManagerGetPrevPageBtn;
+        private Button statsPrevButton;
+        private Button statNextButton;
     }
 }

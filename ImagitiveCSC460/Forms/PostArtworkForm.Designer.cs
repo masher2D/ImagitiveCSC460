@@ -42,7 +42,7 @@
             previewLabel = new Label();
             addTagValueComboBox = new ComboBox();
             addTagLabel = new Label();
-            label1 = new Label();
+            taglistLabel = new Label();
             clearTagsBtn = new Button();
             addTagBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)previewBox).BeginInit();
@@ -132,14 +132,17 @@
             addImageBtn.TabIndex = 18;
             addImageBtn.Text = "Open File";
             addImageBtn.UseVisualStyleBackColor = true;
+            addImageBtn.Click += addImageBtn_Click;
             // 
             // previewBox
             // 
             previewBox.Image = (Image)resources.GetObject("previewBox.Image");
             previewBox.InitialImage = (Image)resources.GetObject("previewBox.InitialImage");
             previewBox.Location = new Point(661, 4);
+            previewBox.MaximumSize = new Size(720, 720);
             previewBox.Name = "previewBox";
             previewBox.Size = new Size(720, 720);
+            previewBox.SizeMode = PictureBoxSizeMode.Zoom;
             previewBox.TabIndex = 19;
             previewBox.TabStop = false;
             // 
@@ -172,15 +175,15 @@
             addTagLabel.TabIndex = 22;
             addTagLabel.Text = "Add Tags (max 3)";
             // 
-            // label1
+            // taglistLabel
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(12, 856);
-            label1.Name = "label1";
-            label1.Size = new Size(452, 45);
-            label1.TabIndex = 23;
-            label1.Text = "Taglist: {Insert submitted tags}";
+            taglistLabel.AutoSize = true;
+            taglistLabel.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            taglistLabel.Location = new Point(12, 856);
+            taglistLabel.Name = "taglistLabel";
+            taglistLabel.Size = new Size(129, 45);
+            taglistLabel.TabIndex = 23;
+            taglistLabel.Text = "Taglist: ";
             // 
             // clearTagsBtn
             // 
@@ -191,6 +194,7 @@
             clearTagsBtn.TabIndex = 24;
             clearTagsBtn.Text = "Clear Tags";
             clearTagsBtn.UseVisualStyleBackColor = true;
+            clearTagsBtn.Click += clearTagsBtn_Click;
             // 
             // addTagBtn
             // 
@@ -200,8 +204,9 @@
             addTagBtn.TabIndex = 25;
             addTagBtn.Text = "Add Tag";
             addTagBtn.UseVisualStyleBackColor = true;
+            addTagBtn.Click += addTagBtn_Click;
             // 
-            // PostArtwork
+            // PostArtworkForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -209,7 +214,7 @@
             ClientSize = new Size(1387, 930);
             Controls.Add(addTagBtn);
             Controls.Add(clearTagsBtn);
-            Controls.Add(label1);
+            Controls.Add(taglistLabel);
             Controls.Add(addTagLabel);
             Controls.Add(addTagValueComboBox);
             Controls.Add(previewLabel);
@@ -222,8 +227,9 @@
             Controls.Add(descriptionLabel);
             Controls.Add(subtitleLabel);
             Controls.Add(headerLabel);
-            Name = "PostArtwork";
+            Name = "PostArtworkForm";
             Text = "PostArtwork";
+            Load += PostArtworkForm_Load;
             ((System.ComponentModel.ISupportInitialize)previewBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -244,7 +250,7 @@
         private Label previewLabel;
         private ComboBox addTagValueComboBox;
         private Label addTagLabel;
-        private Label label1;
+        private Label taglistLabel;
         private Button clearTagsBtn;
         private Button addTagBtn;
     }

@@ -1,5 +1,6 @@
 ﻿using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
+using ImagitiveLibrary.Core.Responses;
 using ImagitiveUI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualBasic.Devices;
@@ -37,7 +38,7 @@ namespace ImagitiveCSC460UI.Services
             return await response.Content.ReadFromJsonAsync<ArtworkModel>();
         }
 
-        public async Task<bool> RemoveArtworkAsync(int artworkId, int reasonId)
+        public async Task<bool> RemoveArtworkAsync(int artworkId, int? reasonId)
         {
             var response = await ApiClient.Client.DeleteAsync($"api/artworks/{artworkId}?reasonId ={reasonId}");
 
@@ -75,5 +76,44 @@ namespace ImagitiveCSC460UI.Services
 
         }
 
+        public async Task<List<ArtworkModel>?> GetArtworksByUserAsync(int userId)
+        {
+            var response = await ApiClient.Client.GetAsync($"api/artworks/user/{userId}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            return await response.Content.ReadFromJsonAsync<List<ArtworkModel>>();
+        }
+
+        public async Task<PagedResponse<ArtworkModel>?> GetArtworksByUserAsync(int userId, int page, int pageSize)
+        {
+            var response = await ApiClient.Client.GetAsync($"api/artworks/user/{userId}/paged?page={page}&pageSize={pageSize}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            return await response.Content.ReadFromJsonAsync<PagedResponse<ArtworkModel>>();
+        }
+
+        public async Task<double?> GetArtistAverageRatingAsync(int userId)
+        {
+            var response = await ApiClient.Client.GetAsync($"api/artworks/user/{userId}/average-rating");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            return await response.Content.ReadFromJsonAsync<double>();
+        }
+
+        public async Task<int?> GetTodaysViewsAsync(int artworkId)
+        {
+            var response = await ApiClient.Client.GetAsync($"api/artworks/{artworkId}/todays-views");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            return await response.Content.ReadFromJsonAsync<int>();
+        }
+
+        public async Task<List<ArtworkModel>?> GetFeedAsync(int viewerId, int page, int pageSize)
+        {
+            var response = await ApiClient.Client.GetAsync($"api/artworks/feed?viewerId={viewerId}&page={page}&pageSize={pageSize}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            return await response.Content.ReadFromJsonAsync<List<ArtworkModel>>();
+        }
     }
 }

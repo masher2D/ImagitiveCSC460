@@ -6,6 +6,6 @@ namespace ImagitiveLibrary.Core.Requests
 {
     public class RemoveArtworkRequest
     {
-        public int ReasonId { get; set; }
+        public int? ReasonId { get; set; }
     }
 }

@@ -33,6 +33,7 @@
             artworkDescriptionLabel = new Label();
             artworkOptionsBtn = new Button();
             artworkUsernameLabel = new Label();
+            artworkAvgRatingLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)artworkImageBox).BeginInit();
             SuspendLayout();
             // 
@@ -41,31 +42,34 @@
             artworkImageBox.Location = new Point(10, 3);
             artworkImageBox.Name = "artworkImageBox";
             artworkImageBox.Size = new Size(480, 480);
+            artworkImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             artworkImageBox.TabIndex = 0;
             artworkImageBox.TabStop = false;
-            artworkImageBox.Click += this.artworkImageBox_Click;
+            artworkImageBox.Click += artworkImageBox_Click;
             // 
             // artworkTitleLabel
             // 
-            artworkTitleLabel.AutoSize = true;
             artworkTitleLabel.Font = new Font("Leelawadee UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             artworkTitleLabel.ImageAlign = ContentAlignment.MiddleRight;
             artworkTitleLabel.Location = new Point(34, 486);
             artworkTitleLabel.Name = "artworkTitleLabel";
-            artworkTitleLabel.Size = new Size(432, 65);
+            artworkTitleLabel.Size = new Size(432, 150);
             artworkTitleLabel.TabIndex = 1;
             artworkTitleLabel.Text = "{InsertArtworkTitle}";
-            artworkTitleLabel.TextAlign = ContentAlignment.MiddleCenter;
+            artworkTitleLabel.TextAlign = ContentAlignment.TopCenter;
             artworkTitleLabel.Click += artworkTitleLabel_Click;
             // 
             // artworkDescriptionLabel
             // 
+            artworkDescriptionLabel.BackColor = Color.Silver;
             artworkDescriptionLabel.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            artworkDescriptionLabel.Location = new Point(3, 647);
+            artworkDescriptionLabel.Location = new Point(3, 677);
             artworkDescriptionLabel.Name = "artworkDescriptionLabel";
-            artworkDescriptionLabel.Size = new Size(494, 127);
+            artworkDescriptionLabel.Size = new Size(497, 133);
             artworkDescriptionLabel.TabIndex = 2;
             artworkDescriptionLabel.Text = "{InsertArtworkDescription}";
+            artworkDescriptionLabel.TextAlign = ContentAlignment.TopCenter;
+            artworkDescriptionLabel.Click += artworkDescriptionLabel_Click;
             // 
             // artworkOptionsBtn
             // 
@@ -75,17 +79,27 @@
             artworkOptionsBtn.TabIndex = 5;
             artworkOptionsBtn.Text = "⋮";
             artworkOptionsBtn.UseVisualStyleBackColor = true;
+            artworkOptionsBtn.Click += artworkOptionsBtn_Click;
             // 
             // artworkUsernameLabel
             // 
-            artworkUsernameLabel.AutoSize = true;
             artworkUsernameLabel.Font = new Font("Leelawadee UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            artworkUsernameLabel.Location = new Point(10, 812);
+            artworkUsernameLabel.Location = new Point(51, 812);
             artworkUsernameLabel.Name = "artworkUsernameLabel";
-            artworkUsernameLabel.Size = new Size(263, 45);
+            artworkUsernameLabel.Size = new Size(390, 45);
             artworkUsernameLabel.TabIndex = 3;
             artworkUsernameLabel.Text = "{InsertUsername}";
             artworkUsernameLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // artworkAvgRatingLabel
+            // 
+            artworkAvgRatingLabel.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            artworkAvgRatingLabel.Location = new Point(6, 636);
+            artworkAvgRatingLabel.Name = "artworkAvgRatingLabel";
+            artworkAvgRatingLabel.Size = new Size(494, 41);
+            artworkAvgRatingLabel.TabIndex = 6;
+            artworkAvgRatingLabel.Text = "{InsertArtworkAvgRating}";
+            artworkAvgRatingLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // ImageInstanceViewer
             // 
@@ -94,16 +108,17 @@
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.White;
+            Controls.Add(artworkAvgRatingLabel);
             Controls.Add(artworkUsernameLabel);
             Controls.Add(artworkOptionsBtn);
             Controls.Add(artworkDescriptionLabel);
             Controls.Add(artworkTitleLabel);
             Controls.Add(artworkImageBox);
             Name = "ImageInstanceViewer";
-            Size = new Size(500, 866);
+            Size = new Size(503, 866);
+            Load += ImageInstanceViewer_Load;
             ((System.ComponentModel.ISupportInitialize)artworkImageBox).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -113,7 +128,6 @@
         private Label artworkDescriptionLabel;
         private Button artworkOptionsBtn;
         private Label artworkUsernameLabel;
-
-        
+        private Label artworkAvgRatingLabel;
     }
 }

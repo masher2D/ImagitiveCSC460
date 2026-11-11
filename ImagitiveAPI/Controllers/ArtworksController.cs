@@ -65,7 +65,7 @@ public class ArtworksController : ControllerBase
 
     [Authorize]
     [HttpDelete("{artworkId}")]
-    public async Task<IActionResult> Remove(int artworkId, int reasonId)
+    public async Task<IActionResult> Remove(int artworkId, int? reasonId)
     {
 
         bool isAdmin = User.IsInRole("Admin");
@@ -73,5 +73,39 @@ public class ArtworksController : ControllerBase
         if (success == 0) return NotFound();
         if (success == 2) return Forbid();
         return Ok();
+    }
+
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetArtworksByUser(int userId)
+    {
+        var artworks = await _artworkService.GetArtworksByUserAsync(userId);
+        return Ok(artworks);
+    }
+
+    [HttpGet("user/{userId}/paged")]
+    public async Task<IActionResult> GetArtworksByUserPaged(int userId, int page, int pageSize)
+    {
+        return Ok(await _artworkService.GetArtworksByUserAsync(userId, page, pageSize));
+    }
+
+    [HttpGet("user/{userId}/average-rating")]
+    public async Task<IActionResult> GetArtistAverageRating(int userId)
+    {
+        var averageRating = await _artworkService.GetArtistAverageRatingAsync(userId);
+        return Ok(averageRating);
+    }
+
+    [HttpGet("{artworkId}/todays-views")]
+    public async Task<IActionResult> GetTodaysViews(int artworkId)
+    {
+        var views = await _artworkService.GetTodaysViewsAsync(artworkId);
+        return Ok(views);
+    }
+
+    [HttpGet("feed")]
+    public async Task<IActionResult> GetFeed(int page = 1, int pageSize = 10)
+    {
+        var feed = await _artworkService.GetFeedAsync(CurrentUserId, page, pageSize);
+        return Ok(feed);
     }
 }

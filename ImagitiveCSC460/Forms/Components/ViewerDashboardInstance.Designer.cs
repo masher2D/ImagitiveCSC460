@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            imageInstanceViewer1 = new ImageInstanceViewer();
+            feedViewer = new ImageInstanceViewer();
             backBtn = new Button();
             forwardBtn = new Button();
             starRatingBar = new TrackBar();
@@ -50,15 +50,15 @@
             panel2.SuspendLayout();
             SuspendLayout();
             // 
-            // imageInstanceViewer1
+            // feedViewer
             // 
-            imageInstanceViewer1.AutoSize = true;
-            imageInstanceViewer1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            imageInstanceViewer1.BackColor = Color.White;
-            imageInstanceViewer1.Location = new Point(24, 15);
-            imageInstanceViewer1.Name = "imageInstanceViewer1";
-            imageInstanceViewer1.Size = new Size(500, 866);
-            imageInstanceViewer1.TabIndex = 0;
+            feedViewer.AutoSize = true;
+            feedViewer.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            feedViewer.BackColor = Color.White;
+            feedViewer.Location = new Point(24, 15);
+            feedViewer.Name = "feedViewer";
+            feedViewer.Size = new Size(503, 866);
+            feedViewer.TabIndex = 0;
             // 
             // backBtn
             // 
@@ -68,6 +68,7 @@
             backBtn.TabIndex = 1;
             backBtn.Text = "↑ Go Back";
             backBtn.UseVisualStyleBackColor = true;
+            backBtn.Click += backBtn_Click;
             // 
             // forwardBtn
             // 
@@ -77,6 +78,7 @@
             forwardBtn.TabIndex = 2;
             forwardBtn.Text = "↓ Continue";
             forwardBtn.UseVisualStyleBackColor = true;
+            forwardBtn.Click += forwardBtn_Click;
             // 
             // starRatingBar
             // 
@@ -88,12 +90,13 @@
             starRatingBar.Size = new Size(90, 208);
             starRatingBar.TabIndex = 1;
             starRatingBar.Value = 2;
+            starRatingBar.Scroll += starRatingBar_Scroll;
             // 
             // ratingLabel
             // 
             ratingLabel.AutoSize = true;
             ratingLabel.Font = new Font("Leelawadee UI", 11F);
-            ratingLabel.Location = new Point(602, 571);
+            ratingLabel.Location = new Point(604, 571);
             ratingLabel.Name = "ratingLabel";
             ratingLabel.Size = new Size(103, 41);
             ratingLabel.TabIndex = 4;
@@ -119,7 +122,7 @@
             panel1.Controls.Add(rating1Label);
             panel1.Controls.Add(starRatingBar);
             panel1.Controls.Add(rating5Label);
-            panel1.Location = new Point(578, 615);
+            panel1.Location = new Point(580, 615);
             panel1.Name = "panel1";
             panel1.Size = new Size(150, 272);
             panel1.TabIndex = 6;
@@ -134,6 +137,7 @@
             ratingSubmitBtn.TabIndex = 9;
             ratingSubmitBtn.Text = "Submit";
             ratingSubmitBtn.UseVisualStyleBackColor = true;
+            ratingSubmitBtn.Click += ratingSubmitBtn_Click;
             // 
             // rating4Label
             // 
@@ -179,7 +183,7 @@
             // 
             panel2.Controls.Add(backBtn);
             panel2.Controls.Add(forwardBtn);
-            panel2.Location = new Point(578, 365);
+            panel2.Location = new Point(580, 439);
             panel2.Name = "panel2";
             panel2.Size = new Size(150, 111);
             panel2.TabIndex = 7;
@@ -188,7 +192,7 @@
             // 
             navLabel.AutoSize = true;
             navLabel.Font = new Font("Leelawadee UI", 11F);
-            navLabel.Location = new Point(573, 321);
+            navLabel.Location = new Point(575, 395);
             navLabel.Name = "navLabel";
             navLabel.Size = new Size(161, 41);
             navLabel.TabIndex = 8;
@@ -208,7 +212,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Leelawadee UI", 11F);
-            label1.Location = new Point(557, 187);
+            label1.Location = new Point(562, 261);
             label1.Name = "label1";
             label1.Size = new Size(187, 41);
             label1.TabIndex = 18;
@@ -217,11 +221,11 @@
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Resolved", "Unresolved" });
-            comboBox1.Location = new Point(544, 231);
+            comboBox1.Location = new Point(549, 305);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(212, 40);
             comboBox1.TabIndex = 17;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // ViewerDashboardInstance
             // 
@@ -236,10 +240,11 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(ratingLabel);
-            Controls.Add(imageInstanceViewer1);
+            Controls.Add(feedViewer);
             MaximumSize = new Size(780, 899);
             Name = "ViewerDashboardInstance";
             Size = new Size(780, 899);
+            Load += ViewerDashboardInstance_Load;
             ((System.ComponentModel.ISupportInitialize)starRatingBar).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -250,7 +255,7 @@
 
         #endregion
 
-        private ImageInstanceViewer imageInstanceViewer1;
+        private ImageInstanceViewer feedViewer;
         private Button backBtn;
         private Button forwardBtn;
         private TrackBar starRatingBar;

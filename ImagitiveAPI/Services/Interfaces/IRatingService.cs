@@ -1,4 +1,5 @@
-﻿using ImagitiveLibrary.Core.Requests;
+﻿using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
 
 namespace ImagitiveAPI.Services.Interfaces
 {
@@ -7,5 +8,9 @@ namespace ImagitiveAPI.Services.Interfaces
         Task<bool> PostRatingAsync(int userId, PostRatingRequest request);
 
         Task<double> GetAverageRatingAsync(int artworkId);
+
+        Task<RatingModel?> GetUserRatingAsync(int userId, int artworkId);
+
+        Task<bool> UpdateRatingAsync(int userId, PostRatingRequest request);
     }
 }

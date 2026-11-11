@@ -74,7 +74,6 @@
             adminDashboardInstance1.Size = new Size(780, 899);
             adminDashboardInstance1.TabIndex = 0;
             adminDashboardInstance1.Visible = false;
-            adminDashboardInstance1.Load += adminDashboardInstance1_Load_1;
             // 
             // panel1
             // 
@@ -372,6 +371,7 @@
             viewerDashboardInstance1.Size = new Size(780, 899);
             viewerDashboardInstance1.TabIndex = 3;
             viewerDashboardInstance1.Visible = false;
+            viewerDashboardInstance1.Load += viewerDashboardInstance1_Load;
             // 
             // MainDashboard
             // 

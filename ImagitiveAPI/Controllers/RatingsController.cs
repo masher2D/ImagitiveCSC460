@@ -35,5 +35,32 @@ public class RatingsController : ControllerBase
         double averageRating = await _ratingService.GetAverageRatingAsync(artworkId);
         return Ok(averageRating);
     }
+
+    [Authorize]
+    [HttpPatch("{artworkId}")]
+    public async Task<IActionResult> UpdateRating(int artworkId, [FromBody] PostRatingRequest request)
+    {
+        bool isUpdated = await _ratingService.UpdateRatingAsync(CurrentUserId, request);
+        if (isUpdated)
+        {
+            return Ok();
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("user/{artworkId}")]
+    public async Task<IActionResult> GetUserRating(int artworkId)
+    {
+        var rating = await _ratingService.GetUserRatingAsync(CurrentUserId, artworkId);
+        if (rating == null)
+        {
+            return NotFound();
+        }
+        return Ok(rating);
+    }
 }
 

@@ -4,7 +4,9 @@ using ImagitiveAPI.Requests;
 using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
+using ImagitiveLibrary.Core.Responses;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Globalization;
 using System.Security.Claims;
 
@@ -131,6 +133,7 @@ namespace ImagitiveAPI.Services
 
         public async Task<List<ArtworkModel>> GetAllArtworksAsync()
         {
+ 
             var artworks = _context.Artworks.ToListAsync();
 
             var mappedArtworks = new List<ArtworkModel>();
@@ -164,13 +167,126 @@ namespace ImagitiveAPI.Services
 
             var artwork = await _context.Artworks.FirstOrDefaultAsync(a => a.ArtworkId == artworkId);
             if (artwork == null) return 0;
-            if(!isAdmin || artwork.UserId != requesterId) return 2;
+            if(isAdmin)
+                if(request.ReasonId == null)
+                    throw new Exception("Admin must provide a reason for removal.");
+            if (!isAdmin && artwork.UserId != requesterId) return 2;
 
             artwork.IsRemoved = true;
             artwork.RemovedReason = request.ReasonId;
 
             await _context.SaveChangesAsync();
             return 1;
+        }
+
+        public async Task<List<ArtworkModel>> GetArtworksByUserAsync(int userId)
+        {
+            var artworks = await _context.Artworks
+                .Where(a => a.UserId == userId && !a.IsRemoved)
+                .ToListAsync();
+            var mappedArtworks = new List<ArtworkModel>();
+            foreach (var artwork in artworks)
+            {
+                mappedArtworks.Add(
+                    await MapToArtworkModel(artwork));
+            }
+            return mappedArtworks;
+        }
+
+        public async Task<PagedResponse<ArtworkModel>> GetArtworksByUserAsync(int userId, int page, int pageSize)
+        {
+            
+            var artworks = await _context.Artworks
+                .Where(a => a.UserId == userId && !a.IsRemoved)
+                .OrderByDescending(a => a.UploadDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var mappedArtworks = new List<ArtworkModel>();
+            foreach (var artwork in artworks)
+            {
+                mappedArtworks.Add(await MapToArtworkModel(artwork));
+            }
+            return new PagedResponse<ArtworkModel>
+            {
+                Items = mappedArtworks,
+                TotalCount = await _context.Artworks.CountAsync(a => a.UserId == userId && !a.IsRemoved),
+                CurrentPage = page,
+                PageSize = pageSize
+            };
+        }
+
+        public async Task<double> GetArtistAverageRatingAsync(int userId)
+        {
+            var artworks = await _context.Artworks
+                .Where(a => a.UserId == userId && !a.IsRemoved)
+                .ToListAsync();
+            if (artworks.Count == 0) return 0.0;
+            double totalRating = 0.0;
+            int ratedArtworksCount = 0;
+            foreach (var artwork in artworks)
+            {
+                var averageRating = await _ratingService.GetAverageRatingAsync(artwork.ArtworkId);
+                if (averageRating > 0)
+                {
+                    totalRating += averageRating;
+                    ratedArtworksCount++;
+                }
+            }
+            return ratedArtworksCount > 0 ? totalRating / ratedArtworksCount : 0.0;
+        }
+
+        public async Task<int> GetTodaysViewsAsync(int artworkId)
+        {
+            var today = DateTime.UtcNow.Date;
+            var end = today.AddDays(1).AddTicks(-1);
+            return await _context.ArtworkViews
+                .CountAsync(v => v.ArtworkId == artworkId && v.ViewedAt >= today && v.ViewedAt <= end);
+        }
+
+        public async Task<List<ArtworkModel>> GetFeedAsync(int viewerId, int page, int pageSize)
+        {
+            var viewer = await _context.Users.FirstAsync(u => u.UserId == viewerId);
+            var region = viewer.RegionID;
+
+            var artworks = await _context.Artworks
+                .Where(a => !a.IsRemoved && a.UserId != viewerId)
+                .ToListAsync();
+
+            var filteredArtworks = artworks.OrderByDescending(a => CalculateRelevanceScore(a, viewerId, region)).ToList();
+            var pagedArtworks = filteredArtworks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return pagedArtworks.Select(a => new ArtworkModel
+            {
+                ArtworkId = a.ArtworkId,
+                UserId = a.UserId,
+                Title = a.Title,
+                Description = a.Description,
+                ImageUrl = a.ImageURL,
+                UploadDate = a.UploadDate,
+                ViewCount = a.ViewCount,
+            }).ToList();
+        }
+
+        private int CalculateRelevanceScore(ArtworkDBModel artwork, int viewerId, int? region)
+        {
+            int score = 0;
+            // Increase score for artworks from the same region
+            var artworkOwner = _context.Users.FirstOrDefault(u => u.UserId == artwork.UserId);
+            if (artworkOwner != null && artworkOwner.RegionID == region)
+            {
+                score += 100;
+            }
+            if (artwork.BoostViewsRemaining > 0)
+            {
+                score += artwork.BoostViewsRemaining; 
+            }
+            // Increase score based on average rating
+            var averageRating = _ratingService.GetAverageRatingAsync(artwork.ArtworkId).Result;
+            score += (int)(averageRating * 2); // Each star adds 2 points
+            // Increase score based on view count
+            score += artwork.ViewCount / 50; // Every 50 views adds 1 point
+            return score;
         }
     }
 }

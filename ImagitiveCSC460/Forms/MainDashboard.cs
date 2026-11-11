@@ -18,21 +18,13 @@ namespace ImagitiveCSC460UI.Forms
         private readonly UserAPIService _userService = new UserAPIService();
         private readonly RegionAPIService _regionService = new RegionAPIService();
 
+        private bool isLoggingOut = false;
+
 
         public MainDashboard(LoginForm loginForm)
         {
             InitializeComponent();
             this.loginForm = loginForm;
-        }
-
-        private void adminDashboardInstance1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void adminDashboardInstance1_Load_1(object sender, EventArgs e)
-        {
-
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -42,13 +34,19 @@ namespace ImagitiveCSC460UI.Forms
 
         private async void MainDashboard_Load(object sender, EventArgs e)
         {
+            if (DesignMode)
+            {
+                return;
+            }
 
+            isLoggingOut = false;
             ConfigureRoleAccess();
             availableRolesComboBox.Items.AddRange(UserSession.Roles.ToArray());
             await LoadRegionsAsync();
             currUsernameValue.Text = UserSession.Username;
             currRegionValue.Text = UserSession.RegionName;
             currEmailValue.Text = UserSession.Email;
+
 
 
         }
@@ -72,6 +70,7 @@ namespace ImagitiveCSC460UI.Forms
                     artistDashboardInstance1.Enabled = true;
 
                     artistDashboardInstance1.Visible = true;
+                    artistDashboardInstance1.RefreshInstance();
                     break;
                 case "Viewer":
                     // Viewer has access to general viewing features
@@ -80,6 +79,7 @@ namespace ImagitiveCSC460UI.Forms
                     artistDashboardInstance1.Enabled = false;
 
                     viewerDashboardInstance1.Visible = true;
+                    viewerDashboardInstance1.RefreshInstance();
                     break;
                 case "Admin":
                     // Admin has access to moderation and management features
@@ -102,7 +102,7 @@ namespace ImagitiveCSC460UI.Forms
         private async Task LoadRegionsAsync()
         {
             var regions = await _regionService.GetRegionsAsync();
-            
+
 
             if (regions == null)
             {
@@ -152,25 +152,20 @@ namespace ImagitiveCSC460UI.Forms
         {
 
             // Confirm logout action with the user
-            DialogResult result = MessageBox.Show("Are you sure you wish to logout? You will be taken back to the login screen.", "Confirm Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                loginForm.Show();
-                ClearSession();
-                Close();
-            }
+
+            isLoggingOut = true;
+            ClearSession();
+            Close();
+
 
 
         }
 
         private void quitBtn_Click(object sender, EventArgs e)
         {
-            // Confirm quit action with the user
-            DialogResult result = MessageBox.Show("Are you sure you wish to quit?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+
+            Application.Exit();
+
         }
 
 
@@ -220,6 +215,28 @@ namespace ImagitiveCSC460UI.Forms
         }
 
         private void changeUsernameLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            // Confirm exit action with the user
+            DialogResult result = MessageBox.Show("Are you sure you wish to quit?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true; // Cancel the closing event
+                return;
+            }
+            if (isLoggingOut)
+            {
+                loginForm.Show();
+            }
+
+            base.OnFormClosing(e);
+        }
+
+        private void viewerDashboardInstance1_Load(object sender, EventArgs e)
         {
 
         }

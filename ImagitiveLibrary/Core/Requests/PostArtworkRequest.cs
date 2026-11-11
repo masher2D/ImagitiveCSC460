@@ -21,7 +21,7 @@ namespace ImagitiveLibrary.Core.Requests
         /// The tags associated with the artwork.
         /// </summary>
         public List<string> Tags { get; set; } = [];
-        
+
 
     }
 }

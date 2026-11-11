@@ -56,7 +56,9 @@ namespace ImagitiveAPI.Services
 
         public async Task<LogInResponse> LoginAsync(LogInRequest request)
         {
+            
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
                 return new LogInResponse

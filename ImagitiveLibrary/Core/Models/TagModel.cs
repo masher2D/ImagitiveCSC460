@@ -9,7 +9,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the ID of the tag.
         /// </summary>
-        public int Id { get; set; }
+        public int TagId { get; set; }
         /// <summary>
         /// Gets or sets the name of the tag.
         /// </summary>
