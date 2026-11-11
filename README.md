@@ -20,13 +20,15 @@ Local artists struggle to get exposure: social media algorithms filter them out,
 
 **Admins**
 - Review reported content and act (remove artwork, warn, suspend, ban)
-- Manage user accounts (restrict voting/posting, ban/unban)
+- Manage user accounts (restrict posting, ban/unban)
 
 ## Tech Stack
 
 - **UI:** C# WinForms (.NET)
 - **Database:** Microsoft SQL Server
-- **Data Access:** ADO.NET (parameterized queries)
+- **Data Access:** EF Core combined with SQL Stored Procedures
+- **API** ASP.NET Core Web API
+- **Auth** JWT Bearer, BCrypt
 - **Image Handling:** Server-side watermarking, reduced-resolution display
 
 
