@@ -164,6 +164,7 @@
             // 
             // selectedRoleComboBox
             // 
+            selectedRoleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             selectedRoleComboBox.FormattingEnabled = true;
             selectedRoleComboBox.Items.AddRange(new object[] { "Artist", "Viewer", "Admin" });
             selectedRoleComboBox.Location = new Point(63, 290);

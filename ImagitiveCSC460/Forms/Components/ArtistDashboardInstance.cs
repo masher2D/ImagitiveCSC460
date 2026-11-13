@@ -53,12 +53,8 @@ namespace ImagitiveCSC460UI.Forms.Components
 
         private void ArtistDashboardInstance_Load(object sender, EventArgs e)
         {
-            if (IsDesignTime)
-            {
-                return;
-            }
-
-            RefreshInstance();
+           
+ 
         }
 
         private async void LoadArtworks(int page)
@@ -67,7 +63,6 @@ namespace ImagitiveCSC460UI.Forms.Components
             {
                 return;
             }
-
             try
             {
 
@@ -163,12 +158,13 @@ namespace ImagitiveCSC460UI.Forms.Components
             {
                 MessageBox.Show("Please select an artwork to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            
+
         }
 
         private void PopulateArtistListView()
         {
             listView1.Items.Clear();
+            listView1.BeginUpdate();
 
             foreach (var artwork in _artworks)
             {
@@ -185,11 +181,14 @@ namespace ImagitiveCSC460UI.Forms.Components
 
                 listView1.Items.Add(item);
             }
+
+            listView1.EndUpdate();
         }
 
         private void PopulateStatListView()
         {
             statsView.Items.Clear();
+            statsView.BeginUpdate();
 
             foreach (var artwork in _artworks)
             {
@@ -203,6 +202,7 @@ namespace ImagitiveCSC460UI.Forms.Components
 
                 statsView.Items.Add(item);
             }
+            statsView.EndUpdate();
         }
 
         private async void LoadAccountAverageRating()
@@ -248,7 +248,7 @@ namespace ImagitiveCSC460UI.Forms.Components
             RefreshInstance();
         }
 
-        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControl_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (IsDesignTime)
             {
@@ -310,6 +310,11 @@ namespace ImagitiveCSC460UI.Forms.Components
             _currentPage = 1;
             LoadArtworks(_currentPage);
             SetPaginationControls();
+        }
+
+        private void avgRatingValueLabel_Click(object sender, EventArgs e)
+        {
+
         }
 
         /*

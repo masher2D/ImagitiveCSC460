@@ -22,6 +22,7 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IAdminRequestService, AdminRequestService>();
 
 builder.Services.AddDbContext<AppDBContext>(options =>
     options

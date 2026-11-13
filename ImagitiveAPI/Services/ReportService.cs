@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using ImagitiveAPI.Data;
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Services;
+using ImagitiveLibrary.Core.Responses;
+using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace ImagitiveAPI.Services
 {
@@ -12,12 +14,12 @@ namespace ImagitiveAPI.Services
     {
         private readonly AppDBContext _context;
 
-        private static readonly HashSet<string> ValidStatuses = [
+        private static readonly HashSet<string> ValidStatuses = new HashSet<string>
+        {
             "Unresolved",
-            "UnderReview",
             "Resolved",
-            "Dismissed"
-        ];
+            "UnderReview"
+        };
 
         public ReportService(AppDBContext context)
         {
@@ -28,11 +30,11 @@ namespace ImagitiveAPI.Services
         {
             return new ReportModel
             {
-                ReportID = report.ReportId,
+                ReportId = report.ReportId,
                 ArtworkId = report.ArtworkId,
                 ReportedUserId = report.ReportedUserId,
                 Status = report.Status,
-                ReasonID = report.ReasonID,
+                ReasonId = report.ReasonId,
                 Description = report.Description,
                 ReporterId = report.ReporterId,
                 ReportedAt = report.ReportedAt
@@ -117,7 +119,7 @@ namespace ImagitiveAPI.Services
             }
 
             bool reasonExists = await _context.Reasons
-                .AnyAsync(r => r.ReasonId == request.ReasonID);
+                .AnyAsync(r => r.ReasonId == request.ReasonId);
 
             bool reporterExists = await _context.Users
                 .AnyAsync(u => u.UserId == reporterId);
@@ -142,7 +144,7 @@ namespace ImagitiveAPI.Services
                 ArtworkId = request.ArtworkId,
                 ReportedUserId = request.ReportedUserId,
                 ReporterId = reporterId,
-                ReasonID = request.ReasonID,
+                ReasonId = request.ReasonId,
                 Description = request.Description,
                 Status = "Unresolved",
                 ReportedAt = DateTime.UtcNow
@@ -171,7 +173,7 @@ namespace ImagitiveAPI.Services
         {
             if (!ValidStatuses.Contains(status))
             {
-                throw new Exception(
+                throw new InvalidOperationException(
                     "Invalid status.");
             }
 
@@ -182,6 +184,119 @@ namespace ImagitiveAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
-        
+
+        public async Task<List<ReportModel>> GetReportsByUserIdAsync(int userId)
+        {
+            var reports = await _context.Reports
+                .Where(r => r.ReportedUserId == userId)
+                .ToListAsync();
+            var mappedReports = new List<ReportModel>();
+            foreach (var report in reports)
+            {
+                mappedReports.Add(MapToReportModel(report));
+            }
+            return mappedReports;
+        }
+
+        public async Task<List<ReportModel>> GetReportsByArtworkIdAsync(int artworkId)
+        {
+            var reports = await _context.Reports
+                .Where(r => r.ArtworkId == artworkId)
+                .ToListAsync();
+            var mappedReports = new List<ReportModel>();
+            foreach (var report in reports)
+            {
+                mappedReports.Add(MapToReportModel(report));
+            }
+            return mappedReports;
+        }
+
+        public async Task<List<ReportModel>> GetReportsByStatusAsync(string status)
+        {
+            var reports = await _context.Reports
+                .Where(r => r.Status == status)
+                .ToListAsync();
+            var mappedReports = new List<ReportModel>();
+            foreach (var report in reports)
+            {
+                mappedReports.Add(MapToReportModel(report));
+            }
+            return mappedReports;
+        }
+
+        public async Task<List<ReportModel>> GetReportsByReporterIdAsync(int reporterId)
+        {
+            var reports = await _context.Reports
+                .Where(r => r.ReporterId == reporterId)
+                .ToListAsync();
+            var mappedReports = new List<ReportModel>();
+            foreach (var report in reports)
+            {
+                mappedReports.Add(MapToReportModel(report));
+            }
+            return mappedReports;
+        }
+
+        public async Task<PagedResponse<ReportModel>> GetAllReportsAsync(int pageNumber, int pageSize, string filter, string sort)
+        {
+            var query = _context.Reports.AsQueryable().AsNoTracking();
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                switch(filter.ToLower())
+                {
+                    case "status: unresolved":
+                        query = query.Where(r => r.Status == "Unresolved");
+                        break;
+                    case "status: resolved":
+                        query = query.Where(r => r.Status == "Resolved");
+                        break;
+                    case "date: last 7 days":
+                        var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
+                        query = query.Where(r => r.ReportedAt >= sevenDaysAgo);
+                        break;
+                    case "date: last month":
+                        var thirtyDaysAgo = DateTime.UtcNow.AddDays(-30);
+                        query = query.Where(r => r.ReportedAt >= thirtyDaysAgo);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid filter value. Valid values are: status: unresolved, status: resolved, date: last 7 days, date: last month.");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch(sort.ToLower())
+                {
+                    case "newest to oldest":
+                        query = query.OrderByDescending(r => r.ReportedAt);
+                        break;
+                    case "oldest to newest":
+                        query = query.OrderBy(r => r.ReportedAt);
+                        break;
+                    case "reason: a-z":
+                        query = query.OrderBy(r => r.ReasonId);
+                        break;
+                    case "reason: z-a":
+                        query = query.OrderByDescending(r => r.ReasonId);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid sort value. Valid values are: newest to oldest, oldest to newest, reason: a-z, reason: z-a.");
+                }
+            }
+
+            var reports = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            var mappedReports = reports.Select(MapToReportModel).ToList();
+            return new PagedResponse<ReportModel>
+            {
+                Items = mappedReports,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalCount = await _context.Reports.CountAsync()
+            };
+        }
     }
 }

@@ -89,5 +89,10 @@ namespace ImagitiveCSC460UI.Forms.Components
         {
 
         }
+
+        private void artworkAvgRatingLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

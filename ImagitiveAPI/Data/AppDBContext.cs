@@ -25,6 +25,7 @@ namespace ImagitiveAPI.Data
         public DbSet<ImagitiveAPI.Models.ArtworkViewDBModel> ArtworkViews => Set<ImagitiveAPI.Models.ArtworkViewDBModel>();
         public DbSet<ImagitiveAPI.Models.RoleDBModel> Roles => Set<ImagitiveAPI.Models.RoleDBModel>();
         public DbSet<ImagitiveAPI.Models.UserActionsDBModel> UserActions => Set<ImagitiveAPI.Models.UserActionsDBModel>();
+        public DbSet<ImagitiveAPI.Models.AdminRequestDBModel> AdminRequests => Set<ImagitiveAPI.Models.AdminRequestDBModel>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

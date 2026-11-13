@@ -9,7 +9,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the ID of the report.
         /// </summary>
-        public int ReportID { get; set; }
+        public int ReportId { get; set; }
         /// <summary>
         /// Gets or sets the ID of the reporter.
         /// </summary>
@@ -21,7 +21,7 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>
-        public int ReasonID { get; set; }
+        public int ReasonId { get; set; }
         /// <summary>
         /// Gets or sets the description of the report.
         /// </summary>

@@ -40,14 +40,13 @@ namespace ImagitiveCSC460UI.Forms.Components
 
         private async void ViewerDashboardInstance_Load(object sender, EventArgs e)
         {
-            if (DesignMode)
-            {
-                return;
-            }
+            
 
+        }
+
+        private async void PrepareFeed()
+        {
             GetFeedPage();
-            LoadFeedArtworks(_feedArtworks);
-
         }
 
         private void LoadFeedArtworks(List<ArtworkModel> artworks)
@@ -66,6 +65,7 @@ namespace ImagitiveCSC460UI.Forms.Components
                 return;
             }
             var artwork = _feedArtworks[_currentArtworkIndex];
+            MessageBox.Show($"Displaying artwork: {artwork.Title} by User ID: {artwork.UserId}");
             var uploader = await _userService.GetUserByIdAsync(artwork.UserId);
             using var stream = await ApiClient.Client.GetStreamAsync(artwork.ImageUrl);
             int fullStars = (int)Math.Floor(artwork.AverageRateValue);
@@ -110,7 +110,7 @@ namespace ImagitiveCSC460UI.Forms.Components
         public void RefreshInstance()
         {
             _currentPage = 1;
-            ViewerDashboardInstance_Load(this, EventArgs.Empty);
+            PrepareFeed();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -137,10 +137,15 @@ namespace ImagitiveCSC460UI.Forms.Components
 
             if (currentRating != null)
             {
-                var isSuccess = await _ratingSerivce.UpdateRatingAsync(ratingRequest);
-                if (isSuccess)
+                var response = await _ratingSerivce.UpdateRatingAsync(ratingRequest);
+                if (response.Success)
                 {
                     MessageBox.Show("Rating submitted successfully!");
+                    var newAverageRating = response.AverageRating;
+                    if (newAverageRating.HasValue)
+                    {
+                        _feedArtworks[_currentArtworkIndex].AverageRateValue = newAverageRating.Value;
+                    }
                     DisplayCurrentArtwork();
                 }
                 else
@@ -150,10 +155,15 @@ namespace ImagitiveCSC460UI.Forms.Components
             }
             else
             {
-                var isSuccess = await _ratingSerivce.PostRatingAsync(ratingRequest);
-                if (isSuccess)
+                var response = await _ratingSerivce.PostRatingAsync(ratingRequest);
+                if (response.Success)
                 {
                     MessageBox.Show("Rating submitted successfully!");
+                    var newAverageRating = response.AverageRating;
+                    if(newAverageRating.HasValue)
+                    {
+                        _feedArtworks[_currentArtworkIndex].AverageRateValue = newAverageRating.Value;
+                    }
                     DisplayCurrentArtwork();
                 }
                 else

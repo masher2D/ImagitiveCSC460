@@ -282,6 +282,7 @@
             // 
             // availableRolesComboBox
             // 
+            availableRolesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             availableRolesComboBox.FormattingEnabled = true;
             availableRolesComboBox.Location = new Point(170, 170);
             availableRolesComboBox.Name = "availableRolesComboBox";

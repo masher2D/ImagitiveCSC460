@@ -25,8 +25,15 @@ public class RatingsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateRating([FromBody] PostRatingRequest request)
     {
-        await _ratingService.PostRatingAsync(CurrentUserId, request);
-        return Ok();
+        var response = await _ratingService.PostRatingAsync(CurrentUserId, request);
+        if (response.Success)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response);
+        }
     }
 
     [HttpGet("average/{artworkId}")]
@@ -40,10 +47,10 @@ public class RatingsController : ControllerBase
     [HttpPatch("{artworkId}")]
     public async Task<IActionResult> UpdateRating(int artworkId, [FromBody] PostRatingRequest request)
     {
-        bool isUpdated = await _ratingService.UpdateRatingAsync(CurrentUserId, request);
-        if (isUpdated)
+        var response = await _ratingService.UpdateRatingAsync(CurrentUserId, request);
+        if (response.Success)
         {
-            return Ok();
+            return Ok(response);
         }
         else
         {

@@ -100,6 +100,7 @@
             artworkAvgRatingLabel.TabIndex = 6;
             artworkAvgRatingLabel.Text = "{InsertArtworkAvgRating}";
             artworkAvgRatingLabel.TextAlign = ContentAlignment.TopCenter;
+            artworkAvgRatingLabel.Click += artworkAvgRatingLabel_Click;
             // 
             // ImageInstanceViewer
             // 

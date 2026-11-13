@@ -70,6 +70,7 @@ namespace ImagitiveAPI.Services
         private async Task<ArtworkModel> MapToArtworkModel(ArtworkDBModel artwork)
         {
             List<string> tags = await GetArtworkTagsAsync(artwork.ArtworkId);
+            double avgRating = await _ratingService.GetAverageRatingAsync(artwork.ArtworkId);
             return new ArtworkModel
             {
                 ArtworkId = artwork.ArtworkId,
@@ -79,7 +80,7 @@ namespace ImagitiveAPI.Services
                 UploadDate = artwork.UploadDate,
                 ViewCount = artwork.ViewCount,
                 UserId = artwork.UserId,
-                AverageRateValue = await _ratingService.GetAverageRatingAsync(artwork.ArtworkId),
+                AverageRateValue = avgRating,
                 Tags = tags
             };
         }
@@ -245,7 +246,7 @@ namespace ImagitiveAPI.Services
                 .CountAsync(v => v.ArtworkId == artworkId && v.ViewedAt >= today && v.ViewedAt <= end);
         }
 
-        public async Task<List<ArtworkModel>> GetFeedAsync(int viewerId, int page, int pageSize)
+        public async Task<PagedResponse<ArtworkModel>> GetFeedAsync(int viewerId, int page, int pageSize)
         {
             var viewer = await _context.Users.FirstAsync(u => u.UserId == viewerId);
             var region = viewer.RegionID;
@@ -256,16 +257,19 @@ namespace ImagitiveAPI.Services
 
             var filteredArtworks = artworks.OrderByDescending(a => CalculateRelevanceScore(a, viewerId, region)).ToList();
             var pagedArtworks = filteredArtworks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            return pagedArtworks.Select(a => new ArtworkModel
+            var mappedArtworks = new List<ArtworkModel>();
+            foreach(var artwork in pagedArtworks)
             {
-                ArtworkId = a.ArtworkId,
-                UserId = a.UserId,
-                Title = a.Title,
-                Description = a.Description,
-                ImageUrl = a.ImageURL,
-                UploadDate = a.UploadDate,
-                ViewCount = a.ViewCount,
-            }).ToList();
+                mappedArtworks.Add(await MapToArtworkModel(artwork));
+            }
+
+            return new PagedResponse<ArtworkModel>
+            {
+                Items = mappedArtworks,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalCount = filteredArtworks.Count
+            };
         }
 
         private int CalculateRelevanceScore(ArtworkDBModel artwork, int viewerId, int? region)

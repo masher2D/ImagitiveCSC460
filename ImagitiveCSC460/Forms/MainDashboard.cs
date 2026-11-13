@@ -88,12 +88,14 @@ namespace ImagitiveCSC460UI.Forms
                     artistDashboardInstance1.Enabled = false;
 
                     adminDashboardInstance1.Visible = true;
+                    adminDashboardInstance1.RefreshInstance();
                     break;
                 default:
                     // Default case, disable all features if role is unknown
                     adminDashboardInstance1.Enabled = false;
                     viewerDashboardInstance1.Enabled = false;
                     artistDashboardInstance1.Enabled = false;
+                    MessageBox.Show("Unknown role. I suggest logging out and selecting a valid role. If this issue persists, contact support.", "Role Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
             }
 
@@ -143,8 +145,14 @@ namespace ImagitiveCSC460UI.Forms
 
         private void swapRoleBtn_Click(object sender, EventArgs e)
         {
+            string selectedRole = availableRolesComboBox.SelectedItem?.ToString();
+            if(string.IsNullOrEmpty(selectedRole) || selectedRole == UserSession.ActiveRole)
+            {
+                MessageBox.Show("Please select a different role to switch to.");
+                return;
+            }
             // Update the active role in the UserSession based on the selected role from the combo box
-            UserSession.ActiveRole = availableRolesComboBox.SelectedItem.ToString();
+            UserSession.ActiveRole = selectedRole;
             ConfigureRoleAccess();
         }
 

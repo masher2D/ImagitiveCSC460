@@ -4,6 +4,7 @@ using ImagitiveAPI.Models;
 using ImagitiveAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Responses;
 
 namespace ImagitiveAPI.Services
 {
@@ -14,31 +15,45 @@ namespace ImagitiveAPI.Services
         {
             _context = context;
         }
-        public async Task<bool> PostRatingAsync(int userId, PostRatingRequest request)
+        public async Task<PostRatingResponse> PostRatingAsync(int userId, PostRatingRequest request)
         {
-
-            
 
             if (request.RateValue < 1 || request.RateValue > 5)
             {
-                throw new Exception("Rating must be between 1 and 5.");
+                return new PostRatingResponse
+                {
+                    Success = false,
+                    ErrorMessage = "Rating must be between 1 and 5."
+                };
             }
 
             var artwork = await _context.Artworks.FirstOrDefaultAsync(a => a.ArtworkId == request.ArtworkId);
 
             if (artwork == null)
             {
-                throw new Exception("Artwork not found.");
+                return new PostRatingResponse
+                {
+                    Success = false,
+                    ErrorMessage = "Artwork not found."
+                };
             }
 
             if (artwork.UserId == userId)
             {
-                throw new Exception("You cannot rate your own artwork.");
+                return new PostRatingResponse
+                {
+                    Success = false,
+                    ErrorMessage = "You cannot rate your own artwork."
+                };
             }
 
             if (artwork.IsRemoved)
             {
-                throw new Exception("Cannot rate removed artwork.");
+                return new PostRatingResponse
+                {
+                    Success = false,
+                    ErrorMessage = "Cannot rate removed artwork."
+                };
             }
 
             var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.ArtworkId == request.ArtworkId && r.UserId == userId);
@@ -57,7 +72,11 @@ namespace ImagitiveAPI.Services
                 _context.Ratings.Add(newRating);
             }
             await _context.SaveChangesAsync();
-            return true;
+            return new PostRatingResponse
+            {
+                Success = true,
+                AverageRating = await GetAverageRatingAsync(request.ArtworkId)
+            };
         }
         public async Task<double> GetAverageRatingAsync(int artworkId)
         {
@@ -81,16 +100,25 @@ namespace ImagitiveAPI.Services
             };
         }
 
-        public async Task<bool> UpdateRatingAsync(int userId, PostRatingRequest request)
+        public async Task<PostRatingResponse> UpdateRatingAsync(int userId, PostRatingRequest request)
         {
             var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.ArtworkId == request.ArtworkId && r.UserId == userId);
             if (existingRating == null)
             {
-                return false; // Rating does not exist
+                return new PostRatingResponse
+                {
+                    Success = false,
+                    ErrorMessage = "Rating does not exist."
+                };
+
             }
             existingRating.RateValue = request.RateValue;
             await _context.SaveChangesAsync();
-            return true;
+            return new PostRatingResponse
+            {
+                Success = true,
+                AverageRating = await GetAverageRatingAsync(request.ArtworkId)
+            };
         }
     }
 }

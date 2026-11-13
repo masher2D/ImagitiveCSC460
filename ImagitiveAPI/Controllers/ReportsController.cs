@@ -65,4 +65,35 @@ public class ReportsController : ControllerBase
         return Ok(report);
     }
 
+    [Authorize]
+    [HttpGet("artwork/{artworkId}")]
+    public async Task<IActionResult> GetReportsByArtworkId(int artworkId)
+    {
+        var reports = await _reportService.GetReportsByArtworkIdAsync(artworkId);
+        return Ok(reports);
+    }
+
+    [Authorize]
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetReportsByUserId(int userId)
+    {
+        var reports = await _reportService.GetReportsByUserIdAsync(userId);
+        return Ok(reports);
+    }
+
+    [Authorize]
+    [HttpGet("my-reports")]
+    public async Task<IActionResult> GetMyReports()
+    {
+        var reports = await _reportService.GetReportsByReporterIdAsync(CurrentUserId);
+        return Ok(reports);
+    }
+
+    [Authorize]
+    [HttpGet("paged")]
+    public async Task<IActionResult> GetAllReports([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string filter = "", [FromQuery] string sort = "")
+    {
+        var pagedReports = await _reportService.GetAllReportsAsync(pageNumber, pageSize, filter, sort);
+        return Ok(pagedReports);
+    }
 }

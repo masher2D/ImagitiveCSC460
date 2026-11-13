@@ -18,7 +18,7 @@ namespace ImagitiveLibrary.Core.Requests
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>
-        public int ReasonID { get; set; }
+        public int ReasonId { get; set; }
         /// <summary>
         /// Gets or sets the description of the report.
         /// </summary>

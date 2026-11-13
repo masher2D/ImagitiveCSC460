@@ -257,6 +257,7 @@
             avgRatingValueLabel.TabIndex = 7;
             avgRatingValueLabel.Text = "{Insert Post Avg Rating}";
             avgRatingValueLabel.TextAlign = ContentAlignment.TopRight;
+            avgRatingValueLabel.Click += avgRatingValueLabel_Click;
             // 
             // dailyViewsValueLabel
             // 
