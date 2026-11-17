@@ -25,6 +25,6 @@ public interface IArtworkService
 
     Task<int> GetTodaysViewsAsync(int artworkId);
 
-    Task<PagedResponse<ArtworkModel>> GetFeedAsync(int viewerId, int page, int pageSize);
+    Task<PagedResponse<ArtworkModel>> GetFeedAsync(int viewerId, int page, int pageSize, string? tagFilter = null);
 
 }

@@ -18,5 +18,15 @@ namespace ImagitiveCSC460UI.Services
             }
             return await response.Content.ReadFromJsonAsync<List<TagModel>>();
         }
+
+        public async Task<TagModel?> GetTagByNameAsync(string tagName)
+        {
+            var response = await ApiClient.Client.GetAsync("api/tags/{tagName}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            return await response.Content.ReadFromJsonAsync<TagModel?>();
+        }
     }
 }

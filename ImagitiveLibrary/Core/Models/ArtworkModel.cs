@@ -23,6 +23,14 @@ namespace ImagitiveLibrary.Core.Models
         /// </summary>
         public string ImageUrl { get; set; } = string.Empty;
         /// <summary>
+        /// Gets or sets the compressed URL.
+        /// </summary>
+        public string CompressedUrl { get; set; } = string.Empty;
+        /// <summary>
+        /// Gets or sets the watermarked URL.
+        /// </summary>
+        public string WatermarkedUrl { get; set; } = string.Empty;
+        /// <summary>
         /// Gets or sets the ID of the user who created the artwork.
         /// </summary>
         public int UserId { get; set; }

@@ -40,13 +40,13 @@ namespace ImagitiveCSC460UI.Services
 
         public async Task<bool> RemoveArtworkAsync(int artworkId, int? reasonId)
         {
-            var response = await ApiClient.Client.DeleteAsync($"api/artworks/{artworkId}?reasonId ={reasonId}");
+            var response = await ApiClient.Client.DeleteAsync($"api/artworks/{artworkId}?reasonId={reasonId}");
 
             return response.IsSuccessStatusCode;
 
         }
 
-        public async Task<ArtworkModel?> GetArtworkById(int artworkId)
+        public async Task<ArtworkModel?> GetArtworkByIdAsync(int artworkId)
         {
             var response = await ApiClient.Client.GetAsync($"api/artworks/{artworkId}");
 
@@ -108,12 +108,35 @@ namespace ImagitiveCSC460UI.Services
             return await response.Content.ReadFromJsonAsync<int>();
         }
 
-        public async Task<List<ArtworkModel>?> GetFeedAsync(int viewerId, int page, int pageSize)
+        public async Task<PagedResponse<ArtworkModel>?> GetFeedAsync(int page, int pageSize, string? tagFilter = null)
         {
-            var response = await ApiClient.Client.GetAsync($"api/artworks/feed?viewerId={viewerId}&page={page}&pageSize={pageSize}");
+            var endpoint = $"api/artworks/feed?page={page}&pageSize={pageSize}";
+            if (!string.IsNullOrWhiteSpace(tagFilter))
+            {
+                endpoint += $"&tagFilter={Uri.EscapeDataString(tagFilter)}";
+            }
+
+            var response = await ApiClient.Client.GetAsync(endpoint);
             if (!response.IsSuccessStatusCode)
                 return null;
-            return await response.Content.ReadFromJsonAsync<List<ArtworkModel>>();
+            return await response.Content.ReadFromJsonAsync<PagedResponse<ArtworkModel>>();
+        }
+
+        public async Task<Stream?> GetImageStreamAsync(string imageUrl)
+        {
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                return null;
+            }
+
+            var response = await ApiClient.Client.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
+            if (!response.IsSuccessStatusCode)
+            {
+                response.Dispose();
+                return null;
+            }
+
+            return await response.Content.ReadAsStreamAsync();
         }
     }
 }

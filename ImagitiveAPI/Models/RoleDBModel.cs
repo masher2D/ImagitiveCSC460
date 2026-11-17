@@ -12,6 +12,7 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// The name of the role.
         /// </summary>
+        [Required]
         public string RoleName { get; set; } = string.Empty;
     }
 }

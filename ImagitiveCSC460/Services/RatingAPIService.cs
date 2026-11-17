@@ -10,8 +10,13 @@ public class RatingAPIService
         PostRatingRequest request)
     {
         var response = await ApiClient.Client.PostAsJsonAsync("api/ratings", request);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception("Failed to post rating.");
+        }
 
-        return await response.Content.ReadFromJsonAsync<PostRatingResponse>();
+        var payload = await response.Content.ReadFromJsonAsync<PostRatingResponse>();
+        return payload ?? new PostRatingResponse { Success = false, ErrorMessage = "Failed to parse rating response." };
     }
 
     public async Task<double?> GetAverageRatingAsync(
@@ -41,6 +46,16 @@ public class RatingAPIService
     public async Task<PostRatingResponse> UpdateRatingAsync(PostRatingRequest request)
     {
         var response = await ApiClient.Client.PatchAsJsonAsync($"api/ratings/{request.ArtworkId}", request);
-        return await response.Content.ReadFromJsonAsync<PostRatingResponse>();
+        if (!response.IsSuccessStatusCode)
+        {
+            return new PostRatingResponse
+            {
+                Success = false,
+                ErrorMessage = "Failed to update rating."
+            };
+        }
+
+        var payload = await response.Content.ReadFromJsonAsync<PostRatingResponse>();
+        return payload ?? new PostRatingResponse { Success = false, ErrorMessage = "Failed to parse rating response." };
     }
 }

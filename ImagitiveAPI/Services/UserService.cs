@@ -71,16 +71,16 @@ namespace ImagitiveAPI.Services
             return mappedUsers;
         }
 
-        public async Task<UserModel?> UpdateUserAsync(int id, UpdateUserRequest request)
+        public async Task<bool> UpdateUserAsync(int id, UpdateUserRequest request)
         {
             var existingUser = await _context.Users.FindAsync(id);
 
             if (existingUser == null)
-                return null;
+                return false;
 
             var isPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, existingUser.PasswordHash);
             if (!isPasswordValid)
-                throw new UnauthorizedAccessException("Current password is incorrect.");
+                return false;
 
             if (!string.IsNullOrWhiteSpace(request.Username))
             {
@@ -101,7 +101,7 @@ namespace ImagitiveAPI.Services
 
             await _context.SaveChangesAsync();
 
-            return await MapToUserModel(existingUser);
+            return true;
         }
         
         public async Task<bool> SetUserStatusAsync(int updateeId, string status)
@@ -113,6 +113,46 @@ namespace ImagitiveAPI.Services
 
             existingUser.AccountStatus = status;
             existingUser.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<string?> GetUserAccountStatusAsync(int userId)
+        {
+            return await _context.Users
+                .Where(u => u.UserId == userId)
+                .Select(u => u.AccountStatus)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<UserModel?> GetUserByUsername(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return null;
+            return await MapToUserModel(user);
+        }
+
+        public async Task<bool> AddUserRole(int userId, string role)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return false;
+            var roleEntity = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == role);
+            if (roleEntity == null)
+                return false;
+            if(roleEntity.RoleName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                return false; // Prevent assigning Admin role
+            var existingUserRole = await _context.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleEntity.RoleId);
+            if (existingUserRole != null)
+                return false; // Role already assigned
+            var userRole = new UserRoleDBModel
+            {
+                UserId = userId,
+                RoleId = roleEntity.RoleId
+            };
+            _context.UserRoles.Add(userRole);
             await _context.SaveChangesAsync();
             return true;
         }

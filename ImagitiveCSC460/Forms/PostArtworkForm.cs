@@ -1,4 +1,4 @@
-﻿using ImagitiveAPI.Session;
+﻿using ImagitiveCSC460UI.Session;
 using ImagitiveCSC460UI.Services;
 using ImagitiveLibrary.Core.Models;
 using System;
@@ -15,7 +15,7 @@ namespace ImagitiveCSC460UI.Forms
     public partial class PostArtworkForm : Form
     {
         private readonly ArtworkAPIService _artworkService = new ArtworkAPIService();
-        private readonly TagAPIService _tagApiService = new TagAPIService();
+        private readonly TagAPIService _tagService = new TagAPIService();
         private string? artworkImagePath = string.Empty;
         private List<string> selectedTagNames = new List<string>();
         public PostArtworkForm()
@@ -25,19 +25,22 @@ namespace ImagitiveCSC460UI.Forms
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            postBtn.Enabled = false;
             var title = validateString(titleValue.Text);
             var description = validateString(descriptionValue.Text);
-            artworkImagePath = validateString(artworkImagePath);
+            artworkImagePath = validateString(artworkImagePath ?? string.Empty);
 
             if (string.IsNullOrWhiteSpace(artworkImagePath) || !File.Exists(artworkImagePath))
             {
                 MessageBox.Show("Please select a valid image file.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                postBtn.Enabled = true;
                 return;
             }
 
                 if (string.IsNullOrWhiteSpace(title))
             {
                 MessageBox.Show("Title cannot be empty.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                postBtn.Enabled = true;
                 return;
             }
 
@@ -48,11 +51,15 @@ namespace ImagitiveCSC460UI.Forms
                 Tags = selectedTagNames
             };
 
+            pictureBox1.Visible = true;
+
             var response = await _artworkService.CreateArtworkAsync(artworkImagePath, request);
 
             if (response == null)
             {
                 MessageBox.Show("Failed to post artwork. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                postBtn.Enabled = true;
+                pictureBox1.Visible = false;
                 return;
             }
             else
@@ -99,7 +106,7 @@ namespace ImagitiveCSC460UI.Forms
 
         private async void PostArtworkForm_Load(object sender, EventArgs e)
         {
-            var tags = await _tagApiService.GetAllTagsAsync();
+            var tags = await _tagService.GetAllTagsAsync();
 
             addTagValueComboBox.DataSource = tags;
 
@@ -119,7 +126,8 @@ namespace ImagitiveCSC460UI.Forms
                     MessageBox.Show("Please select a tag to add.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                if (selectedTagNames.Contains((addTagValueComboBox.SelectedItem as TagModel)?.Name))
+                var selectedTagName = (addTagValueComboBox.SelectedItem as TagModel)?.Name;
+                if (!string.IsNullOrWhiteSpace(selectedTagName) && selectedTagNames.Contains(selectedTagName))
                 {
                     MessageBox.Show("This tag has already been added.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;

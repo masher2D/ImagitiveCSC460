@@ -1,4 +1,5 @@
 ﻿using ImagitiveAPI.Services.Interfaces;
+using ImagitiveAPI.Helpers;
 using ImagitiveLibrary.Core.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ public class ReportsController : ControllerBase
 {
     private readonly IReportService _reportService;
 
-    private int CurrentUserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+    private int CurrentUserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
     public ReportsController(IReportService reportService)
     {
@@ -23,11 +24,11 @@ public class ReportsController : ControllerBase
     [HttpPatch("{id}/status")]
     public async Task<IActionResult> UpdateStatus(int id, UpdateReportStatusRequest request)
     {
-        bool isAdmin = User.IsInRole("Admin");
-        if (!isAdmin)
+        if (!ActiveRoleAuthorizationHelper.TryResolveActiveRole(Request, User, out _, out var errorResult, "Admin"))
         {
-            return Forbid();
+            return errorResult!;
         }
+
         bool updated =
             await _reportService
                 .UpdateReportStatusAsync(
@@ -95,5 +96,17 @@ public class ReportsController : ControllerBase
     {
         var pagedReports = await _reportService.GetAllReportsAsync(pageNumber, pageSize, filter, sort);
         return Ok(pagedReports);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("{id}/resolve")]
+    public async Task<IActionResult> PostResolve(int id, PostAdminReportDecisionRequest request)
+    {
+        request.RequestId = id;
+        bool resolved = await _reportService.ResolveReportAsync(CurrentUserId, request);
+        if (!resolved)
+            return NotFound();
+
+        return Ok();
     }
 }

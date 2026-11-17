@@ -30,7 +30,7 @@ namespace ImagitiveCSC460UI.Forms
 
         private void submitBtn_Click(object sender, EventArgs e)
         {
-            
+
             string password = validateString(passwordValue.Text);
             if (string.IsNullOrEmpty(password))
             {
@@ -38,7 +38,7 @@ namespace ImagitiveCSC460UI.Forms
                 return;
             }
             var result = MessageBox.Show("Are you sure you want to proceed?", "Confirm Action", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if(result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 ResultValue = password;
                 this.DialogResult = DialogResult.OK;
@@ -49,7 +49,12 @@ namespace ImagitiveCSC460UI.Forms
 
         private string validateString(string dirtyText)
         {
-            return dirtyText?.Trim();
+            return dirtyText.Trim();
+
+        }
+
+        private void ConfirmPasswordForm_Load(object sender, EventArgs e)
+        {
 
         }
     }

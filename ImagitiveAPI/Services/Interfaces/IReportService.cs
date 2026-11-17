@@ -23,5 +23,7 @@ namespace ImagitiveAPI.Services.Interfaces
         Task<List<ReportModel>> GetReportsByReporterIdAsync(int reporterId);
 
         Task<PagedResponse<ReportModel>> GetAllReportsAsync(int pageNumber, int pageSize, string filter, string sort);
+
+        Task<bool> ResolveReportAsync(int resolverId, PostAdminReportDecisionRequest request);
     }
 }

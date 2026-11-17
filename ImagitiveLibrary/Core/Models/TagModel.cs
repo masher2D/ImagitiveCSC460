@@ -13,6 +13,6 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the name of the tag.
         /// </summary>
-        public string Name { get; set; }
+        public required string Name { get; set; }
     }
 }

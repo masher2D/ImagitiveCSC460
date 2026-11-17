@@ -1,7 +1,8 @@
-﻿using ImagitiveAPI.Session;
+﻿using ImagitiveCSC460UI.Session;
 using ImagitiveCSC460UI.Services;
 using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
+using ImagitiveUI.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +16,16 @@ namespace ImagitiveCSC460UI.Forms
     public partial class MainDashboard : Form
     {
         private LoginForm loginForm;
+
+        //*************************
+        // API Services Here
+        //*************************
+
         private readonly UserAPIService _userService = new UserAPIService();
         private readonly RegionAPIService _regionService = new RegionAPIService();
 
         private bool isLoggingOut = false;
+        private bool isIgnoringCloseEvent = false;
 
 
         public MainDashboard(LoginForm loginForm)
@@ -51,8 +58,100 @@ namespace ImagitiveCSC460UI.Forms
 
         }
 
+        private void currRoleValue_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void currRoleValue_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void availableRolesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void swapRoleBtn_Click(object sender, EventArgs e)
+        {
+            StartSwapRole();
+        }
+
+        private void logoutBtn_Click(object sender, EventArgs e)
+        {
+
+            // Confirm logout action with the user
+            isLoggingOut = true;
+            ClearSession();
+            Close();
+
+        }
+
+        private void quitBtn_Click(object sender, EventArgs e)
+        {
+
+            Application.Exit();
+
+        }
+
+
+        private async void saveAndLogoutBtn_Click(object sender, EventArgs e)
+        {
+            StartSaveAndLogout();
+        }
+
+
+
+        private void regionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void changeUsernameLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (!isIgnoringCloseEvent)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you wish to quit?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true; // Cancel the closing event
+                    return;
+                }
+            }
+            // Confirm exit action with the user
+
+            if (isLoggingOut)
+            {
+                loginForm.Show();
+            }
+
+            base.OnFormClosing(e);
+        }
+
+        private void viewerDashboardInstance1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void addRoleBtn_Click(object sender, EventArgs e)
+        {
+            StartAddRole();
+        }
+
+        //*************************
+        // Helper Functions Below
+        //*************************
+
         private void ConfigureRoleAccess()
         {
+            ApiClient.SetActiveRole(UserSession.ActiveRole);
+
             currRoleValue.Text = UserSession.ActiveRole;
 
             availableRolesComboBox.SelectedIndex = availableRolesComboBox.Items.IndexOf(UserSession.ActiveRole);
@@ -60,6 +159,8 @@ namespace ImagitiveCSC460UI.Forms
             adminDashboardInstance1.Visible = false;
             artistDashboardInstance1.Visible = false;
             viewerDashboardInstance1.Visible = false;
+
+            viewerDashboardInstance1.ClearFilters();
             // Check the user's active role and configure access accordingly
             switch (UserSession.ActiveRole)
             {
@@ -128,56 +229,69 @@ namespace ImagitiveCSC460UI.Forms
             }
         }
 
-        private void currRoleValue_Click(object sender, EventArgs e)
+        private void ClearSession()
         {
-
+            UserSession.UserId = 0;
+            UserSession.JwtToken = string.Empty;
+            UserSession.Username = string.Empty;
+            UserSession.Roles.Clear();
+            UserSession.ActiveRole = string.Empty;
+            ApiClient.ClearAuthContext();
         }
 
-        private void currRoleValue_Click_1(object sender, EventArgs e)
-        {
 
+
+        //*************************
+        // Wire Section Here
+        //*************************
+
+        private async void StartAddRole()
+        {
+            if (string.IsNullOrEmpty(possibleRoleBox.Text))
+            {
+                MessageBox.Show("Please enter a role to add.");
+                return;
+            }
+            if (UserSession.Roles.Contains(possibleRoleBox.Text))
+            {
+                MessageBox.Show("You already have this role.");
+                return;
+            }
+            var confirmResult = MessageBox.Show($"Are you sure you want to add the role '{possibleRoleBox.Text}'? Roles added cannot be removed.", "Confirm Role Addition", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmResult != DialogResult.Yes)
+            {
+                return;
+            }
+            var result = await _userService.AddUserRole(possibleRoleBox.Text);
+            if (result)
+            {
+                UserSession.Roles.Add(possibleRoleBox.Text);
+                MessageBox.Show("Role added successfully.");
+                availableRolesComboBox.Items.Clear();
+                availableRolesComboBox.Items.AddRange(UserSession.Roles.ToArray());
+
+            }
+            else
+            {
+                MessageBox.Show("Failed to add role.");
+            }
         }
 
-        private void availableRolesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private async void StartSwapRole()
         {
-
-        }
-
-        private void swapRoleBtn_Click(object sender, EventArgs e)
-        {
-            string selectedRole = availableRolesComboBox.SelectedItem?.ToString();
-            if(string.IsNullOrEmpty(selectedRole) || selectedRole == UserSession.ActiveRole)
+            string? selectedRole = availableRolesComboBox.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(selectedRole) || selectedRole == UserSession.ActiveRole)
             {
                 MessageBox.Show("Please select a different role to switch to.");
                 return;
             }
             // Update the active role in the UserSession based on the selected role from the combo box
             UserSession.ActiveRole = selectedRole;
+            ApiClient.SetActiveRole(UserSession.ActiveRole);
             ConfigureRoleAccess();
         }
 
-        private void logoutBtn_Click(object sender, EventArgs e)
-        {
-
-            // Confirm logout action with the user
-
-            isLoggingOut = true;
-            ClearSession();
-            Close();
-
-
-
-        }
-
-        private void quitBtn_Click(object sender, EventArgs e)
-        {
-
-            Application.Exit();
-
-        }
-
-
-        private async void saveAndLogoutBtn_Click(object sender, EventArgs e)
+        private async void StartSaveAndLogout()
         {
             using var verifyForm = new ConfirmPasswordForm();
 
@@ -204,49 +318,10 @@ namespace ImagitiveCSC460UI.Forms
             }
             MessageBox.Show("Profile updated. You will now be logged out.");
             ClearSession();
-            loginForm.Show();
+            isIgnoringCloseEvent = true;
+            isLoggingOut = true;
             Close();
         }
 
-        private void ClearSession()
-        {
-            UserSession.UserId = 0;
-            UserSession.JwtToken = string.Empty;
-            UserSession.Username = string.Empty;
-            UserSession.Roles.Clear();
-            UserSession.ActiveRole = string.Empty;
-        }
-
-        private void regionComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void changeUsernameLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            // Confirm exit action with the user
-            DialogResult result = MessageBox.Show("Are you sure you wish to quit?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.No)
-            {
-                e.Cancel = true; // Cancel the closing event
-                return;
-            }
-            if (isLoggingOut)
-            {
-                loginForm.Show();
-            }
-
-            base.OnFormClosing(e);
-        }
-
-        private void viewerDashboardInstance1_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

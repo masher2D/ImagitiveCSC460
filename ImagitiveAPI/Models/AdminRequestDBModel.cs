@@ -14,22 +14,27 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the id of the requester.
         /// </summary>
+        [Required]
         public int RequesterId { get; set; }
         /// <summary>
         /// Gets or sets the id of the requestee.
         /// </summary>
+        [Required]
         public int RequesteeId { get; set; }
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
+        [Required]
         public string Description { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets the current status.
         /// </summary>
+        [Required]
         public string Status { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets the date and time when the item was requested.
         /// </summary>
+        [Required]
         public DateTime RequestedAt { get; set; }
         /// <summary>
         /// Gets or sets the date and time when the item was resolved.

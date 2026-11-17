@@ -14,6 +14,7 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the ID of the reporter.
         /// </summary>
+        [Required]
         public int ReporterId { get; set; }
         /// <summary>
         /// Gets or sets the ID of the artwork being reported.
@@ -22,18 +23,22 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the reason for the report.
         /// </summary>
+        [Required]
         public int ReasonId { get; set; }
         /// <summary>
         /// Gets or sets the description of the report.
         /// </summary>
-        public string Description { get; set; }
+        [Required]
+        public required string Description { get; set; }
         /// <summary>
         /// Gets or sets the status of the report.
         /// </summary>
-        public string Status { get; set; }
+        [Required]
+        public required string Status { get; set; }
         /// <summary>
         /// Gets or sets the date and time when the report was created.
         /// </summary>
+        [Required]
         public DateTime ReportedAt { get; set; }
         /// <summary>
         /// Gets or sets the date and time when the report was resolved.

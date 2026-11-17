@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImagitiveLibrary.Core.Requests
 {
-    public class PostAdminPromoteRequest
+    public class PostAdminPromoteCreateRequest
     {
         /// <summary>
         /// Gets or sets the id of the requestee.

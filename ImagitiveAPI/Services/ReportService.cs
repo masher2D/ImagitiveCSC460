@@ -6,6 +6,7 @@ using ImagitiveAPI.Data;
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Services;
 using ImagitiveLibrary.Core.Responses;
+using ImagitiveLibrary.Core.Constants;
 using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace ImagitiveAPI.Services
@@ -16,9 +17,9 @@ namespace ImagitiveAPI.Services
 
         private static readonly HashSet<string> ValidStatuses = new HashSet<string>
         {
-            "Unresolved",
-            "Resolved",
-            "UnderReview"
+            ModerationStatuses.Unresolved,
+            ModerationStatuses.Resolved,
+            ModerationStatuses.UnderReview
         };
 
         public ReportService(AppDBContext context)
@@ -37,7 +38,10 @@ namespace ImagitiveAPI.Services
                 ReasonId = report.ReasonId,
                 Description = report.Description,
                 ReporterId = report.ReporterId,
-                ReportedAt = report.ReportedAt
+                ReportedAt = report.ReportedAt,
+                ResolvedAt = report.ResolvedAt,
+                ResolvedBy = report.ResolvedBy,
+                ActionTaken = report.ActionTaken
             };
         }
 
@@ -75,7 +79,7 @@ namespace ImagitiveAPI.Services
                     r.ReporterId == reporterId &&
                     r.ReportedUserId ==
                     request.ReportedUserId &&
-                    r.Status == "Unresolved");
+                    r.Status == ModerationStatuses.Unresolved);
 
                 if (alreadyReported)
                 {
@@ -108,7 +112,7 @@ namespace ImagitiveAPI.Services
                     .AnyAsync(r =>
                     r.ReporterId == reporterId &&
                     r.ArtworkId == request.ArtworkId &&
-                    r.Status == "Unresolved");
+                    r.Status == ModerationStatuses.Unresolved);
 
                 if (alreadyReported)
                 {
@@ -146,7 +150,7 @@ namespace ImagitiveAPI.Services
                 ReporterId = reporterId,
                 ReasonId = request.ReasonId,
                 Description = request.Description,
-                Status = "Unresolved",
+                Status = ModerationStatuses.Unresolved,
                 ReportedAt = DateTime.UtcNow
             };
 
@@ -165,7 +169,9 @@ namespace ImagitiveAPI.Services
 
         public async Task<List<ReportModel>> GetAllReportsAsync()
         {
-            var reports = await _context.Reports.ToListAsync();
+            var reports = await _context.Reports
+                .Where(r => r.Status != "Discarded")
+                .ToListAsync();
             return reports.Select(MapToReportModel).ToList();
         }
 
@@ -246,10 +252,10 @@ namespace ImagitiveAPI.Services
                 switch(filter.ToLower())
                 {
                     case "status: unresolved":
-                        query = query.Where(r => r.Status == "Unresolved");
+                        query = query.Where(r => r.Status == ModerationStatuses.Unresolved);
                         break;
                     case "status: resolved":
-                        query = query.Where(r => r.Status == "Resolved");
+                        query = query.Where(r => r.Status == ModerationStatuses.Resolved);
                         break;
                     case "date: last 7 days":
                         var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
@@ -297,6 +303,54 @@ namespace ImagitiveAPI.Services
                 PageSize = pageSize,
                 TotalCount = await _context.Reports.CountAsync()
             };
+
+
+        }
+
+        public async Task<bool> ResolveReportAsync(int resolverId, PostAdminReportDecisionRequest request)
+        {
+            var report = await _context.Reports.FindAsync(request.RequestId);
+            if (report == null)
+            {
+                return false;
+            }
+            var user = await _context.Users.FindAsync(report.ReportedUserId);
+            if (request.Decision.ToLower() == "restrict the reported user")
+            {
+               
+                if (user != null)
+                {
+                    user.AccountStatus = AccountStatuses.Restricted;
+                    user.RestrictedUntil = request.RestrictedUntil ?? DateTime.Now.AddMonths(2);
+                }
+            } else if (request.Decision.ToLower() == "ban the reported user")
+            {
+                if(user != null)
+                {
+                    user.AccountStatus = AccountStatuses.Banned;
+                }
+            } else if (request.Decision.ToLower() == "warn the reported user")
+            {
+                if(user != null)
+                {
+                    user.AccountStatus = AccountStatuses.Warned;
+                }
+            }
+            else if (request.Decision.ToLower() == "dismiss the report")
+            {
+                // intentionally no user/account action
+            }
+            else
+            {
+                return false;
+            }
+
+            report.ActionTaken = request.Decision;
+            report.Status = ModerationStatuses.Resolved;
+            report.ResolvedAt = DateTime.UtcNow;
+            report.ResolvedBy = resolverId;
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

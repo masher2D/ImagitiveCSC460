@@ -3,6 +3,7 @@ using ImagitiveAPI.Models;
 using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
 using ImagitiveLibrary.Core.Responses;
+using ImagitiveLibrary.Core.Constants;
 using ImagitiveAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,7 +69,54 @@ namespace ImagitiveAPI.Services
                 };
             }
 
+            if (user.AccountStatus == AccountStatuses.Banned)
+            {
+                return new LogInResponse
+                {
+                    Success = false,
+                    Message = "Your account has been banned. Please contact support for assistance."
+                };
+            }
+
+            if(user.AccountStatus == AccountStatuses.Deactivated)
+            {
+                return new LogInResponse
+                {
+                    Success = false,
+                    Message = "Your account is deactivated. Please contact support for assistance."
+                };
+            }
+
+            if(user.AccountStatus == AccountStatuses.Restricted)
+            {
+                if(user.RestrictedUntil.HasValue && user.RestrictedUntil.Value > DateTime.UtcNow)
+                {
+                    return new LogInResponse
+                    {
+                        Success = false,
+                        Message = $"Your account is restricted until {user.RestrictedUntil.Value.ToString("u")}. Please contact support for assistance."
+                    };
+                }
+                else
+                {
+                    user.AccountStatus = AccountStatuses.Active;
+                    user.RestrictedUntil = null;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             var roles = await GetUserRolesAsync(user.UserId);
+
+            if (roles.Count == 0)
+            {
+                return new LogInResponse
+                {
+                    Success = false,
+                    Message = "Your account does not have any roles assigned. Please contact support for assistance."
+                };
+            }
+
+            
 
             string token = _jwtService.GenerateToken(user, roles);
 
@@ -89,18 +137,20 @@ namespace ImagitiveAPI.Services
             
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-            var user = new UserDBModel
-            {
-                Username = request.Username,
-                Email = request.Email,
-                PasswordHash = hashedPassword
-            };
+            
 
             bool userExists = await _context.Users.AnyAsync(u => u.Username == request.Username || u.Email == request.Email);
             if (userExists)
             {
                 throw new Exception("User with the same username or email already exists.");
             }
+
+            var user = new UserDBModel
+            {
+                Username = request.Username,
+                Email = request.Email,
+                PasswordHash = hashedPassword
+            };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

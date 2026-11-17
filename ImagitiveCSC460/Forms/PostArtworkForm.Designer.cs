@@ -45,7 +45,9 @@
             taglistLabel = new Label();
             clearTagsBtn = new Button();
             addTagBtn = new Button();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)previewBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // headerLabel
@@ -99,6 +101,7 @@
             // 
             descriptionValue.AcceptsReturn = true;
             descriptionValue.Location = new Point(12, 266);
+            descriptionValue.MaxLength = 500;
             descriptionValue.Multiline = true;
             descriptionValue.Name = "descriptionValue";
             descriptionValue.Size = new Size(616, 251);
@@ -108,6 +111,7 @@
             // titleValue
             // 
             titleValue.Location = new Point(12, 150);
+            titleValue.MaxLength = 80;
             titleValue.Name = "titleValue";
             titleValue.Size = new Size(200, 39);
             titleValue.TabIndex = 16;
@@ -206,12 +210,24 @@
             addTagBtn.UseVisualStyleBackColor = true;
             addTagBtn.Click += addTagBtn_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(791, 796);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(112, 62);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 26;
+            pictureBox1.TabStop = false;
+            pictureBox1.Visible = false;
+            // 
             // PostArtworkForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1387, 930);
+            Controls.Add(pictureBox1);
             Controls.Add(addTagBtn);
             Controls.Add(clearTagsBtn);
             Controls.Add(taglistLabel);
@@ -231,6 +247,7 @@
             Text = "PostArtwork";
             Load += PostArtworkForm_Load;
             ((System.ComponentModel.ISupportInitialize)previewBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -253,5 +270,6 @@
         private Label taglistLabel;
         private Button clearTagsBtn;
         private Button addTagBtn;
+        private PictureBox pictureBox1;
     }
 }

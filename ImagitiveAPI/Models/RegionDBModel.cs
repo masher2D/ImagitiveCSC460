@@ -14,10 +14,12 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the name of the region.
         /// </summary>
+        [Required]
         public string Name { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets a value indicating whether the region is active.
         /// </summary>
+        [Required]
         public bool IsActive { get; set; }
     }
 }

@@ -92,7 +92,7 @@
             // artworkManagerGetPrevPageBtn
             // 
             artworkManagerGetPrevPageBtn.Font = new Font("Leelawadee UI", 9F);
-            artworkManagerGetPrevPageBtn.Location = new Point(15, 636);
+            artworkManagerGetPrevPageBtn.Location = new Point(6, 688);
             artworkManagerGetPrevPageBtn.Name = "artworkManagerGetPrevPageBtn";
             artworkManagerGetPrevPageBtn.Size = new Size(181, 46);
             artworkManagerGetPrevPageBtn.TabIndex = 14;
@@ -103,7 +103,7 @@
             // artworkManagerGetNextPageBtn
             // 
             artworkManagerGetNextPageBtn.Font = new Font("Leelawadee UI", 9F);
-            artworkManagerGetNextPageBtn.Location = new Point(15, 688);
+            artworkManagerGetNextPageBtn.Location = new Point(571, 688);
             artworkManagerGetNextPageBtn.Name = "artworkManagerGetNextPageBtn";
             artworkManagerGetNextPageBtn.Size = new Size(181, 46);
             artworkManagerGetNextPageBtn.TabIndex = 13;
@@ -114,7 +114,7 @@
             // artworkManagerReloadBtn
             // 
             artworkManagerReloadBtn.Font = new Font("Leelawadee UI", 9F);
-            artworkManagerReloadBtn.Location = new Point(593, 688);
+            artworkManagerReloadBtn.Location = new Point(304, 688);
             artworkManagerReloadBtn.Name = "artworkManagerReloadBtn";
             artworkManagerReloadBtn.Size = new Size(150, 46);
             artworkManagerReloadBtn.TabIndex = 12;
@@ -151,7 +151,7 @@
             listView1.Location = new Point(6, 103);
             listView1.MultiSelect = false;
             listView1.Name = "listView1";
-            listView1.Size = new Size(746, 642);
+            listView1.Size = new Size(746, 579);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -379,7 +379,6 @@
         private Button postNewArtworkBtn;
         private ColumnHeader lvTags;
         private ColumnHeader lvartworkCreationDate;
-        private ColumnHeader ArtworkTitle;
         private Label avgRatingLabel;
         private Label totalViewsLabel;
         private Label dailyViewsLabel;

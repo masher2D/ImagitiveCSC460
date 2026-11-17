@@ -31,7 +31,6 @@
             artworkImageBox = new PictureBox();
             artworkTitleLabel = new Label();
             artworkDescriptionLabel = new Label();
-            artworkOptionsBtn = new Button();
             artworkUsernameLabel = new Label();
             artworkAvgRatingLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)artworkImageBox).BeginInit();
@@ -55,7 +54,7 @@
             artworkTitleLabel.Name = "artworkTitleLabel";
             artworkTitleLabel.Size = new Size(432, 150);
             artworkTitleLabel.TabIndex = 1;
-            artworkTitleLabel.Text = "{InsertArtworkTitle}";
+            artworkTitleLabel.Text = "Please Wait";
             artworkTitleLabel.TextAlign = ContentAlignment.TopCenter;
             artworkTitleLabel.Click += artworkTitleLabel_Click;
             // 
@@ -67,19 +66,9 @@
             artworkDescriptionLabel.Name = "artworkDescriptionLabel";
             artworkDescriptionLabel.Size = new Size(497, 133);
             artworkDescriptionLabel.TabIndex = 2;
-            artworkDescriptionLabel.Text = "{InsertArtworkDescription}";
+            artworkDescriptionLabel.Text = "Not quite ready yet...";
             artworkDescriptionLabel.TextAlign = ContentAlignment.TopCenter;
             artworkDescriptionLabel.Click += artworkDescriptionLabel_Click;
-            // 
-            // artworkOptionsBtn
-            // 
-            artworkOptionsBtn.Location = new Point(447, 813);
-            artworkOptionsBtn.Name = "artworkOptionsBtn";
-            artworkOptionsBtn.Size = new Size(50, 50);
-            artworkOptionsBtn.TabIndex = 5;
-            artworkOptionsBtn.Text = "⋮";
-            artworkOptionsBtn.UseVisualStyleBackColor = true;
-            artworkOptionsBtn.Click += artworkOptionsBtn_Click;
             // 
             // artworkUsernameLabel
             // 
@@ -88,7 +77,7 @@
             artworkUsernameLabel.Name = "artworkUsernameLabel";
             artworkUsernameLabel.Size = new Size(390, 45);
             artworkUsernameLabel.TabIndex = 3;
-            artworkUsernameLabel.Text = "{InsertUsername}";
+            artworkUsernameLabel.Text = "......";
             artworkUsernameLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // artworkAvgRatingLabel
@@ -98,7 +87,7 @@
             artworkAvgRatingLabel.Name = "artworkAvgRatingLabel";
             artworkAvgRatingLabel.Size = new Size(494, 41);
             artworkAvgRatingLabel.TabIndex = 6;
-            artworkAvgRatingLabel.Text = "{InsertArtworkAvgRating}";
+            artworkAvgRatingLabel.Text = "The artwork is loading...";
             artworkAvgRatingLabel.TextAlign = ContentAlignment.TopCenter;
             artworkAvgRatingLabel.Click += artworkAvgRatingLabel_Click;
             // 
@@ -111,12 +100,11 @@
             BackColor = Color.White;
             Controls.Add(artworkAvgRatingLabel);
             Controls.Add(artworkUsernameLabel);
-            Controls.Add(artworkOptionsBtn);
             Controls.Add(artworkDescriptionLabel);
             Controls.Add(artworkTitleLabel);
             Controls.Add(artworkImageBox);
             Name = "ImageInstanceViewer";
-            Size = new Size(503, 866);
+            Size = new Size(503, 857);
             Load += ImageInstanceViewer_Load;
             ((System.ComponentModel.ISupportInitialize)artworkImageBox).EndInit();
             ResumeLayout(false);
@@ -127,7 +115,6 @@
         private PictureBox artworkImageBox;
         private Label artworkTitleLabel;
         private Label artworkDescriptionLabel;
-        private Button artworkOptionsBtn;
         private Label artworkUsernameLabel;
         private Label artworkAvgRatingLabel;
     }

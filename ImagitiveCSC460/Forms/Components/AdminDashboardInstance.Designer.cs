@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminDashboardInstance));
             headerLabel = new Label();
             sortBox2 = new ComboBox();
             sortByLabel = new Label();
@@ -40,6 +41,7 @@
             filterBox2 = new ComboBox();
             adminManagementTab = new TabControl();
             reportsPage = new TabPage();
+            loadGif1 = new PictureBox();
             clearFiltersBtn1 = new Button();
             reportsPrevBtn = new Button();
             reportsNextBtn = new Button();
@@ -56,14 +58,17 @@
             filterBox1 = new ComboBox();
             sortBox1 = new ComboBox();
             adminRequestsPage = new TabPage();
+            loadGif2 = new PictureBox();
             addRequestBtn = new Button();
             clearFiltersBtn2 = new Button();
-            artworkManagerGetPrevPageBtn = new Button();
-            artworkManagerGetNextPageBtn = new Button();
+            requestsPrevBtn = new Button();
+            requestsNextBtn = new Button();
             requestsReloadBtn = new Button();
             adminManagementTab.SuspendLayout();
             reportsPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)loadGif1).BeginInit();
             adminRequestsPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)loadGif2).BeginInit();
             SuspendLayout();
             // 
             // headerLabel
@@ -99,6 +104,7 @@
             // 
             // requestsListView
             // 
+            requestsListView.BackColor = Color.WhiteSmoke;
             requestsListView.Columns.AddRange(new ColumnHeader[] { requestID, reportDate, consideredUser, suggesterUsername });
             requestsListView.Location = new Point(0, 98);
             requestsListView.Name = "requestsListView";
@@ -161,6 +167,7 @@
             // 
             // reportsPage
             // 
+            reportsPage.Controls.Add(loadGif1);
             reportsPage.Controls.Add(clearFiltersBtn1);
             reportsPage.Controls.Add(reportsPrevBtn);
             reportsPage.Controls.Add(reportsNextBtn);
@@ -177,6 +184,17 @@
             reportsPage.TabIndex = 1;
             reportsPage.Text = "Reports";
             reportsPage.UseVisualStyleBackColor = true;
+            // 
+            // loadGif1
+            // 
+            loadGif1.Image = (Image)resources.GetObject("loadGif1.Image");
+            loadGif1.Location = new Point(312, 340);
+            loadGif1.Name = "loadGif1";
+            loadGif1.Size = new Size(112, 62);
+            loadGif1.SizeMode = PictureBoxSizeMode.Zoom;
+            loadGif1.TabIndex = 26;
+            loadGif1.TabStop = false;
+            loadGif1.Visible = false;
             // 
             // clearFiltersBtn1
             // 
@@ -198,6 +216,7 @@
             reportsPrevBtn.TabIndex = 24;
             reportsPrevBtn.Text = "Get Prev Page";
             reportsPrevBtn.UseVisualStyleBackColor = true;
+            reportsPrevBtn.Click += reportsPrevBtn_Click;
             // 
             // reportsNextBtn
             // 
@@ -208,6 +227,7 @@
             reportsNextBtn.TabIndex = 23;
             reportsNextBtn.Text = "Get Next Page";
             reportsNextBtn.UseVisualStyleBackColor = true;
+            reportsNextBtn.Click += reportsNextBtn_Click;
             // 
             // reportsReloadBtn
             // 
@@ -222,6 +242,7 @@
             // 
             // reportsListView
             // 
+            reportsListView.BackColor = Color.WhiteSmoke;
             reportsListView.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5, columnHeader6 });
             reportsListView.Location = new Point(0, 98);
             reportsListView.Name = "reportsListView";
@@ -305,10 +326,11 @@
             // 
             // adminRequestsPage
             // 
+            adminRequestsPage.Controls.Add(loadGif2);
             adminRequestsPage.Controls.Add(addRequestBtn);
             adminRequestsPage.Controls.Add(clearFiltersBtn2);
-            adminRequestsPage.Controls.Add(artworkManagerGetPrevPageBtn);
-            adminRequestsPage.Controls.Add(artworkManagerGetNextPageBtn);
+            adminRequestsPage.Controls.Add(requestsPrevBtn);
+            adminRequestsPage.Controls.Add(requestsNextBtn);
             adminRequestsPage.Controls.Add(requestsReloadBtn);
             adminRequestsPage.Controls.Add(sortByLabel);
             adminRequestsPage.Controls.Add(label1);
@@ -322,6 +344,17 @@
             adminRequestsPage.TabIndex = 0;
             adminRequestsPage.Text = "Admin Promotion Requests";
             adminRequestsPage.UseVisualStyleBackColor = true;
+            // 
+            // loadGif2
+            // 
+            loadGif2.Image = (Image)resources.GetObject("loadGif2.Image");
+            loadGif2.Location = new Point(312, 340);
+            loadGif2.Name = "loadGif2";
+            loadGif2.Size = new Size(112, 62);
+            loadGif2.SizeMode = PictureBoxSizeMode.Zoom;
+            loadGif2.TabIndex = 28;
+            loadGif2.TabStop = false;
+            loadGif2.Visible = false;
             // 
             // addRequestBtn
             // 
@@ -345,25 +378,27 @@
             clearFiltersBtn2.UseVisualStyleBackColor = true;
             clearFiltersBtn2.Click += clearFiltersBtn2_Click;
             // 
-            // artworkManagerGetPrevPageBtn
+            // requestsPrevBtn
             // 
-            artworkManagerGetPrevPageBtn.Font = new Font("Leelawadee UI", 9F);
-            artworkManagerGetPrevPageBtn.Location = new Point(6, 696);
-            artworkManagerGetPrevPageBtn.Name = "artworkManagerGetPrevPageBtn";
-            artworkManagerGetPrevPageBtn.Size = new Size(181, 46);
-            artworkManagerGetPrevPageBtn.TabIndex = 19;
-            artworkManagerGetPrevPageBtn.Text = "Get Prev Page";
-            artworkManagerGetPrevPageBtn.UseVisualStyleBackColor = true;
+            requestsPrevBtn.Font = new Font("Leelawadee UI", 9F);
+            requestsPrevBtn.Location = new Point(6, 696);
+            requestsPrevBtn.Name = "requestsPrevBtn";
+            requestsPrevBtn.Size = new Size(181, 46);
+            requestsPrevBtn.TabIndex = 19;
+            requestsPrevBtn.Text = "Get Prev Page";
+            requestsPrevBtn.UseVisualStyleBackColor = true;
+            requestsPrevBtn.Click += requestsPrevBtn_Click;
             // 
-            // artworkManagerGetNextPageBtn
+            // requestsNextBtn
             // 
-            artworkManagerGetNextPageBtn.Font = new Font("Leelawadee UI", 9F);
-            artworkManagerGetNextPageBtn.Location = new Point(553, 696);
-            artworkManagerGetNextPageBtn.Name = "artworkManagerGetNextPageBtn";
-            artworkManagerGetNextPageBtn.Size = new Size(181, 46);
-            artworkManagerGetNextPageBtn.TabIndex = 18;
-            artworkManagerGetNextPageBtn.Text = "Get Next Page";
-            artworkManagerGetNextPageBtn.UseVisualStyleBackColor = true;
+            requestsNextBtn.Font = new Font("Leelawadee UI", 9F);
+            requestsNextBtn.Location = new Point(553, 696);
+            requestsNextBtn.Name = "requestsNextBtn";
+            requestsNextBtn.Size = new Size(181, 46);
+            requestsNextBtn.TabIndex = 18;
+            requestsNextBtn.Text = "Get Next Page";
+            requestsNextBtn.UseVisualStyleBackColor = true;
+            requestsNextBtn.Click += requestsNextBtn_Click;
             // 
             // requestsReloadBtn
             // 
@@ -374,6 +409,7 @@
             requestsReloadBtn.TabIndex = 17;
             requestsReloadBtn.Text = "Reload";
             requestsReloadBtn.UseVisualStyleBackColor = true;
+            requestsReloadBtn.Click += requestsReloadBtn_Click;
             // 
             // AdminDashboardInstance
             // 
@@ -389,8 +425,10 @@
             adminManagementTab.ResumeLayout(false);
             reportsPage.ResumeLayout(false);
             reportsPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)loadGif1).EndInit();
             adminRequestsPage.ResumeLayout(false);
             adminRequestsPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)loadGif2).EndInit();
             ResumeLayout(false);
         }
 
@@ -419,8 +457,8 @@
         private Label label3;
         private ComboBox filterBox1;
         private ComboBox sortBox1;
-        private Button artworkManagerGetPrevPageBtn;
-        private Button artworkManagerGetNextPageBtn;
+        private Button requestsPrevBtn;
+        private Button requestsNextBtn;
         private Button requestsReloadBtn;
         private Button reportsPrevBtn;
         private Button reportsNextBtn;
@@ -429,5 +467,7 @@
         private Button clearFiltersBtn1;
         private Button clearFiltersBtn2;
         private Button addRequestBtn;
+        private PictureBox loadGif2;
+        private PictureBox loadGif1;
     }
 }

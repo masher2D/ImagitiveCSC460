@@ -37,6 +37,7 @@
             // passwordValue
             // 
             passwordValue.Location = new Point(216, 237);
+            passwordValue.MaxLength = 20;
             passwordValue.Name = "passwordValue";
             passwordValue.Size = new Size(377, 39);
             passwordValue.TabIndex = 0;
@@ -85,6 +86,7 @@
             Controls.Add(passwordValue);
             Name = "ConfirmPasswordForm";
             Text = "ConfirmPasswordForm";
+            Load += ConfirmPasswordForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

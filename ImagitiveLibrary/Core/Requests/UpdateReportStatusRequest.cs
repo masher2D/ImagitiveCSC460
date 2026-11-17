@@ -6,6 +6,6 @@ namespace ImagitiveLibrary.Core.Requests
 {
     public class UpdateReportStatusRequest
     {
-        public string NewStatus { get; set; }
+        public required string NewStatus { get; set; }
     }
 }

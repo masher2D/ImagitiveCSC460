@@ -1,4 +1,4 @@
-﻿using ImagitiveAPI.Session;
+﻿using ImagitiveCSC460UI.Session;
 using ImagitiveLibrary.Core.Models;
 using ImagitiveLibrary.Core.Requests;
 using ImagitiveUI.Services;
@@ -41,6 +41,28 @@ namespace ImagitiveCSC460UI.Services
 
         }
 
+        public async Task<bool> SetUserStatusAsync(int updateeId, string status)
+        {
+            var response = await ApiClient.Client.PatchAsJsonAsync($"api/users/{updateeId}/status", new { Status = status });
+            return response.IsSuccessStatusCode;
+        }
         
+        public async Task<UserModel?> GetUserByUsername(string username)
+        {
+            var response = await ApiClient.Client.GetAsync($"api/users/username/{username}");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            return await response.Content.ReadFromJsonAsync<UserModel>();
+        }
+
+        public async Task<bool> AddUserRole(string role)
+        {
+            var response = await ApiClient.Client.PostAsJsonAsync($"api/users/{UserSession.UserId}/roles", new PostAddRoleRequest { Role = role });
+            if (!response.IsSuccessStatusCode)
+                return false;
+
+            return true;
+
+        }
     }
 }

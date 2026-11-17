@@ -38,7 +38,7 @@ namespace ImagitiveAPI.Controllers
             var response = await _authService.LoginAsync(request);
             if (!response.Success)
             {
-                return Unauthorized(response);
+                return Unauthorized(new { Message = response.Message });
             }
             return Ok(response);
         }

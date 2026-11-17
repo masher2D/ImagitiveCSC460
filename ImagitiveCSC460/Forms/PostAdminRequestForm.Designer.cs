@@ -31,9 +31,9 @@
             headerLabel = new Label();
             descriptionLabel = new Label();
             usernameLabel = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            postBtn = new Button();
+            usernameValue = new TextBox();
+            descriptionValue = new TextBox();
+            postRequestBtn = new Button();
             SuspendLayout();
             // 
             // headerLabel
@@ -67,44 +67,48 @@
             usernameLabel.TabIndex = 15;
             usernameLabel.Text = "Username of Requestee";
             // 
-            // textBox1
+            // usernameValue
             // 
-            textBox1.Location = new Point(12, 160);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(335, 39);
-            textBox1.TabIndex = 16;
+            usernameValue.Location = new Point(12, 160);
+            usernameValue.MaxLength = 50;
+            usernameValue.Name = "usernameValue";
+            usernameValue.Size = new Size(335, 39);
+            usernameValue.TabIndex = 16;
             // 
-            // textBox2
+            // descriptionValue
             // 
-            textBox2.Location = new Point(12, 261);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(834, 117);
-            textBox2.TabIndex = 17;
+            descriptionValue.Location = new Point(12, 261);
+            descriptionValue.MaxLength = 1000;
+            descriptionValue.Multiline = true;
+            descriptionValue.Name = "descriptionValue";
+            descriptionValue.Size = new Size(834, 117);
+            descriptionValue.TabIndex = 17;
             // 
-            // postBtn
+            // postRequestBtn
             // 
-            postBtn.Font = new Font("Leelawadee UI", 12F);
-            postBtn.Location = new Point(12, 425);
-            postBtn.Name = "postBtn";
-            postBtn.Size = new Size(231, 103);
-            postBtn.TabIndex = 18;
-            postBtn.Text = "Post Request";
-            postBtn.UseVisualStyleBackColor = true;
+            postRequestBtn.Font = new Font("Leelawadee UI", 12F);
+            postRequestBtn.Location = new Point(12, 425);
+            postRequestBtn.Name = "postRequestBtn";
+            postRequestBtn.Size = new Size(231, 103);
+            postRequestBtn.TabIndex = 18;
+            postRequestBtn.Text = "Post Request";
+            postRequestBtn.UseVisualStyleBackColor = true;
+            postRequestBtn.Click += postRequestBtn_Click;
             // 
             // PostAdminRequestForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1055, 554);
-            Controls.Add(postBtn);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(postRequestBtn);
+            Controls.Add(descriptionValue);
+            Controls.Add(usernameValue);
             Controls.Add(usernameLabel);
             Controls.Add(descriptionLabel);
             Controls.Add(headerLabel);
             Name = "PostAdminRequestForm";
             Text = "PostAdminRequestForm";
+            Load += PostAdminRequestForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -114,8 +118,8 @@
         private Label headerLabel;
         private Label descriptionLabel;
         private Label usernameLabel;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private Button postBtn;
+        private TextBox usernameValue;
+        private TextBox descriptionValue;
+        private Button postRequestBtn;
     }
 }

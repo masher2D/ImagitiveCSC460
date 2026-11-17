@@ -21,10 +21,9 @@ namespace ImagitiveAPI.Data
         public DbSet<ImagitiveAPI.Models.ReportDBModel> Reports => Set<ImagitiveAPI.Models.ReportDBModel>();
         public DbSet<ImagitiveAPI.Models.RegionDBModel> Regions => Set<ImagitiveAPI.Models.RegionDBModel>();
         public DbSet<ImagitiveAPI.Models.ArtworkTagDBModel> ArtworkTags => Set<ImagitiveAPI.Models.ArtworkTagDBModel>();
-        public DbSet<ImagitiveAPI.Models.UserRoleDBModelcs> UserRoles => Set<ImagitiveAPI.Models.UserRoleDBModelcs>();
+        public DbSet<ImagitiveAPI.Models.UserRoleDBModel> UserRoles => Set<ImagitiveAPI.Models.UserRoleDBModel>();
         public DbSet<ImagitiveAPI.Models.ArtworkViewDBModel> ArtworkViews => Set<ImagitiveAPI.Models.ArtworkViewDBModel>();
         public DbSet<ImagitiveAPI.Models.RoleDBModel> Roles => Set<ImagitiveAPI.Models.RoleDBModel>();
-        public DbSet<ImagitiveAPI.Models.UserActionsDBModel> UserActions => Set<ImagitiveAPI.Models.UserActionsDBModel>();
         public DbSet<ImagitiveAPI.Models.AdminRequestDBModel> AdminRequests => Set<ImagitiveAPI.Models.AdminRequestDBModel>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,7 +32,7 @@ namespace ImagitiveAPI.Data
             modelBuilder.Entity<ArtworkTagDBModel>()
                 .HasKey(at => new { at.ArtworkId, at.TagId });
 
-            modelBuilder.Entity<UserRoleDBModelcs>()
+            modelBuilder.Entity<UserRoleDBModel>()
                 .HasKey(ur => new { ur.UserId, ur.RoleId });
 
             modelBuilder.Entity<RatingDBModel>()
@@ -42,6 +41,9 @@ namespace ImagitiveAPI.Data
                     ar.ArtworkId,
                     ar.UserId
                 });
+
+            modelBuilder.Entity<ArtworkViewDBModel>()
+                .HasKey(av => new { av.ArtworkId, av.ViewerId });
 
 
         }

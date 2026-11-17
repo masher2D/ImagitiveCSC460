@@ -6,7 +6,7 @@ namespace ImagitiveAPI.Services.Interfaces
 {
     public interface IAdminRequestService
     {
-        Task<AdminRequestModel> CreateRequestAsync(int reporterId, PostAdminPromoteRequest request);
+        Task<AdminRequestModel> CreateRequestAsync(int reporterId, PostAdminPromoteCreateRequest request);
 
         Task<List<AdminRequestModel>> GetAllRequestsAsync();
 
@@ -19,6 +19,8 @@ namespace ImagitiveAPI.Services.Interfaces
         Task<List<AdminRequestModel>> GetRequestsByRequesterIdAsync(int requesterId);
 
         Task<PagedResponse<AdminRequestModel>> GetAllRequestsAsync(int pageNumber, int pageSize, string filter, string sort);
+
+        Task<bool> ResolvePromoteRequestAsync(int resolverId, PostAdminPromoteDecisionRequest decisionRequest);
 
     }
 }

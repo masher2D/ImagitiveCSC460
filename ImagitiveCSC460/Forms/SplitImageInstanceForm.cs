@@ -8,21 +8,11 @@ using System.Windows.Forms;
 
 namespace ImagitiveCSC460UI.Forms
 {
-    public partial class ManageUserForm : Form
+    public partial class SplitImageInstanceForm : Form
     {
-        public ManageUserForm()
+        public SplitImageInstanceForm()
         {
             InitializeComponent();
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

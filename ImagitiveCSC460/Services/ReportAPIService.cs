@@ -97,5 +97,11 @@ namespace ImagitiveCSC460UI.Services
 
             return await response.Content.ReadFromJsonAsync<PagedResponse<ReportModel>>();
         }
+
+        public async Task<bool> ResolveReportAsync(int id, PostAdminReportDecisionRequest request)
+        {
+            var response = await ApiClient.Client.PostAsJsonAsync($"api/reports/{id}/resolve", request);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

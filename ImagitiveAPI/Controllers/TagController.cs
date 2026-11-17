@@ -19,5 +19,13 @@ namespace ImagitiveAPI.Controllers
             var tags = await _tagService.GetAllTagsAsync();
             return Ok(tags);
         }
+
+        [HttpGet("{tagName}")]
+        public async Task<IActionResult> GetByUsername(string tagName)
+        {
+            var tag = await _tagService.GetTagByNameAsync(tagName);
+            return Ok(tag);
+
+        }
     }
 }

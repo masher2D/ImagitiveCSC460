@@ -93,7 +93,9 @@
             // passwordValue
             // 
             passwordValue.Location = new Point(84, 153);
+            passwordValue.MaxLength = 20;
             passwordValue.Name = "passwordValue";
+            passwordValue.PasswordChar = '*';
             passwordValue.Size = new Size(200, 39);
             passwordValue.TabIndex = 4;
             // 
@@ -186,6 +188,7 @@
             // emailValue
             // 
             emailValue.Location = new Point(91, 243);
+            emailValue.MaxLength = 255;
             emailValue.Name = "emailValue";
             emailValue.Size = new Size(200, 39);
             emailValue.TabIndex = 20;
@@ -246,7 +249,9 @@
             // passwordValueN
             // 
             passwordValueN.Location = new Point(91, 153);
+            passwordValueN.MaxLength = 20;
             passwordValueN.Name = "passwordValueN";
+            passwordValueN.PasswordChar = '*';
             passwordValueN.Size = new Size(200, 39);
             passwordValueN.TabIndex = 13;
             passwordValueN.TextChanged += passwordValueN_TextChanged;
@@ -264,6 +269,7 @@
             // usernameValueN
             // 
             usernameValueN.Location = new Point(91, 62);
+            usernameValueN.MaxLength = 50;
             usernameValueN.Name = "usernameValueN";
             usernameValueN.Size = new Size(200, 39);
             usernameValueN.TabIndex = 11;

@@ -1,9 +1,8 @@
-﻿using ImagitiveAPI.Data;
-using ImagitiveAPI.Services.Interfaces;
+﻿using ImagitiveAPI.Services.Interfaces;
+using ImagitiveLibrary.Core.Constants;
 using ImagitiveLibrary.Core.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace ImagitiveAPI.Controllers;
@@ -13,18 +12,28 @@ namespace ImagitiveAPI.Controllers;
 public class RatingsController : ControllerBase
 {
     private readonly IRatingService _ratingService;
+    private readonly IUserService _userService;
 
     private int CurrentUserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-    public RatingsController(IRatingService ratingService)
+    public RatingsController(IRatingService ratingService, IUserService userService)
     {
         _ratingService = ratingService;
+        _userService = userService;
     }
 
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateRating([FromBody] PostRatingRequest request)
     {
+
+        var status = await _userService.GetUserAccountStatusAsync(CurrentUserId);
+
+        if (status == AccountStatuses.Restricted)
+        {
+            return Forbid("Your account is restricted. You cannot create new artworks.");
+        }
+
         var response = await _ratingService.PostRatingAsync(CurrentUserId, request);
         if (response.Success)
         {

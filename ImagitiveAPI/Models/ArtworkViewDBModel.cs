@@ -14,14 +14,17 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the ID of the artwork.
         /// </summary>
+        [Required]
         public int ArtworkId { get; set; }
         /// <summary>
         /// Gets or sets the ID of the viewer.
         /// </summary>
+        [Required]
         public int ViewerId { get; set; }
         /// <summary>
         /// Gets or sets the date and time when the artwork was viewed.
         /// </summary>
+        [Required]
         public DateTime ViewedAt { get; set; }
     }
 }

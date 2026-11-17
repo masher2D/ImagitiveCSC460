@@ -44,7 +44,11 @@
             navLabel = new Label();
             headerLabel = new Label();
             label1 = new Label();
-            comboBox1 = new ComboBox();
+            tagFilterBox = new ComboBox();
+            clearFiltersBtn = new Button();
+            reloadBtn = new Button();
+            downloadBtn = new Button();
+            reportBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)starRatingBar).BeginInit();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -57,7 +61,7 @@
             feedViewer.BackColor = Color.White;
             feedViewer.Location = new Point(24, 15);
             feedViewer.Name = "feedViewer";
-            feedViewer.Size = new Size(503, 866);
+            feedViewer.Size = new Size(503, 857);
             feedViewer.TabIndex = 0;
             // 
             // backBtn
@@ -96,11 +100,12 @@
             // 
             ratingLabel.AutoSize = true;
             ratingLabel.Font = new Font("Leelawadee UI", 11F);
-            ratingLabel.Location = new Point(604, 571);
+            ratingLabel.Location = new Point(604, 580);
             ratingLabel.Name = "ratingLabel";
             ratingLabel.Size = new Size(103, 41);
             ratingLabel.TabIndex = 4;
             ratingLabel.Text = "Rating";
+            ratingLabel.Click += ratingLabel_Click;
             // 
             // rating5Label
             // 
@@ -122,7 +127,7 @@
             panel1.Controls.Add(rating1Label);
             panel1.Controls.Add(starRatingBar);
             panel1.Controls.Add(rating5Label);
-            panel1.Location = new Point(580, 615);
+            panel1.Location = new Point(580, 624);
             panel1.Name = "panel1";
             panel1.Size = new Size(150, 272);
             panel1.TabIndex = 6;
@@ -183,20 +188,20 @@
             // 
             panel2.Controls.Add(backBtn);
             panel2.Controls.Add(forwardBtn);
-            panel2.Location = new Point(580, 439);
+            panel2.Location = new Point(578, 472);
             panel2.Name = "panel2";
-            panel2.Size = new Size(150, 111);
+            panel2.Size = new Size(150, 106);
             panel2.TabIndex = 7;
             // 
             // navLabel
             // 
-            navLabel.AutoSize = true;
-            navLabel.Font = new Font("Leelawadee UI", 11F);
-            navLabel.Location = new Point(575, 395);
+            navLabel.Font = new Font("Leelawadee UI", 9.5F);
+            navLabel.Location = new Point(530, 428);
             navLabel.Name = "navLabel";
-            navLabel.Size = new Size(161, 41);
+            navLabel.Size = new Size(247, 41);
             navLabel.TabIndex = 8;
             navLabel.Text = "Navigation";
+            navLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // headerLabel
             // 
@@ -212,20 +217,64 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Leelawadee UI", 11F);
-            label1.Location = new Point(562, 261);
+            label1.Location = new Point(560, 242);
             label1.Name = "label1";
             label1.Size = new Size(187, 41);
             label1.TabIndex = 18;
             label1.Text = "Filter By Tag:";
             // 
-            // comboBox1
+            // tagFilterBox
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(549, 305);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(212, 40);
-            comboBox1.TabIndex = 17;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            tagFilterBox.FormattingEnabled = true;
+            tagFilterBox.Location = new Point(547, 286);
+            tagFilterBox.Name = "tagFilterBox";
+            tagFilterBox.Size = new Size(212, 40);
+            tagFilterBox.TabIndex = 17;
+            tagFilterBox.SelectedIndexChanged += tagFilterBox_SelectedIndexChanged;
+            // 
+            // clearFiltersBtn
+            // 
+            clearFiltersBtn.Font = new Font("Leelawadee UI", 8.5F);
+            clearFiltersBtn.Location = new Point(563, 332);
+            clearFiltersBtn.Name = "clearFiltersBtn";
+            clearFiltersBtn.Size = new Size(181, 40);
+            clearFiltersBtn.TabIndex = 26;
+            clearFiltersBtn.Text = "Clear Filters";
+            clearFiltersBtn.UseVisualStyleBackColor = true;
+            clearFiltersBtn.Click += clearFiltersBtn_Click;
+            // 
+            // reloadBtn
+            // 
+            reloadBtn.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            reloadBtn.Location = new Point(581, 378);
+            reloadBtn.Name = "reloadBtn";
+            reloadBtn.Size = new Size(144, 46);
+            reloadBtn.TabIndex = 27;
+            reloadBtn.Text = "Reload";
+            reloadBtn.UseVisualStyleBackColor = true;
+            reloadBtn.Click += reloadBtn_Click;
+            // 
+            // downloadBtn
+            // 
+            downloadBtn.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            downloadBtn.Location = new Point(581, 141);
+            downloadBtn.Name = "downloadBtn";
+            downloadBtn.Size = new Size(144, 46);
+            downloadBtn.TabIndex = 28;
+            downloadBtn.Text = "Download";
+            downloadBtn.UseVisualStyleBackColor = true;
+            downloadBtn.Click += downloadBtn_Click;
+            // 
+            // reportBtn
+            // 
+            reportBtn.Font = new Font("Leelawadee UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            reportBtn.Location = new Point(581, 193);
+            reportBtn.Name = "reportBtn";
+            reportBtn.Size = new Size(144, 46);
+            reportBtn.TabIndex = 29;
+            reportBtn.Text = "Report Art";
+            reportBtn.UseVisualStyleBackColor = true;
+            reportBtn.Click += reportBtn_Click;
             // 
             // ViewerDashboardInstance
             // 
@@ -233,8 +282,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.Silver;
+            Controls.Add(reportBtn);
+            Controls.Add(downloadBtn);
+            Controls.Add(reloadBtn);
+            Controls.Add(clearFiltersBtn);
             Controls.Add(label1);
-            Controls.Add(comboBox1);
+            Controls.Add(tagFilterBox);
             Controls.Add(headerLabel);
             Controls.Add(navLabel);
             Controls.Add(panel2);
@@ -271,6 +324,10 @@
         private Label navLabel;
         private Label headerLabel;
         private Label label1;
-        private ComboBox comboBox1;
+        private ComboBox tagFilterBox;
+        private Button clearFiltersBtn;
+        private Button reloadBtn;
+        private Button downloadBtn;
+        private Button reportBtn;
     }
 }

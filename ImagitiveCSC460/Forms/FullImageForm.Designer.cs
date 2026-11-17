@@ -34,7 +34,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(35, 15);
+            pictureBox1.Location = new Point(10, 10);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(400, 400);
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -47,10 +47,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(474, 429);
+            ClientSize = new Size(419, 419);
             Controls.Add(pictureBox1);
             Name = "FullImageForm";
             Text = "FullImageForm";
+            Load += FullImageForm_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();

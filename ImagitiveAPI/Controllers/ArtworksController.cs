@@ -1,5 +1,7 @@
 ﻿using ImagitiveAPI.Requests;
+using ImagitiveAPI.Helpers;
 using ImagitiveAPI.Services.Interfaces;
+using ImagitiveLibrary.Core.Constants;
 using ImagitiveLibrary.Core.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +15,14 @@ namespace ImagitiveAPI.Controllers;
 public class ArtworksController : ControllerBase
 {
     private readonly IArtworkService _artworkService;
+    private readonly IUserService _userService;
 
     private int CurrentUserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-    public ArtworksController(IArtworkService artworkService)
+    public ArtworksController(IArtworkService artworkService, IUserService userService)
     {
         _artworkService = artworkService;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -44,6 +48,12 @@ public class ArtworksController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create( [FromForm] PostArtworkFormRequest request)
     {
+        var status = await _userService.GetUserAccountStatusAsync(CurrentUserId);
+
+        if(status == AccountStatuses.Restricted)
+        {
+            return Forbid("Your account is restricted. You cannot create new artworks.");
+        }
 
         var artwork = await _artworkService.CreateArtworkAsync(CurrentUserId, request);
 
@@ -65,11 +75,26 @@ public class ArtworksController : ControllerBase
 
     [Authorize]
     [HttpDelete("{artworkId}")]
-    public async Task<IActionResult> Remove(int artworkId, int? reasonId)
+    public async Task<IActionResult> Remove(int artworkId, int? reasonId, [FromHeader(Name = "X-Active-Role")] string? activeRole) 
     {
+        if (string.IsNullOrWhiteSpace(activeRole))
+            return BadRequest("Missing active role.");
 
-        bool isAdmin = User.IsInRole("Admin");
-        int success = await _artworkService.RemoveArtworkAsync(CurrentUserId, isAdmin, artworkId, new RemoveArtworkRequest { ReasonId = reasonId });
+        // security: active role must be one of roles in JWT
+        if (!User.IsInRole(activeRole))
+            return Forbid();
+
+        bool currentlyAdmin = string.Equals("Admin", activeRole, StringComparison.OrdinalIgnoreCase);
+
+        if (reasonId.HasValue && reasonId.Value <= 0)
+        {
+            return BadRequest("Invalid reason ID.");
+        }
+
+        if (currentlyAdmin && !reasonId.HasValue)
+            return BadRequest("Admin must provide a reason for removal.");
+
+        int success = await _artworkService.RemoveArtworkAsync(CurrentUserId, currentlyAdmin, artworkId, new RemoveArtworkRequest { ReasonId = reasonId });
         if (success == 0) return NotFound();
         if (success == 2) return Forbid();
         return Ok();
@@ -103,9 +128,9 @@ public class ArtworksController : ControllerBase
     }
 
     [HttpGet("feed")]
-    public async Task<IActionResult> GetFeed(int page = 1, int pageSize = 10)
+    public async Task<IActionResult> GetFeed(int page = 1, int pageSize = 10, string? tagFilter = null)
     {
-        var feed = await _artworkService.GetFeedAsync(CurrentUserId, page, pageSize);
+        var feed = await _artworkService.GetFeedAsync(CurrentUserId, page, pageSize, tagFilter);
         return Ok(feed);
     }
 }

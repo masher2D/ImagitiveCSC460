@@ -33,10 +33,22 @@ namespace ImagitiveLibrary.Core.Models
         /// <summary>
         /// Gets or sets the status of the report.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; set; }
         /// <summary>
         /// Gets or sets the date and time when the report was created.
         /// </summary>
         public DateTime ReportedAt { get; set; }
+        /// <summary>
+        /// Gets or sets the date and time when the report was resolved.
+        /// </summary>
+        public DateTime? ResolvedAt { get; set; }
+        /// <summary>
+        /// Gets or sets the ID of the user who resolved the report.
+        /// </summary>
+        public int? ResolvedBy { get; set; }
+        /// <summary>
+        /// Gets or sets the action taken regarding the report.
+        /// </summary>
+        public string? ActionTaken { get; set; }
     }
 }

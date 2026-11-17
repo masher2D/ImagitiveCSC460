@@ -1,18 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ImagitiveCSC460UI.Forms.Components
 {
     public partial class ImageInstanceViewer : UserControl
     {
+        public event EventHandler? ArtworkDoubleClicked;
+
+        private readonly ContextMenuStrip _blockedContextMenu;
+
         public ImageInstanceViewer()
         {
             InitializeComponent();
+
+            _blockedContextMenu = new ContextMenuStrip();
+            _blockedContextMenu.Opening += BlockedContextMenu_Opening;
+            artworkImageBox.ContextMenuStrip = _blockedContextMenu;
+
+            DoubleClick += HandleArtworkDoubleClick;
+            artworkImageBox.DoubleClick += HandleArtworkDoubleClick;
+            artworkTitleLabel.DoubleClick += HandleArtworkDoubleClick;
+
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -30,7 +40,7 @@ namespace ImagitiveCSC460UI.Forms.Components
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Image ArtworkImage
+        public Image? ArtworkImage
         {
             get => artworkImageBox.Image;
             set => artworkImageBox.Image = value;
@@ -59,15 +69,14 @@ namespace ImagitiveCSC460UI.Forms.Components
             ArtworkAvgRating = avgRating;
         }
 
-        // Add this method to your ImageInstanceViewer.cs (code-behind file)
+
         private void artworkTitleLabel_Click(object sender, EventArgs e)
         {
-            // Add your click handling logic here, or leave empty if not needed
+
         }
 
         private void artworkImageBox_Click(object sender, EventArgs e)
         {
-            // TODO: Add logic if needed
         }
 
         private void artworkOptionsBtn_Click(object sender, EventArgs e)
@@ -75,9 +84,9 @@ namespace ImagitiveCSC460UI.Forms.Components
 
         }
 
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        private void BlockedContextMenu_Opening(object? sender, CancelEventArgs e)
         {
-
+            e.Cancel = true;
         }
 
         private void artworkDescriptionLabel_Click(object sender, EventArgs e)
@@ -93,6 +102,11 @@ namespace ImagitiveCSC460UI.Forms.Components
         private void artworkAvgRatingLabel_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void HandleArtworkDoubleClick(object? sender, EventArgs e)
+        {
+            ArtworkDoubleClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

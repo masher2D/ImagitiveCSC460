@@ -1,11 +1,13 @@
-﻿using ImagitiveAPI.Services.Interfaces;
-using ImagitiveLibrary.Core.Models;
-using ImagitiveLibrary.Core.Requests;
-using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
 using ImagitiveAPI.Data;
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Services;
+using ImagitiveAPI.Services.Interfaces;
+using ImagitiveLibrary.Core.Constants;
+using ImagitiveLibrary.Core.Models;
+using ImagitiveLibrary.Core.Requests;
 using ImagitiveLibrary.Core.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace ImagitiveAPI.Services
 {
@@ -15,9 +17,9 @@ namespace ImagitiveAPI.Services
 
         private static readonly HashSet<string> ValidStatuses = new HashSet<string>
         {
-            "Unresolved",
-            "Resolved",
-            "UnderReview"
+            ModerationStatuses.Unresolved,
+            ModerationStatuses.Resolved,
+            ModerationStatuses.UnderReview
         };
 
         public AdminRequestService(AppDBContext context)
@@ -25,7 +27,7 @@ namespace ImagitiveAPI.Services
             _context = context;
         }
 
-        public async Task<AdminRequestModel> CreateRequestAsync(int reporterId, PostAdminPromoteRequest request)
+        public async Task<AdminRequestModel> CreateRequestAsync(int reporterId, PostAdminPromoteCreateRequest request)
         {
             bool isValidRequest = request.RequesteeId > 0 && !string.IsNullOrWhiteSpace(request.Description);
             if(!isValidRequest)
@@ -60,7 +62,7 @@ namespace ImagitiveAPI.Services
                 RequesterId = reporterId,
                 RequesteeId = request.RequesteeId,
                 Description = request.Description,
-                Status = "Unresolved",
+                Status = ModerationStatuses.Unresolved,
                 RequestedAt = DateTime.UtcNow,
                 
             };
@@ -85,10 +87,10 @@ namespace ImagitiveAPI.Services
                 switch(filter.ToLower())
                 {
                     case "status: unresolved":
-                        query = query.Where(r => r.Status == "Unresolved");
+                        query = query.Where(r => r.Status == ModerationStatuses.Unresolved);
                         break;
                     case "status: resolved":
-                        query = query.Where(r => r.Status == "Resolved");
+                        query = query.Where(r => r.Status == ModerationStatuses.Resolved);
                         break;
                     case "date: last 7 days":
                         var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
@@ -181,6 +183,47 @@ namespace ImagitiveAPI.Services
                 return false;
             }
             request.Status = status;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ResolvePromoteRequestAsync(int resolverId, PostAdminPromoteDecisionRequest decisionRequest)
+        {
+            var adminRequest = await _context.AdminRequests.FindAsync(decisionRequest.RequestId);
+            if (adminRequest == null)
+            {
+                return false;
+            }
+            var user = await _context.Users.FindAsync(adminRequest.RequesteeId);
+            if(user == null)
+            {
+                return false;
+            } 
+            if (decisionRequest.Decision.ToLower() == "approve")
+            {
+                var existingUserRole = await _context.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == user.UserId && ur.RoleId == 3);
+                if(existingUserRole == null)
+                {
+                    _context.UserRoles.Add(new UserRoleDBModel
+                    {
+                        UserId = user.UserId,
+                        RoleId = 3
+                    });
+                }
+            } else if(decisionRequest.Decision.ToLower() == "deny")
+            {
+                // do nothing on purpose
+            }
+            else
+            {
+                return false;
+            }
+
+            adminRequest.ActionTaken = decisionRequest.Decision;
+            adminRequest.Status = ModerationStatuses.Resolved;
+            adminRequest.ResolvedAt = DateTime.UtcNow;
+            adminRequest.ResolvedBy = resolverId;
             await _context.SaveChangesAsync();
             return true;
         }

@@ -8,51 +8,40 @@ namespace ImagitiveUI.Services;
 
 public class AuthAPIService
 {
-    public async Task<LogInResponse?> LoginAsync(
-        LogInRequest request)
+    public async Task<LogInResponse?> LoginAsync(LogInRequest request)
     {
-        var response =
-            await ApiClient.Client.PostAsJsonAsync(
-                "api/auth/login",
-                request);
+        var response = await ApiClient.Client.PostAsJsonAsync("api/auth/login", request);
 
         if (!response.IsSuccessStatusCode)
         {
-            return null;
+            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            if (error == null)
+            {
+                return new LogInResponse { Success = false, Message = "An unknown error occurred." };
+            }
+            return new LogInResponse { Success = false, Message = error.Message };
         }
 
-        return await response.Content
-            .ReadFromJsonAsync<LogInResponse>();
+        return await response.Content.ReadFromJsonAsync<LogInResponse>();
     }
 
-    public async Task<(UserModel? User, string? Error)> SignupAsync(
-        SignupRequest request)
+    public async Task<(UserModel? User, string? Error)> SignupAsync(SignupRequest request)
     {
-        var response =
-            await ApiClient.Client.PostAsJsonAsync(
-                "api/auth/signup",
-                request);
+        var response = await ApiClient.Client.PostAsJsonAsync("api/auth/signup", request);
 
         if (!response.IsSuccessStatusCode)
         {
-            var error =
-                await response.Content
-                    .ReadFromJsonAsync<ErrorResponse>();
+            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
 
             return (null, error?.Message);
         }
 
-            return (await response.Content
-            .ReadFromJsonAsync<UserModel>(), null);
+            return (await response.Content.ReadFromJsonAsync<UserModel>(), null);
     }
 
-    public async Task<bool> UpdatePasswordAsync(
-        UpdatePasswordRequest request)
+    public async Task<bool> UpdatePasswordAsync(UpdatePasswordRequest request)
     {
-        var response =
-            await ApiClient.Client.PatchAsJsonAsync(
-                "api/auth/update-password",
-                request);
+        var response = await ApiClient.Client.PatchAsJsonAsync("api/auth/update-password", request);
 
         return response.IsSuccessStatusCode;
     }

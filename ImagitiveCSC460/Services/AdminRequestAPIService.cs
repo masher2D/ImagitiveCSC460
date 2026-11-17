@@ -11,14 +11,14 @@ namespace ImagitiveCSC460UI.Services
 {
     public class AdminRequestAPIService
     {
-        public Task<AdminRequestModel> CreateRequestAsync(int reporterId, PostAdminPromoteRequest request)
+        public async Task<AdminRequestModel?> CreateRequestAsync(PostAdminPromoteCreateRequest request)
         {
-            var response = ApiClient.Client.PostAsJsonAsync($"api/adminrequests/{reporterId}", request).Result;
+            var response = await ApiClient.Client.PostAsJsonAsync("api/adminrequests", request);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Failed to create admin request: {response.ReasonPhrase}");
             }
-            return response.Content.ReadFromJsonAsync<AdminRequestModel>();
+            return await response.Content.ReadFromJsonAsync<AdminRequestModel>();
         }
 
         public async Task<List<AdminRequestModel>?> GetAllRequestsAsync()
@@ -75,6 +75,12 @@ namespace ImagitiveCSC460UI.Services
                 return null;
             }
             return await response.Content.ReadFromJsonAsync<PagedResponse<AdminRequestModel>>();
+        }
+
+        public async Task<bool> ResolvePromoteRequestAsync(int requestId, PostAdminPromoteDecisionRequest request)
+        {
+            var response = await ApiClient.Client.PostAsJsonAsync($"api/adminrequests/{requestId}/resolve", request);
+            return response.IsSuccessStatusCode;
         }
     }
 }

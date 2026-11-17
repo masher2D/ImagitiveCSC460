@@ -22,5 +22,20 @@ namespace ImagitiveAPI.Services
                 })
                 .ToListAsync();
         }
+
+        public async Task<TagModel?> GetTagByNameAsync(string tagName)
+        {
+            var tag = await _context.Tags
+                .FirstOrDefaultAsync(t => t.Name == tagName);
+            if(tag == null)
+            {
+                return null;
+            }
+            return new TagModel
+            {
+                TagId = tag.TagId,
+                Name = tag.Name
+            };
+        }
     }
 }

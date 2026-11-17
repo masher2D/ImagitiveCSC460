@@ -1,4 +1,4 @@
-﻿using ImagitiveAPI.Session;
+﻿using ImagitiveCSC460UI.Session;
 using ImagitiveCSC460UI.Services;
 using ImagitiveLibrary.Core.Models;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ namespace ImagitiveCSC460UI.Forms.Components
     {
         private int _currentPage = 1;
         private int _totalPages = 1;
-        private const int PageSize = 15;
+        private const int PageSize = 12;
         private List<ArtworkModel> _artworks = new List<ArtworkModel>();
 
 
@@ -29,7 +29,7 @@ namespace ImagitiveCSC460UI.Forms.Components
 
         }
 
-        private void postNewArtworkBtn_Click(object sender, EventArgs e)
+        private async void postNewArtworkBtn_Click(object sender, EventArgs e)
         {
             postNewArtworkBtn.Enabled = false;
             try
@@ -44,7 +44,7 @@ namespace ImagitiveCSC460UI.Forms.Components
             finally
             {
                 postNewArtworkBtn.Enabled = true;
-                RefreshInstance();
+                await RefreshInstanceAsync();
 
 
 
@@ -57,7 +57,7 @@ namespace ImagitiveCSC460UI.Forms.Components
  
         }
 
-        private async void LoadArtworks(int page)
+        private async Task LoadArtworksAsync(int page)
         {
             if (IsDesignTime)
             {
@@ -74,6 +74,7 @@ namespace ImagitiveCSC460UI.Forms.Components
                     PopulateArtistListView();
                     PopulateStatListView();
                     LoadAccountAverageRating();
+                    SetPaginationControls();
                 }
 
                 else
@@ -87,29 +88,27 @@ namespace ImagitiveCSC460UI.Forms.Components
             }
         }
 
-        private void artworkManagerGetPrevPageBtn_Click(object sender, EventArgs e)
+        private async void artworkManagerGetPrevPageBtn_Click(object sender, EventArgs e)
         {
             if (_currentPage > 1)
             {
                 _currentPage--;
-                LoadArtworks(_currentPage);
-                SetPaginationControls();
+                await LoadArtworksAsync(_currentPage);
             }
         }
 
-        private void artworkManagerGetNextPageBtn_Click(object sender, EventArgs e)
+        private async void artworkManagerGetNextPageBtn_Click(object sender, EventArgs e)
         {
             if (_currentPage < _totalPages)
             {
                 _currentPage++;
-                LoadArtworks(_currentPage);
-                SetPaginationControls();
+                await LoadArtworksAsync(_currentPage);
             }
         }
 
-        private void artworkManagerReloadBtn_Click(object sender, EventArgs e)
+        private async void artworkManagerReloadBtn_Click(object sender, EventArgs e)
         {
-            RefreshInstance();
+            await RefreshInstanceAsync();
         }
 
         private void SetPaginationControls()
@@ -145,7 +144,7 @@ namespace ImagitiveCSC460UI.Forms.Components
                         if (deleteResult)
                         {
                             MessageBox.Show("Artwork deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            RefreshInstance();
+                            await RefreshInstanceAsync();
                         }
                         else
                         {
@@ -223,39 +222,37 @@ namespace ImagitiveCSC460UI.Forms.Components
             }
         }
 
-        private void statsPrevButton_Click(object sender, EventArgs e)
+        private async void statsPrevButton_Click(object sender, EventArgs e)
         {
             if (_currentPage > 1)
             {
                 _currentPage--;
-                LoadArtworks(_currentPage);
-                SetPaginationControls();
+                await LoadArtworksAsync(_currentPage);
             }
         }
 
-        private void statsNextButton_Click(object sender, EventArgs e)
+        private async void statsNextButton_Click(object sender, EventArgs e)
         {
             if (_currentPage < _totalPages)
             {
                 _currentPage++;
-                LoadArtworks(_currentPage);
-                SetPaginationControls();
+                await LoadArtworksAsync(_currentPage);
             }
         }
 
-        private void statsReloadButton_Click(object sender, EventArgs e)
+        private async void statsReloadButton_Click(object sender, EventArgs e)
         {
-            RefreshInstance();
+            await RefreshInstanceAsync();
         }
 
-        private void TabControl_SelectedIndexChanged(object? sender, EventArgs e)
+        private async void TabControl_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (IsDesignTime)
             {
                 return;
             }
 
-            RefreshInstance();
+            await RefreshInstanceAsync();
         }
 
         private void statisticsPage_Click(object sender, EventArgs e)
@@ -301,15 +298,20 @@ namespace ImagitiveCSC460UI.Forms.Components
 
         }
 
-        public void RefreshInstance()
+        public async void RefreshInstance()
+        {
+            await RefreshInstanceAsync();
+        }
+
+        private async Task RefreshInstanceAsync()
         {
             if (IsDesignTime)
             {
                 return;
             }
             _currentPage = 1;
-            LoadArtworks(_currentPage);
-            SetPaginationControls();
+            _totalPages = 1;
+            await LoadArtworksAsync(_currentPage);
         }
 
         private void avgRatingValueLabel_Click(object sender, EventArgs e)

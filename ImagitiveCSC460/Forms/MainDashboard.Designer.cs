@@ -48,6 +48,9 @@
             changeUsernameLabel = new Label();
             saveAndLogoutBtn = new Button();
             loginSettingsPage = new TabPage();
+            possibleRoleBox = new ComboBox();
+            possibleRoleLabel = new Label();
+            addRoleBtn = new Button();
             availableRolesComboBox = new ComboBox();
             availableRolesLabel = new Label();
             currRoleValue = new Label();
@@ -266,6 +269,9 @@
             // loginSettingsPage
             // 
             loginSettingsPage.BackColor = Color.Gainsboro;
+            loginSettingsPage.Controls.Add(possibleRoleBox);
+            loginSettingsPage.Controls.Add(possibleRoleLabel);
+            loginSettingsPage.Controls.Add(addRoleBtn);
             loginSettingsPage.Controls.Add(availableRolesComboBox);
             loginSettingsPage.Controls.Add(availableRolesLabel);
             loginSettingsPage.Controls.Add(currRoleValue);
@@ -279,6 +285,36 @@
             loginSettingsPage.Size = new Size(599, 768);
             loginSettingsPage.TabIndex = 2;
             loginSettingsPage.Text = "Login";
+            // 
+            // possibleRoleBox
+            // 
+            possibleRoleBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            possibleRoleBox.FormattingEnabled = true;
+            possibleRoleBox.Items.AddRange(new object[] { "Artist", "Viewer" });
+            possibleRoleBox.Location = new Point(170, 436);
+            possibleRoleBox.Name = "possibleRoleBox";
+            possibleRoleBox.Size = new Size(242, 40);
+            possibleRoleBox.TabIndex = 9;
+            // 
+            // possibleRoleLabel
+            // 
+            possibleRoleLabel.AutoSize = true;
+            possibleRoleLabel.Font = new Font("Leelawadee UI", 11F);
+            possibleRoleLabel.Location = new Point(184, 379);
+            possibleRoleLabel.Name = "possibleRoleLabel";
+            possibleRoleLabel.Size = new Size(214, 41);
+            possibleRoleLabel.TabIndex = 8;
+            possibleRoleLabel.Text = "Possible Roles:";
+            // 
+            // addRoleBtn
+            // 
+            addRoleBtn.Location = new Point(216, 502);
+            addRoleBtn.Name = "addRoleBtn";
+            addRoleBtn.Size = new Size(150, 46);
+            addRoleBtn.TabIndex = 7;
+            addRoleBtn.Text = "Add Role";
+            addRoleBtn.UseVisualStyleBackColor = true;
+            addRoleBtn.Click += addRoleBtn_Click;
             // 
             // availableRolesComboBox
             // 
@@ -429,5 +465,8 @@
         private Label currEmailLabel;
         private Label currRegionLabel;
         private Label currUsernameLabel;
+        private ComboBox possibleRoleBox;
+        private Label possibleRoleLabel;
+        private Button addRoleBtn;
     }
 }

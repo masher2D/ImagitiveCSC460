@@ -1,4 +1,5 @@
 ﻿using ImagitiveAPI.Data;
+using ImagitiveAPI.Helpers;
 using ImagitiveAPI.Models;
 using ImagitiveAPI.Services.Interfaces;
 using ImagitiveLibrary.Core.Models;
@@ -51,20 +52,57 @@ namespace ImagitiveAPI.Controllers
 
             int authenticatedUserId = int.Parse(currentUserId);
 
-            bool isAdmin = User.IsInRole("Admin");
+            if (!ActiveRoleAuthorizationHelper.TryResolveActiveRole(Request, User, out var activeRole, out var errorResult))
+            {
+                return errorResult!;
+            }
+
+            bool isAdmin = string.Equals(activeRole, "Admin", StringComparison.OrdinalIgnoreCase);
 
             if (!isAdmin && authenticatedUserId != id)
                 return Forbid();
 
-            var user = await _userService.UpdateUserAsync(id, request);
-            if (user == null)
+            bool success = await _userService.UpdateUserAsync(id, request);
+            if (!success)
                 return NotFound();
 
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("username/{username}")]
+        public async Task<IActionResult> GetByUsername(string username)
+        {
+            var user = await _userService.GetUserByUsername(username);
+            if (user == null)
+                return NotFound();
             return Ok(user);
         }
 
-        
+        [Authorize]
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> SetUserStatus(int id, [FromBody] SetUserStatusRequest request)
+        {
+            if (!ActiveRoleAuthorizationHelper.TryResolveActiveRole(Request, User, out _, out var errorResult, "Admin") && request.Status != "Deactivated")
+            {
+                return errorResult!;
+            }
 
+            var result = await _userService.SetUserStatusAsync(id, request.Status);
+            if (!result)
+                return NotFound();
+            return NoContent();
+        }
 
+        [Authorize]
+        [HttpPost("{userId}/roles")]
+        public async Task<IActionResult> AddUserRole(int userId, [FromBody] PostAddRoleRequest request)
+        {
+           
+            var result = await _userService.AddUserRole(userId,request.Role);
+            if (!result)
+                return NotFound();
+            return NoContent();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ImagitiveAPI.Models
 {
@@ -8,10 +9,12 @@ namespace ImagitiveAPI.Models
         /// <summary>
         /// Gets or sets the ID of the artwork.
         /// </summary>
+        [Key]
         public int ArtworkId { get; set; }
         /// <summary>
         /// Gets or sets the ID of the tag.
         /// </summary>
+        [Key]
         public int TagId { get; set; }
     }
 }

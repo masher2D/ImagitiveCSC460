@@ -1,4 +1,4 @@
-﻿namespace ImagitiveAPI.Session
+﻿namespace ImagitiveCSC460UI.Session
 {
     public static class UserSession
     {

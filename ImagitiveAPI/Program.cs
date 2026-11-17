@@ -23,11 +23,19 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IAdminRequestService, AdminRequestService>();
+builder.Services.AddScoped<IReasonService, ReasonService>();
 
 builder.Services.AddDbContext<AppDBContext>(options =>
     options
         .UseSqlServer(
-            builder.Configuration.GetConnectionString("DefaultConnection"))
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+                })
         .LogTo(Console.WriteLine, LogLevel.Information));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
